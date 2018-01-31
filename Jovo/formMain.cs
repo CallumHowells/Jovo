@@ -12,6 +12,8 @@ namespace Jovo
 {
     public partial class formMain : Form
     {
+        ToolStrip menu = new ToolStrip();
+
         public formMain()
         {
             InitializeComponent();
@@ -19,7 +21,8 @@ namespace Jovo
 
         private void formMain_Load(object sender, EventArgs e)
         {
-
+            menu.Items.Add(new ToolStripMenuItem { Name = "tsSettings", Text = "Settings...", Image = Properties.Resources.settings });
+            menu.Items.Add(new ToolStripMenuItem { Name = "tsExit", Text = "Exit...", Image = Properties.Resources.close1 });
         }
     }
 }
