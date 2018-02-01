@@ -16,7 +16,12 @@ namespace Jovo
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new formMain());
+
+            ModuleHandler module = new ModuleHandler();
+            module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
+            module.GetModules();
+
+            Application.Run(new formMain(module));
         }
     }
 }
