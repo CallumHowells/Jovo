@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,20 @@ namespace Jovo
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
 
+            foreach (ModuleData data in module.Modules)
+            {
+                item = new ToolStripMenuItem();
+                item.Name = data.Name;
+                item.Text = data.Text;
+                item.Tag = data;
+                if (File.Exists(data.Path + "\\" + data.Icon))
+                    item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
+                else
+                    item.Image = Properties.Resources.settings;
+                item.Click += menu_Click;
+                menu.Items.Add(item);
+            }
+
             // Create context menu items and add to menu
             item = new ToolStripMenuItem();
             item.Name = "tsSettings";
@@ -54,16 +69,9 @@ namespace Jovo
 
         private void formMain_Load(object sender, EventArgs e)
         {
-            foreach(ModuleData data in module.Modules)
-            {
-                item = new ToolStripMenuItem();
-                item.Name = data.Name;
-                item.Text = data.Text;
-                item.Tag = data;
-                item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
-                item.Click += menu_Click;
-                menu.Items.Add(item);
-            }
+            
+            formSettings frm = new formSettings(module);
+            frm.ShowDialog();
         }
 
         private void menu_Click(object sender, EventArgs e)
@@ -93,10 +101,10 @@ namespace Jovo
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    module.ExecuteModule(Jovo.Default.NOTIFYEVENT_LEFT);
+                    module.ExecuteModule(Jovo.Default.System_Tray_Icon_Middle_Click_Module);
                     break;
                 case MouseButtons.Middle:
-                    module.ExecuteModule(Jovo.Default.NOTIFYEVENT_MIDDLE);
+                    module.ExecuteModule(Jovo.Default.System_Tray_Icon_Left_Click_Module);
                     break;
 
                 default:

@@ -26,24 +26,24 @@ namespace Jovo {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string NOTIFYEVENT_LEFT {
+        public string System_Tray_Icon_Middle_Click_Module {
             get {
-                return ((string)(this["NOTIFYEVENT_LEFT"]));
+                return ((string)(this["System_Tray_Icon_Middle_Click_Module"]));
             }
             set {
-                this["NOTIFYEVENT_LEFT"] = value;
+                this["System_Tray_Icon_Middle_Click_Module"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string NOTIFYEVENT_MIDDLE {
+        public string System_Tray_Icon_Left_Click_Module {
             get {
-                return ((string)(this["NOTIFYEVENT_MIDDLE"]));
+                return ((string)(this["System_Tray_Icon_Left_Click_Module"]));
             }
             set {
-                this["NOTIFYEVENT_MIDDLE"] = value;
+                this["System_Tray_Icon_Left_Click_Module"] = value;
             }
         }
     }

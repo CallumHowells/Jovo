@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Jovo" GeneratedClassName="Jovo">
   <Profiles />
   <Settings>
-    <Setting Name="NOTIFYEVENT_LEFT" Type="System.String" Scope="User">
+    <Setting Name="System_Tray_Icon_Middle_Click_Module" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="NOTIFYEVENT_MIDDLE" Type="System.String" Scope="User">
+    <Setting Name="System_Tray_Icon_Left_Click_Module" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

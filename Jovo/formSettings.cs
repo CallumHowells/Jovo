@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,49 +18,397 @@ namespace Jovo
     public partial class formSettings : Form
     {
         ModuleHandler module;
+        bool settingsChanged;
 
         public formSettings(ModuleHandler _module)
         {
             module = _module;
             InitializeComponent();
+
+            this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Size.Width + 5), Screen.PrimaryScreen.WorkingArea.Height - (this.Size.Height + 5));
         }
 
         private void formSettings_Load(object sender, EventArgs e)
         {
-            //rgb(245, 246, 250)
-            Panel def = new Panel();
-            def.Size = new Size(48, 48);
-            def.Location = new Point(8, 8);
-            def.BackColor = Color.FromArgb(236, 236, 236);
-            def.BackgroundImage = Properties.Resources.settings;
-            def.BackgroundImageLayout = ImageLayout.Center;
-            def.BorderStyle = BorderStyle.FixedSingle;
-            this.Controls.Add(def);
+            settingsChanged = false;
+            GenerateSettingHeaders();
+        }
 
-            int y = 8;
+        private void GenerateSettingHeaders()
+        {
+            Label lbl = new Label();
+            lbl.Name = "lblJovo";
+            lbl.Text = "Jovo";
+            lbl.AutoSize = true;
+            lbl.ForeColor = Color.FromArgb(30, 30, 30);
+            lbl.BackColor = Color.Transparent;
+            lbl.MouseEnter += label_MouseEnter;
+            lbl.MouseLeave += label_MouseLeave;
+            lbl.Click += label_Click;
+            lbl.Tag = null;
+            lbl.TextAlign = ContentAlignment.MiddleLeft;
+            //lbl.Size = new Size(100, 25);
+            lbl.Location = new Point(5, 70);
+            lbl.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+            this.Controls.Add(lbl);
+
+            Panel pnl = new Panel();
+            pnl.Name = "pnlHeadJovo";
+            pnl.Size = new Size(lbl.Size.Width, 3);
+            pnl.Location = new Point(5, 95);
+            pnl.BackColor = Color.FromArgb(51, 153, 255);
+            pnl.Visible = true;
+            this.Controls.Add(pnl);
+
+            FillInfoPanel(null);
+            GenerateSettingPanel(null);
+
+            int x = 5 + lbl.Size.Width + 5;
             foreach (ModuleData data in module.Modules)
             {
-                y += 47;
-                Panel pnl = new Panel();
-                pnl.Size = new Size(48, 48);
-                pnl.Location = new Point(8, y);
-                pnl.BackColor = Color.FromArgb(218, 223, 225);
-                pnl.BackgroundImage = ResizeImage(Image.FromFile(data.Path + "\\" + data.Icon), 25, 25);
-                pnl.BackgroundImageLayout = ImageLayout.Center;
-                pnl.BorderStyle = BorderStyle.FixedSingle;
-                this.Controls.Add(pnl);
-            }
+                Label header = new Label();
+                header.Name = "lbl" + data.Name;
+                header.Text = data.Text;
+                header.AutoSize = true;
+                header.ForeColor = Color.FromArgb(30, 30, 30);
+                header.BackColor = Color.Transparent;
+                header.MouseEnter += label_MouseEnter;
+                header.MouseLeave += label_MouseLeave;
+                header.Click += label_Click;
+                header.Tag = (object)data.Tag;
+                header.TextAlign = ContentAlignment.MiddleLeft;
+                //header.Size = new Size(100, 25);
+                header.Location = new Point(x, 70);
+                header.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+                this.Controls.Add(header);
 
-            Panel settings = new Panel();
-            settings.Size = new Size(this.ClientSize.Width - 63, this.ClientSize.Height - 16);
-            settings.Location = new Point(55, 8);
-            settings.BackColor = Color.FromArgb(236, 236, 236);
-            settings.BackgroundImage = Properties.Resources.settings;
-            settings.BackgroundImageLayout = ImageLayout.Center;
-            settings.BorderStyle = BorderStyle.FixedSingle;
-            this.Controls.Add(settings);
+                Panel under = new Panel();
+                under.Name = "pnlHead" + data.Name;
+                under.Size = new Size(header.Size.Width, 3);
+                under.Location = new Point(x, 95);
+                under.BackColor = Color.FromArgb(51, 153, 255);
+                under.Visible = false;
+                this.Controls.Add(under);
+                x += header.Size.Width + 5;
+            }
+        }
+
+        private void GenerateSettingPanel(object ModuleTag)
+        {
+            if (!UserChangedSettings(ModuleTag))
+            {
+                pnlSettings.Controls.Clear();
+                foreach (Control cntrl in this.Controls)
+                {
+                    if (cntrl.Name.Contains("btnSave"))
+                    {
+                        Button btn = (Button)cntrl;
+                        btn.Dispose();
+                    }
+                }
+
+                if (ModuleTag == null)
+                {
+                    int x = 10;
+                    int y = 5;
+                    foreach (SettingsProperty setting in Jovo.Default.Properties)
+                    {
+                        Label name = new Label();
+                        name.Name = "lbl" + setting.Name;
+                        name.Text = setting.Name.Replace("_", " ");
+                        name.ForeColor = Color.FromArgb(30, 30, 30);
+                        name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
+                        name.Location = new Point(x, y);
+                        pnlSettings.Controls.Add(name);
+                        y += 15;
+
+                        if (setting.Name.Contains("Module"))
+                        {
+                            ComboBox value = new ComboBox();
+                            value.Name = "cbx" + setting.Name;
+                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                            value.Location = new Point(x, y);
+                            value.SelectedValueChanged += setting_SelectedValueChanged;
+                            value.DropDownStyle = ComboBoxStyle.DropDownList;
+                            foreach (ModuleData data in module.Modules)
+                                value.Items.Add(data.Name);
+                            value.SelectedItem = Jovo.Default[setting.Name].ToString();
+                            pnlSettings.Controls.Add(value);
+                            y += 21;
+                        }
+                        else
+                        {
+                            TextBox value = new TextBox();
+                            value.Name = "txt" + setting.Name;
+                            value.Text = Jovo.Default[setting.Name].ToString();
+                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                            value.Location = new Point(x, y);
+                            value.TextChanged += setting_TextChanged;
+                            pnlSettings.Controls.Add(value);
+                            y += 22;
+                        }
+
+                        y += 10;
+                    }
+
+                    Button btn = new Button();
+                    btn.Name = "btnSave";
+                    btn.Text = "Save Changes";
+                    btn.Tag = null;
+                    btn.Size = new Size(400, 23);
+                    btn.Location = new Point(12, 565);
+                    btn.Click += save_Click;
+                    this.Controls.Add(btn);
+
+                    ShowNoSettings(false);
+                }
+                else
+                {
+                    int x = 10;
+                    int y = 5;
+
+                    try
+                    {
+                        foreach (KeyValuePair<string, JToken> setting in module.GetModuleSettings((ModuleData)ModuleTag))
+                        {
+                            //Console.WriteLine(setting.Key + "   =>   " + setting.Value);
+
+                            Label name = new Label();
+                            name.Name = "lbl" + setting.Key;
+                            name.Text = setting.Key.Replace("_", " ");
+                            name.ForeColor = Color.FromArgb(30, 30, 30);
+                            name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
+                            name.Location = new Point(x, y);
+                            pnlSettings.Controls.Add(name);
+                            y += 15;
+
+                            TextBox value = new TextBox();
+                            value.Name = "txt" + setting.Key;
+                            value.Text = setting.Value.ToString();
+                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                            value.Location = new Point(x, y);
+                            value.TextChanged += setting_TextChanged;
+                            pnlSettings.Controls.Add(value);
+                            y += 22;
+
+
+                            y += 10;
+                        }
+
+                        Button btn = new Button();
+                        btn.Name = "btnSave";
+                        btn.Text = "Save Changes";
+                        btn.Tag = ModuleTag;
+                        btn.Size = new Size(400, 23);
+                        btn.Location = new Point(12, 565);
+                        btn.Click += save_Click;
+                        this.Controls.Add(btn);
+
+                        ShowNoSettings(false);
+                    }
+                    catch (Exception)
+                    { ShowNoSettings(true); }
+                }
+
+                settingsChanged = false;
+            }
+        }
+
+        private void FillInfoPanel(object ModuleTag)
+        {
+            if (ModuleTag == null)
+            {
+                lblModuleText.Text = "Jovo";
+                lblModuleInfo.Text = "Jovo is a multi-functional tool for consolidating modules until one centralised menu for easy access via the Windows system tray.";
+                lblModulePath.Text = module.AppPath;
+                lblModuleName.Text = "jovo";
+                lblModuleVersion.Text = "1.0.0.0";
+                lblModulePublishDate.Text = "01/02/2018 23:04";
+                lblModuleChangelog.Visible = false;
+            }
+            else
+            {
+                ModuleData data = (ModuleData)ModuleTag;
+                lblModuleText.Text = data.Text;
+                lblModuleInfo.Text = data.Info;
+                lblModulePath.Text = data.Path;
+                lblModuleName.Text = data.Name;
+                lblModuleVersion.Text = data.Version;
+                lblModulePublishDate.Text = data.PublishDate;
+                if (File.Exists(data.Path + "\\changelog.json"))
+                    lblModuleChangelog.Visible = true;
+                else
+                    lblModuleChangelog.Visible = false;
+            }
+        }
+
+        private bool UserChangedSettings(object ModuleTag)
+        {
+            if (settingsChanged)
+            {
+                DialogResult dr = MessageBox.Show("Any unsaved changes will be lost!\n\nAre you sure you want to continue?", "Warning...", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (dr == DialogResult.No)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
+
+        private void ShowNoSettings(bool visible)
+        {
+            pnlNoSettings.Visible = visible;
+        }
+
+        private void ShowSaveSuccess(object ModuleTag)
+        {
+            Timer timer = new Timer();
+            timer.Interval = 3000;
+            timer.Tick += save_Tick;
+            if (ModuleTag == null)
+                lblSaveSuccess.Text = "Settings for Jovo were saved successfully!";
+            else
+            {
+                ModuleData data = (ModuleData)ModuleTag;
+                lblSaveSuccess.Text = "Settings for " + data.Text + " were saved successfully!";
+            }
+            pnlSaveSuccess.Visible = true;
+
+            timer.Start();
+        }
+
+        #region EventHandlers
+        private void label_Click(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
+            foreach (Control cntrl in this.Controls)
+            {
+                if (cntrl.Name.Contains("pnlHead"))
+                {
+                    Panel pnl = (Panel)cntrl;
+                    if (pnl.Name == pnlName)
+                    {
+                        pnl.Visible = true;
+                        FillInfoPanel(lbl.Tag);
+                        GenerateSettingPanel(lbl.Tag);
+                    }
+                    else
+                        pnl.Visible = false;
+                }
+            }
+        }
+
+        private void label_MouseEnter(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(51, 153, 255);
+        }
+
+        private void label_MouseLeave(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(30, 30, 30);
+        }
+
+        private void lblModuleChangelog_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Changelog form doesnt work yet.");
+        }
+
+        private void lblModuleChangelog_MouseEnter(object sender, EventArgs e)
+        {
+            lblModuleChangelog.ForeColor = Color.FromArgb(36, 133, 229);
+        }
+
+        private void lblModuleChangelog_MouseLeave(object sender, EventArgs e)
+        {
+            lblModuleChangelog.ForeColor = Color.FromArgb(0, 102, 204);
+        }
+
+        private void btnFormClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void setting_SelectedValueChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
 
         }
+
+        private void setting_TextChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
+        }
+
+        private void save_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            if (btn.Tag == null)
+            {
+                foreach (SettingsProperty setting in Jovo.Default.Properties)
+                {
+                    if (setting.Name.Contains("Module"))
+                    {
+                        foreach (Control cntrl in pnlSettings.Controls)
+                            if (cntrl.Name == "cbx" + setting.Name)
+                            {
+                                ComboBox value = (ComboBox)cntrl;
+                                Jovo.Default[setting.Name] = value.Text;
+                            }
+                    }
+                    else
+                    {
+                        foreach (Control cntrl in pnlSettings.Controls)
+                            if (cntrl.Name == "txt" + setting.Name)
+                            {
+                                TextBox value = (TextBox)cntrl;
+                                Jovo.Default[setting.Name] = value.Text;
+                            }
+                    }
+                }
+                Jovo.Default.Save();
+                ShowSaveSuccess(btn.Tag);
+                settingsChanged = false;
+            }
+            else
+            {
+                JObject save = new JObject();
+                foreach (KeyValuePair<string, JToken> setting in module.GetModuleSettings((ModuleData)btn.Tag))
+                {
+                    foreach (Control cntrl in pnlSettings.Controls)
+                        if (cntrl.Name == "txt" + setting.Key)
+                        {
+                            TextBox value = (TextBox)cntrl;
+                            save.Add(setting.Key, value.Text);
+                        }
+                }
+                if (module.SaveModuleSettings((ModuleData)btn.Tag, save))
+                {
+                    ShowSaveSuccess(btn.Tag);
+                    settingsChanged = false;
+                }
+            }
+        }
+
+        private void save_Tick(object sender, EventArgs e)
+        {
+            Timer timer = (Timer)sender;
+            timer.Stop();
+            pnlSaveSuccess.Visible = false;
+        }
+
+        private void btnFormClose_MouseEnter(object sender, EventArgs e)
+        {
+            btnFormClose.BackColor = Color.FromArgb(201, 222, 245);
+        }
+
+        private void btnFormClose_MouseLeave(object sender, EventArgs e)
+        {
+            btnFormClose.BackColor = Color.FromArgb(255, 255, 255);
+        }
+        #endregion
 
         public static Bitmap ResizeImage(Image image, int width, int height)
         {

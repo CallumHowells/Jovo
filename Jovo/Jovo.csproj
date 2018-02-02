@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Jovo_Logo.ico" />
+    <None Include="Resources\crying_face.png" />
     <None Include="Resources\settings.png" />
     <None Include="Resources\close1.png" />
     <None Include="Resources\Jovo_Logo.png" />
