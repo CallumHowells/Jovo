@@ -69,9 +69,7 @@ namespace Jovo
 
         private void formMain_Load(object sender, EventArgs e)
         {
-            
-            formSettings frm = new formSettings(module);
-            frm.ShowDialog();
+     
         }
 
         private void menu_Click(object sender, EventArgs e)
