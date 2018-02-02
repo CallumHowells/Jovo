@@ -88,8 +88,15 @@ namespace Jovo
 
                 default:
                     ModuleData data = (ModuleData)click.Tag;
-                    Process.Start(data.Path + "\\" + data.Name + ".exe");
+                    if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
+                    {
+                        Process.Start(data.Path + "\\" + data.Name + ".exe");
+                    } else
+                    {
+                        MessageBox.Show("Manifest file incorrectly configured!");
+                    }
                     break;
+
             }
         }
 

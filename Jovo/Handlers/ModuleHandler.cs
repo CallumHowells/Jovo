@@ -16,7 +16,7 @@ namespace Jovo
 
         public string AppPath { get; set; }
         public string ModulePath { get; set; }
-        public List<ModuleData> Modules = new List<ModuleData>();
+        public List<ModuleData> InstalledModules = new List<ModuleData>();
 
         public bool ExecuteModule(string name)
         {
@@ -38,7 +38,7 @@ namespace Jovo
 
         public void GetModules()
         {
-            Modules.Clear();
+            InstalledModules.Clear();
             JsonSerializer serializer = new JsonSerializer();
 
             foreach (string path in Directory.GetDirectories(ModulePath))
@@ -48,7 +48,7 @@ namespace Jovo
                     ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
                     data.Path = path;
                     data.Tag = (object)data;
-                    Modules.Add(data);
+                    InstalledModules.Add(data);
                 }
             }
         }
