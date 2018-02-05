@@ -44,7 +44,6 @@ namespace Jovo
 
         public void GetModules()
         {
-            //Console.WriteLine("Getting installed modules");
             InstalledModules.Clear();
             JsonSerializer serializer = new JsonSerializer();
 
@@ -86,7 +85,6 @@ namespace Jovo
 
         public void GetServerModules()
         {
-            //Console.WriteLine("Getting server modules");
             ServerModules.Clear();
             JsonSerializer serializer = new JsonSerializer();
 
@@ -99,17 +97,14 @@ namespace Jovo
                     data.Path = path;
                     data.Tag = (object)data;
                     ServerModules.Add(data);
-                    //Console.WriteLine("Added " + data.Name);
                 }
             }
         }
 
         public void GetModuleUpdates()
         {
-            //Console.WriteLine("Updater...");
             GetModules();
             GetServerModules();
-            //Console.WriteLine("Got modules... Trying move");
             foreach (ModuleData AvailableModule in ServerModules)
             {
                 DirectoryInfo localDir = new DirectoryInfo(ModulePath + "\\" + AvailableModule.Name);
@@ -122,12 +117,7 @@ namespace Jovo
                 } else if (CompareModuleVersions(AvailableModule))
                 {
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
-                } else
-                {
-                    Console.WriteLine("Didn't update, up to date");
-                }
-
-                //Console.WriteLine(AvailableModule.Path + " -> " + localDir);
+                } 
             }
             GetModules();
         }
