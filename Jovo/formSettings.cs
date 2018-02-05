@@ -64,7 +64,7 @@ namespace Jovo
             GenerateSettingPanel(null);
 
             int x = 5 + lbl.Size.Width + 5;
-            foreach (ModuleData data in module.Modules)
+            foreach (ModuleData data in module.InstalledModules)
             {
                 Label header = new Label();
                 header.Name = "lbl" + data.Name;
@@ -130,7 +130,7 @@ namespace Jovo
                             value.Location = new Point(x, y);
                             value.SelectedValueChanged += setting_SelectedValueChanged;
                             value.DropDownStyle = ComboBoxStyle.DropDownList;
-                            foreach (ModuleData data in module.Modules)
+                            foreach (ModuleData data in module.InstalledModules)
                                 value.Items.Add(data.Name);
                             value.SelectedItem = Jovo.Default[setting.Name].ToString();
                             pnlSettings.Controls.Add(value);
