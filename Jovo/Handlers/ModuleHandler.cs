@@ -112,16 +112,41 @@ namespace Jovo
             //Console.WriteLine("Got modules... Trying move");
             foreach (ModuleData AvailableModule in ServerModules)
             {
+                DirectoryInfo localDir = new DirectoryInfo(ModulePath + "\\" + AvailableModule.Name);
+
                 if (!Directory.Exists(ModulePath + "\\" + AvailableModule.Name))
                 {
                     Directory.CreateDirectory(ModulePath + "\\" + AvailableModule.Name);
-                }
-                DirectoryInfo localDir = new DirectoryInfo(ModulePath + "\\" + AvailableModule.Name);
 
-                CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+                } else if (CompareModuleVersions(AvailableModule))
+                {
+                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+                } else
+                {
+                    Console.WriteLine("Didn't update, up to date");
+                }
+
                 //Console.WriteLine(AvailableModule.Path + " -> " + localDir);
             }
             GetModules();
+        }
+
+        private bool CompareModuleVersions(ModuleData module)
+        {
+            foreach (ModuleData InstalledModule in InstalledModules)
+            {
+                if(InstalledModule.Name == module.Name)
+                {
+                    Version InstalledVersion = new Version(InstalledModule.Version);
+                    Version ServerVersion = new Version(module.Version);
+                    if(InstalledVersion < ServerVersion)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void CopyAll(DirectoryInfo source, DirectoryInfo target)
