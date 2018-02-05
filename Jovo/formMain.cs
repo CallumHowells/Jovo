@@ -25,6 +25,8 @@ namespace Jovo
         public formMain(ModuleHandler _module)
         {
             module = _module;
+            module.GetModuleUpdates();
+
             InitializeComponent();
 
             // Create NotifyIcon to sit in system tray
@@ -35,7 +37,7 @@ namespace Jovo
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
 
-            foreach (ModuleData data in module.Modules)
+            foreach (ModuleData data in module.InstalledModules)
             {
                 item = new ToolStripMenuItem();
                 item.Name = data.Name;

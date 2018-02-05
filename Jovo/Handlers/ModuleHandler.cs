@@ -17,6 +17,8 @@ namespace Jovo
         public string AppPath { get; set; }
         public string ModulePath { get; set; }
         public List<ModuleData> InstalledModules = new List<ModuleData>();
+        public List<ModuleData> ServerModules = new List<ModuleData>();
+        public string ServerPath = @"\\itsql\C$\Weightron\Jovo";
 
         public bool ExecuteModule(string name)
         {
@@ -77,6 +79,53 @@ namespace Jovo
             return File.Exists(data.Path + "\\settings.json");
         }
 
+        public void GetServerModules()
+        {
+            ServerModules.Clear();
+            JsonSerializer serializer = new JsonSerializer();
+
+            foreach (string path in Directory.GetDirectories(ServerPath))
+            {
+                if (File.Exists(ServerPath + "\\" + path + "\\manifest.json"))
+                {
+                    ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
+                    data.Path = path;
+                    data.Tag = (object)data;
+                    ServerModules.Add(data);
+                }
+            }
+        }
+
+        public void GetModuleUpdates()
+        {
+            GetModules();
+            GetServerModules();
+
+            foreach (ModuleData AvailableModule in ServerModules)
+            {
+                if (!Directory.Exists(ModulePath + "\\" + AvailableModule.Name))
+                {
+                    Directory.CreateDirectory(ModulePath + "\\" + AvailableModule.Name);
+                }
+                DirectoryInfo localDir = new DirectoryInfo(ModulePath + "\\" + AvailableModule.Name);
+
+                CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+            }
+        }
+
+        private static void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        {
+            foreach (FileInfo fi in source.GetFiles())
+            {
+                fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
+            }
+
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
+            {
+                DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
+                CopyAll(diSourceSubDir, nextTargetSubDir);
+            }
+        }
     }
 
 
