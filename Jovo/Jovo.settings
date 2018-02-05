@@ -8,5 +8,8 @@
     <Setting Name="System_Tray_Icon_Left_Click_Module" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="Path_Server_Update" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

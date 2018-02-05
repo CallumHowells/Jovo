@@ -15,11 +15,12 @@ namespace Jovo
         public ModuleHandler() { }
 
         public string AppPath { get; set; }
-        public string ModulePath { get; set; }
-        public List<ModuleData> InstalledModules = new List<ModuleData>();
-        public List<ModuleData> ServerModules = new List<ModuleData>();
+        public string AppModulePath { get; set; }
         public string ServerPath { get; set; }
         public string ServerModulePath { get; set; }
+        public List<ModuleData> InstalledModules = new List<ModuleData>();
+        public List<ModuleData> ServerModules = new List<ModuleData>();
+
 
         public bool ExecuteModule(string name)
         {
@@ -34,12 +35,20 @@ namespace Jovo
         public void GetSetDirectoryStructure(string appDir)
         {
             AppPath = Path.GetDirectoryName(appDir);
-            ModulePath = AppPath + "\\modules";
-            if (!Directory.Exists(ModulePath))
-                Directory.CreateDirectory(ModulePath);
+            AppModulePath = AppPath + "\\modules";
+            if (!Directory.Exists(AppModulePath))
+                Directory.CreateDirectory(AppModulePath);
 
-            ServerPath = @"\\itsql\C$\Weightron\Jovo\";
-            ServerModulePath = ServerPath + "\\Modules";
+            if (!String.IsNullOrWhiteSpace(Jovo.Default.Path_Server_Update))
+            {
+                ServerPath = null;
+                ServerModulePath = null;
+            }
+            else
+            {
+                ServerPath = Jovo.Default.Path_Server_Update;
+                ServerModulePath = ServerPath + "Modules";
+            }
         }
 
         public void GetModules()
@@ -47,7 +56,7 @@ namespace Jovo
             InstalledModules.Clear();
             JsonSerializer serializer = new JsonSerializer();
 
-            foreach (string path in Directory.GetDirectories(ModulePath))
+            foreach (string path in Directory.GetDirectories(AppModulePath))
             {
                 if (File.Exists(path + "\\manifest.json"))
                 {
@@ -85,18 +94,21 @@ namespace Jovo
 
         public void GetServerModules()
         {
-            ServerModules.Clear();
-            JsonSerializer serializer = new JsonSerializer();
-
-            foreach (string path in Directory.GetDirectories(ServerModulePath))
+            if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
+                ServerModules.Clear();
+                JsonSerializer serializer = new JsonSerializer();
 
-                if (File.Exists(path + "\\manifest.json"))
+                foreach (string path in Directory.GetDirectories(ServerModulePath))
                 {
-                    ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
-                    data.Path = path;
-                    data.Tag = (object)data;
-                    ServerModules.Add(data);
+
+                    if (File.Exists(path + "\\manifest.json"))
+                    {
+                        ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
+                        data.Path = path;
+                        data.Tag = (object)data;
+                        ServerModules.Add(data);
+                    }
                 }
             }
         }
@@ -107,17 +119,18 @@ namespace Jovo
             GetServerModules();
             foreach (ModuleData AvailableModule in ServerModules)
             {
-                DirectoryInfo localDir = new DirectoryInfo(ModulePath + "\\" + AvailableModule.Name);
+                DirectoryInfo localDir = new DirectoryInfo(AppModulePath + "\\" + AvailableModule.Name);
 
-                if (!Directory.Exists(ModulePath + "\\" + AvailableModule.Name))
+                if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    Directory.CreateDirectory(ModulePath + "\\" + AvailableModule.Name);
+                    Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
-                } else if (CompareModuleVersions(AvailableModule))
+                }
+                else if (CompareModuleVersions(AvailableModule))
                 {
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
-                } 
+                }
             }
             GetModules();
         }
@@ -126,11 +139,11 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
-                if(InstalledModule.Name == module.Name)
+                if (InstalledModule.Name == module.Name)
                 {
                     Version InstalledVersion = new Version(InstalledModule.Version);
                     Version ServerVersion = new Version(module.Version);
-                    if(InstalledVersion < ServerVersion)
+                    if (InstalledVersion < ServerVersion)
                     {
                         return true;
                     }
