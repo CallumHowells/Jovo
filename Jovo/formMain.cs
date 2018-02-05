@@ -14,6 +14,8 @@ namespace Jovo
 {
     public partial class formMain : Form
     {
+        // https://www.iconfinder.com/iconsets/colicon
+
         // Define Handlers
         ModuleHandler module;
 
@@ -21,8 +23,6 @@ namespace Jovo
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
         NotifyIcon icon;
-
-        //test
 
         public formMain(ModuleHandler _module)
         {
@@ -52,6 +52,9 @@ namespace Jovo
             }
 
             // Create context menu items and add to menu
+            ToolStripSeparator sep = new ToolStripSeparator();
+            menu.Items.Add(sep);
+
             item = new ToolStripMenuItem();
             item.Name = "tsSettings";
             item.Text = "Settings";
@@ -64,7 +67,7 @@ namespace Jovo
             item.Name = "tsExit";
             item.Text = "Exit";
             item.Tag = "exit";
-            item.Image = Properties.Resources.close1;
+            item.Image = Properties.Resources.exit;
             item.Click += menu_Click;
             menu.Items.Add(item);
         }
