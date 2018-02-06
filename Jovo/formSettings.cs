@@ -136,6 +136,25 @@ namespace Jovo
                             pnlSettings.Controls.Add(value);
                             y += 21;
                         }
+                        else if(setting.Name.Contains("Path"))
+                        {
+                            TextBox pth = new TextBox();
+                            pth.Name = "txt" + setting.Name;
+                            pth.Text = Jovo.Default[setting.Name].ToString();
+                            pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
+                            pth.Location = new Point(x, y);
+                            pth.TextChanged += setting_TextChanged;
+                            pnlSettings.Controls.Add(pth);
+
+                            Button pthbrowse = new Button();
+                            pthbrowse.Name = "btn" + setting.Name;
+                            pthbrowse.Text = "...";
+                            pthbrowse.Size = new Size(24, 22);
+                            pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
+                            pthbrowse.Click += path_Click;
+                            pnlSettings.Controls.Add(pthbrowse);
+                            y += 22;
+                        }
                         else
                         {
                             TextBox value = new TextBox();
