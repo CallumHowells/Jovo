@@ -169,27 +169,81 @@ namespace Jovo
 
                     try
                     {
-                        foreach (KeyValuePair<string, JToken> setting in module.GetModuleSettings((ModuleData)ModuleTag))
+                        foreach (SettingData data in module.GetModuleSettings((ModuleData)ModuleTag))
                         {
                             //Console.WriteLine(setting.Key + "   =>   " + setting.Value);
 
                             Label name = new Label();
-                            name.Name = "lbl" + setting.Key;
-                            name.Text = setting.Key.Replace("_", " ");
+                            name.Name = "lbl" + data.Name;
+                            name.Text = data.Text;
                             name.ForeColor = Color.FromArgb(30, 30, 30);
                             name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
                             name.Location = new Point(x, y);
                             pnlSettings.Controls.Add(name);
                             y += 15;
 
-                            TextBox value = new TextBox();
-                            value.Name = "txt" + setting.Key;
-                            value.Text = setting.Value.ToString();
-                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                            value.Location = new Point(x, y);
-                            value.TextChanged += setting_TextChanged;
-                            pnlSettings.Controls.Add(value);
-                            y += 22;
+                            switch (data.Domain)
+                            {
+                                case "string":
+                                    TextBox str = new TextBox();
+                                    str.Name = "txt" + data.Name;
+                                    str.Text = data.Value;
+                                    str.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                    str.Location = new Point(x, y);
+                                    str.TextChanged += setting_TextChanged;
+                                    pnlSettings.Controls.Add(str);
+                                    y += 22;
+                                    break;
+
+                                case "integer":
+                                    NumericUpDown num = new NumericUpDown();
+                                    num.Name = "num" + data.Name;
+                                    num.Minimum = 0;
+                                    num.Maximum = 10000;
+                                    num.Value = (int.TryParse(data.Value, out int value)) ? Convert.ToInt16(data.Value) : 0;
+                                    num.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                    num.Location = new Point(x, y);
+                                    num.TextChanged += setting_ValueChanged;
+                                    pnlSettings.Controls.Add(num);
+                                    y += 22;
+                                    break;
+
+                                case "path":
+                                    TextBox pth = new TextBox();
+                                    pth.Name = "txt" + data.Name;
+                                    pth.Text = data.Value;
+                                    pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
+                                    pth.Location = new Point(x, y);
+                                    pth.TextChanged += setting_TextChanged;
+                                    pnlSettings.Controls.Add(pth);
+
+                                    Button pthbrowse = new Button();
+                                    pthbrowse.Name = "btn" + data.Name;
+                                    pthbrowse.Text = "...";
+                                    pthbrowse.Size = new Size(24, 22);
+                                    pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
+                                    pthbrowse.Click += path_Click;
+                                    pnlSettings.Controls.Add(pthbrowse);
+                                    y += 22;
+                                    break;
+
+                                case "boolean":
+                                    ComboBox cmb = new ComboBox();
+                                    cmb.Name = "cbx" + data.Name;
+                                    cmb.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                                    cmb.Location = new Point(x, y);
+                                    cmb.SelectedValueChanged += setting_SelectedValueChanged;
+                                    cmb.DropDownStyle = ComboBoxStyle.DropDownList;
+                                    cmb.Items.Add("True");
+                                    cmb.Items.Add("False");
+                                    cmb.SelectedItem = data.Value;
+                                    pnlSettings.Controls.Add(cmb);
+                                    y += 21;
+                                    break;
+
+                                default:
+                                    break;
+                            }
 
 
                             y += 10;
@@ -334,10 +388,14 @@ namespace Jovo
         private void setting_SelectedValueChanged(object sender, EventArgs e)
         {
             settingsChanged = true;
-
         }
 
         private void setting_TextChanged(object sender, EventArgs e)
+        {
+            settingsChanged = true;
+        }
+
+        private void setting_ValueChanged(object sender, EventArgs e)
         {
             settingsChanged = true;
         }
@@ -375,13 +433,55 @@ namespace Jovo
             else
             {
                 JObject save = new JObject();
-                foreach (KeyValuePair<string, JToken> setting in module.GetModuleSettings((ModuleData)btn.Tag))
+                foreach (SettingData data in module.GetModuleSettings((ModuleData)btn.Tag))
                 {
                     foreach (Control cntrl in pnlSettings.Controls)
-                        if (cntrl.Name == "txt" + setting.Key)
+                        switch (data.Domain)
                         {
-                            TextBox value = (TextBox)cntrl;
-                            save.Add(setting.Key, value.Text);
+                            case "boolean":
+                                if (cntrl.Name == "cbx" + data.Name)
+                                {
+                                    ComboBox value = (ComboBox)cntrl;
+
+                                    JObject set = new JObject(
+                                         new JProperty("Name", data.Name),
+                                         new JProperty("Text", data.Text),
+                                         new JProperty("Domain", data.Domain),
+                                         new JProperty("Value", value.SelectedItem));
+
+                                    save.Add(data.Name, set);
+                                }
+                                break;
+
+                            case "integer":
+                                if (cntrl.Name == "num" + data.Name)
+                                {
+                                    NumericUpDown value = (NumericUpDown)cntrl;
+
+                                    JObject set = new JObject(
+                                         new JProperty("Name", data.Name),
+                                         new JProperty("Text", data.Text),
+                                         new JProperty("Domain", data.Domain),
+                                         new JProperty("Value", Convert.ToInt16(value.Value)));
+
+                                    save.Add(data.Name, set);
+                                }
+                                break;
+
+                            default:
+                                if (cntrl.Name == "txt" + data.Name)
+                                {
+                                    TextBox value = (TextBox)cntrl;
+
+                                    JObject set = new JObject(
+                                         new JProperty("Name", data.Name),
+                                         new JProperty("Text", data.Text),
+                                         new JProperty("Domain", data.Domain),
+                                         new JProperty("Value", value.Text));
+
+                                    save.Add(data.Name, set);
+                                }
+                                break;
                         }
                 }
                 if (module.SaveModuleSettings((ModuleData)btn.Tag, save))
@@ -397,6 +497,21 @@ namespace Jovo
             Timer timer = (Timer)sender;
             timer.Stop();
             pnlSaveSuccess.Visible = false;
+        }
+
+        private void path_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fld = new FolderBrowserDialog();
+            fld.ShowNewFolderButton = true;
+            fld.Description = "Select Path...";
+            fld.RootFolder = Environment.SpecialFolder.Desktop;
+
+            DialogResult dia = fld.ShowDialog();
+            if (dia == DialogResult.OK)
+            {
+                Button btn = (Button)sender;
+                ((TextBox)pnlSettings.Controls[btn.Name.Replace("btn", "txt")]).Text = fld.SelectedPath;
+            }
         }
 
         private void btnFormClose_MouseEnter(object sender, EventArgs e)

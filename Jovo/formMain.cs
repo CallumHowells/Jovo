@@ -22,6 +22,7 @@ namespace Jovo
         // Define Controls
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
+        ToolStripSeparator sep;
         NotifyIcon icon;
 
         public formMain(ModuleHandler _module)
@@ -39,8 +40,15 @@ namespace Jovo
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
 
-            foreach (ModuleData data in module.InstalledModules)
+            int prev_cat = 0;
+            foreach (ModuleData data in module.InstalledModules.OrderBy(o => o.Category).ToList())
             {
+                if (prev_cat != data.Category)
+                {
+                    sep = new ToolStripSeparator();
+                    menu.Items.Add(sep);
+                }
+
                 item = new ToolStripMenuItem();
                 item.Name = data.Name;
                 item.Text = data.Text;
@@ -51,10 +59,12 @@ namespace Jovo
                     item.Image = Properties.Resources.settings;
                 item.Click += menu_Click;
                 menu.Items.Add(item);
+
+                prev_cat = data.Category;
             }
 
             // Create context menu items and add to menu
-            ToolStripSeparator sep = new ToolStripSeparator();
+            sep = new ToolStripSeparator();
             menu.Items.Add(sep);
 
             item = new ToolStripMenuItem();
@@ -74,11 +84,6 @@ namespace Jovo
             menu.Items.Add(item);
         }
 
-        private void formMain_Load(object sender, EventArgs e)
-        {
-     
-        }
-
         private void menu_Click(object sender, EventArgs e)
         {
             // Each context menu item triggers this event, get which is triggered using Tag element //
@@ -94,14 +99,7 @@ namespace Jovo
                     break;
 
                 default:
-                    ModuleData data = (ModuleData)click.Tag;
-                    if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
-                    {
-                        Process.Start(data.Path + "\\" + data.Name + ".exe");
-                    } else
-                    {
-                        MessageBox.Show("Manifest file incorrectly configured!");
-                    }
+                    module.ExecuteModule((ModuleData)click.Tag);
                     break;
 
             }
@@ -113,10 +111,10 @@ namespace Jovo
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    module.ExecuteModule(Jovo.Default.System_Tray_Icon_Middle_Click_Module);
+                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Left_Click_Module));
                     break;
                 case MouseButtons.Middle:
-                    module.ExecuteModule(Jovo.Default.System_Tray_Icon_Left_Click_Module);
+                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Middle_Click_Module));
                     break;
 
                 default:

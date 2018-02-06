@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace Jovo
 {
@@ -22,14 +23,30 @@ namespace Jovo
         public List<ModuleData> ServerModules = new List<ModuleData>();
 
 
-        public bool ExecuteModule(string name)
+        #region InternalModules
+        public bool ExecuteModule(ModuleData data)
         {
             try
             {
-                return true;
+                if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
+                {
+                    Process.Start(data.Path + "\\" + data.Name + ".exe");
+                    return true;
+                }
+                return false;
             }
             catch (Exception)
             { return false; }
+        }
+
+        public ModuleData FindModule(string name)
+        {
+            foreach (ModuleData data in InstalledModules)
+            {
+                if (data.Name == name)
+                    return data;
+            }
+            return null;
         }
 
         public void GetSetDirectoryStructure(string appDir)
@@ -54,7 +71,6 @@ namespace Jovo
         public void GetModules()
         {
             InstalledModules.Clear();
-            JsonSerializer serializer = new JsonSerializer();
 
             foreach (string path in Directory.GetDirectories(AppModulePath))
             {
@@ -67,15 +83,29 @@ namespace Jovo
                 }
             }
         }
+        #endregion
 
-        public JObject GetModuleSettings(ModuleData data)
+        #region Settings
+        public List<SettingData> GetModuleSettings(ModuleData data)
         {
+            List<SettingData> moduleSettings = new List<SettingData>();
+            moduleSettings.Clear();
+
             if (File.Exists(data.Path + "\\settings.json"))
             {
                 JToken tkn = JObject.Parse(File.ReadAllText(data.Path + "\\settings.json"));
                 JObject obj = tkn.Value<JObject>();
-                return obj;
+
+                foreach (KeyValuePair<string, JToken> setting in obj)
+                {
+                    SettingData settings = JsonConvert.DeserializeObject<SettingData>(setting.Value.ToString());
+                    settings.Module = data.Name;
+                    moduleSettings.Add(settings);
+                }
+
+                return moduleSettings;
             }
+
             return null;
         }
 
@@ -91,7 +121,9 @@ namespace Jovo
 
             return File.Exists(data.Path + "\\settings.json");
         }
+        #endregion
 
+        #region ServerSideModules
         public void GetServerModules()
         {
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
@@ -165,6 +197,7 @@ namespace Jovo
                 CopyAll(diSourceSubDir, nextTargetSubDir);
             }
         }
+        #endregion
     }
 
 
@@ -174,10 +207,20 @@ namespace Jovo
         public string Icon { get; set; }
         public string Text { get; set; }
         public object Tag { get; set; }
+        public int Category { get; set; }
         public string Version { get; set; }
         public string PublishDate { get; set; }
         public string Path { get; set; }
         public string Info { get; set; }
+    }
+
+    public class SettingData
+    {
+        public string Module { get; set; }
+        public string Name { get; set; }
+        public string Text { get; set; }
+        public string Domain { get; set; }
+        public string Value { get; set; }
     }
 
 }

@@ -16,6 +16,7 @@ namespace Jovo
 
         public formChangelog(ModuleHandler _module)
         {
+            module = _module;
             InitializeComponent();
         }
 
