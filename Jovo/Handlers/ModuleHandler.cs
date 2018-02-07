@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -88,19 +87,20 @@ namespace Jovo
             ServerModules.Clear();
             JsonSerializer serializer = new JsonSerializer();
 
-            foreach (string path in Directory.GetDirectories(ServerModulePath))
+            if (Directory.Exists(ServerModulePath))
             {
-
-                if (File.Exists(path + "\\manifest.json"))
+                foreach (string path in Directory.GetDirectories(ServerModulePath))
                 {
-                    ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
-                    data.Path = path;
-                    data.Tag = (object)data;
-                    ServerModules.Add(data);
+                    if (File.Exists(path + "\\manifest.json"))
+                    {
+                        ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
+                        data.Path = path;
+                        data.Tag = (object)data;
+                        ServerModules.Add(data);
+                    }
                 }
             }
         }
-
         public void GetModuleUpdates()
         {
             GetModules();
@@ -114,10 +114,11 @@ namespace Jovo
                     Directory.CreateDirectory(ModulePath + "\\" + AvailableModule.Name);
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
-                } else if (CompareModuleVersions(AvailableModule))
+                }
+                else if (CompareModuleVersions(AvailableModule))
                 {
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
-                } 
+                }
             }
             GetModules();
         }
@@ -126,14 +127,21 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
-                if(InstalledModule.Name == module.Name)
+                try
                 {
-                    Version InstalledVersion = new Version(InstalledModule.Version);
-                    Version ServerVersion = new Version(module.Version);
-                    if(InstalledVersion < ServerVersion)
+                    if (InstalledModule.Name == module.Name)
                     {
-                        return true;
+                        Version InstalledVersion = new Version(InstalledModule.Version);
+                        Version ServerVersion = new Version(module.Version);
+                        if (InstalledVersion < ServerVersion)
+                        {
+                            return true;
+                        }
                     }
+                }
+                catch (Exception VersionCheckException)
+                {
+                    Console.WriteLine(VersionCheckException.Message);
                 }
             }
             return false;

@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -67,11 +61,6 @@ namespace Jovo
             item.Image = Properties.Resources.close1;
             item.Click += menu_Click;
             menu.Items.Add(item);
-        }
-
-        private void formMain_Load(object sender, EventArgs e)
-        {
-     
         }
 
         private void menu_Click(object sender, EventArgs e)
