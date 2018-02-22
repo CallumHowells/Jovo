@@ -50,6 +50,8 @@ namespace Jovo
             }
 
             // Create context menu items and add to menu
+            menu.Items.Add(new ToolStripSeparator());
+
             item = new ToolStripMenuItem();
             item.Name = "tsSettings";
             item.Text = "Settings";
