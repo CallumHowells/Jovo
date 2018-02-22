@@ -47,9 +47,9 @@
             this.lblModuleInfo = new System.Windows.Forms.Label();
             this.pnlSettings = new System.Windows.Forms.Panel();
             this.pnlNoSettings = new System.Windows.Forms.Panel();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pnlSaveSuccess = new System.Windows.Forms.Panel();
             this.lblSaveSuccess = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -253,15 +253,16 @@
             this.pnlNoSettings.TabIndex = 8;
             this.pnlNoSettings.Visible = false;
             // 
-            // pictureBox2
+            // label3
             // 
-            this.pictureBox2.Image = global::Jovo.Properties.Resources.crying_face;
-            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(186, 76);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.label3.Location = new System.Drawing.Point(3, 108);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(186, 71);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "This Module doesn\'t contain any configurable settings.";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
@@ -274,16 +275,15 @@
             this.label2.Text = "Oh no!";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // pictureBox2
             // 
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
-            this.label3.Location = new System.Drawing.Point(3, 108);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(186, 71);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "This Module doesn\'t contain any configurable settings.";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pictureBox2.Image = global::Jovo.Properties.Resources.if_smiley__8_2290989;
+            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(186, 76);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
             // 
             // pnlSaveSuccess
             // 
