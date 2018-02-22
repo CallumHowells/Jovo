@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -35,7 +36,7 @@ namespace Jovo
             icon.MouseDown += icon_Click;
 
             int prev_cat = 0;
-            foreach (ModuleData data in module.InstalledModules.OrderBy(o => o.Category).ToList())
+            foreach (ModuleData data in module.InstalledModules)
             {
                 if (prev_cat != data.Category)
                 {

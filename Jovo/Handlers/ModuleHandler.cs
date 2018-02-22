@@ -125,7 +125,6 @@ namespace Jovo
         #region ServerSideModules
         public void GetServerModules()
         {
-
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
                 ServerModules.Clear();
@@ -172,7 +171,6 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
-
                 try
                 {
                     if (InstalledModule.Name == module.Name)
