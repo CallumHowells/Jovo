@@ -125,9 +125,16 @@ namespace Jovo
         #region ServerSideModules
         public void GetServerModules()
         {
+            ServerModulePath = Jovo.Default.Path_Server_Update;
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
+                if (ServerModulePath.EndsWith("\\") | ServerModulePath.EndsWith("/"))
+                {
+                    ServerModulePath += "\\";
+                }
+                Console.WriteLine(ServerModulePath);
                 ServerModules.Clear();
+
                 JsonSerializer serializer = new JsonSerializer();
                 if (Directory.Exists(ServerModulePath))
                 {
@@ -140,6 +147,7 @@ namespace Jovo
                             data.Tag = (object)data;
                             ServerModules.Add(data);
                         }
+                        Console.WriteLine(path);
                     }
                 }
             }
@@ -171,6 +179,7 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
+
                 try
                 {
                     if (InstalledModule.Name == module.Name)
