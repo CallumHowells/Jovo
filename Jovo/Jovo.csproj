@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="formChangelog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formChangelog.Designer.cs">
+      <DependentUpon>formChangelog.cs</DependentUpon>
+    </Compile>
     <Compile Include="formSettings.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,9 @@
     <Compile Include="Handlers\SystemFunctions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="formChangelog.resx">
+      <DependentUpon>formChangelog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="formMain.resx">
       <DependentUpon>formMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -110,9 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Jovo_Logo.ico" />
-    <None Include="Resources\crying_face.png" />
     <None Include="Resources\settings.png" />
-    <None Include="Resources\close1.png" />
+    <None Include="Resources\exit.png" />
+    <None Include="Resources\if_smiley__8_2290989.png" />
     <None Include="Resources\Jovo_Logo.png" />
     <None Include="Resources\Jovo_Logo.ico" />
   </ItemGroup>

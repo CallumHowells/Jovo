@@ -46,5 +46,17 @@ namespace Jovo {
                 this["System_Tray_Icon_Left_Click_Module"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Path_Server_Update {
+            get {
+                return ((string)(this["Path_Server_Update"]));
+            }
+            set {
+                this["Path_Server_Update"] = value;
+            }
+        }
     }
 }
