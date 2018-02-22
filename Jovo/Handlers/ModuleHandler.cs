@@ -130,19 +130,22 @@ namespace Jovo
             {
                 ServerModules.Clear();
                 JsonSerializer serializer = new JsonSerializer();
-                if(Directory.Exists(ServerModulePath)){
-                foreach (string path in Directory.GetDirectories(ServerModulePath))
+                if (Directory.Exists(ServerModulePath))
                 {
-                    if (File.Exists(path + "\\manifest.json"))
+                    foreach (string path in Directory.GetDirectories(ServerModulePath))
                     {
-                        ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
-                        data.Path = path;
-                        data.Tag = (object)data;
-                        ServerModules.Add(data);
+                        if (File.Exists(path + "\\manifest.json"))
+                        {
+                            ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
+                            data.Path = path;
+                            data.Tag = (object)data;
+                            ServerModules.Add(data);
+                        }
                     }
                 }
             }
         }
+
         public void GetModuleUpdates()
         {
             GetModules();
@@ -170,12 +173,9 @@ namespace Jovo
             foreach (ModuleData InstalledModule in InstalledModules)
             {
 
-  try {
-                if (InstalledModule.Name == module.Name)
+                try
                 {
-                    Version InstalledVersion = new Version(InstalledModule.Version);
-                    Version ServerVersion = new Version(module.Version);
-                    if (InstalledVersion < ServerVersion)
+                    if (InstalledModule.Name == module.Name)
                     {
                         Version InstalledVersion = new Version(InstalledModule.Version);
                         Version ServerVersion = new Version(module.Version);
