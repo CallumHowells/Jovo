@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Xml.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -126,14 +125,14 @@ namespace Jovo
         #region ServerSideModules
         public void GetServerModules()
         {
+
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
                 ServerModules.Clear();
                 JsonSerializer serializer = new JsonSerializer();
-
+                if(Directory.Exists(ServerModulePath)){
                 foreach (string path in Directory.GetDirectories(ServerModulePath))
                 {
-
                     if (File.Exists(path + "\\manifest.json"))
                     {
                         ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
@@ -144,7 +143,6 @@ namespace Jovo
                 }
             }
         }
-
         public void GetModuleUpdates()
         {
             GetModules();
@@ -171,14 +169,25 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
+
+  try {
                 if (InstalledModule.Name == module.Name)
                 {
                     Version InstalledVersion = new Version(InstalledModule.Version);
                     Version ServerVersion = new Version(module.Version);
                     if (InstalledVersion < ServerVersion)
                     {
-                        return true;
+                        Version InstalledVersion = new Version(InstalledModule.Version);
+                        Version ServerVersion = new Version(module.Version);
+                        if (InstalledVersion < ServerVersion)
+                        {
+                            return true;
+                        }
                     }
+                }
+                catch (Exception VersionCheckException)
+                {
+                    Console.WriteLine(VersionCheckException.Message);
                 }
             }
             return false;
