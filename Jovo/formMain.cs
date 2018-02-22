@@ -91,6 +91,7 @@ namespace Jovo
                     frm.ShowDialog();
                     break;
                 case "exit":
+                    icon.Visible = false;
                     Application.Exit();
                     break;
 

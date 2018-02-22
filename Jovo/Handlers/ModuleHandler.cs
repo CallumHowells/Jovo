@@ -88,7 +88,6 @@ namespace Jovo
         public List<SettingData> GetModuleSettings(ModuleData data)
         {
             List<SettingData> moduleSettings = new List<SettingData>();
-            moduleSettings.Clear();
 
             if (File.Exists(data.Path + "\\settings.json"))
             {
@@ -97,7 +96,11 @@ namespace Jovo
 
                 foreach (KeyValuePair<string, JToken> setting in obj)
                 {
-                    SettingData settings = JsonConvert.DeserializeObject<SettingData>(setting.Value.ToString());
+                    SettingData settings = new SettingData();
+                    settings.Name = setting.Key;
+                    settings.Text = setting.Key;
+                    settings.Value = setting.Value.ToString();
+                    settings.Domain = "string";
                     settings.Module = data.Name;
                     moduleSettings.Add(settings);
                 }
