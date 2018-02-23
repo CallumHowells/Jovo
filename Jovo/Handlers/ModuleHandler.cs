@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Jovo
 {
@@ -156,7 +156,7 @@ namespace Jovo
             }
         }
 
-        public void GetModuleUpdates()
+        public void GetModuleUpdates(UtilityHandler utility, BackgroundWorker worker)
         {
             GetModules();
             GetServerModules();
@@ -167,16 +167,20 @@ namespace Jovo
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
-                    formMain.Notification("Installing module", AvailableModule.Name);
+                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name + "\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest", Timeout = 0, Method = "Show" });
 
-                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+                    Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
+                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
+
+                    worker.ReportProgress(0, (object)new NotificationData() { Method = "Hide" });
                 }
                 else if (CompareModuleVersions(AvailableModule))
                 {
-                    formMain.Notification("Updating module", AvailableModule.Name);
+                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
 
-                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
+                    CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
+
+                    worker.ReportProgress(0, (object)new NotificationData() { Method = "Hide" });
                 }
             }
 
@@ -208,7 +212,7 @@ namespace Jovo
             return false;
         }
 
-        private void CopyAll(DirectoryInfo source, DirectoryInfo target)
+        private void CopyAll(DirectoryInfo source, DirectoryInfo target, UtilityHandler utility)
         {
             foreach (FileInfo fi in source.GetFiles())
             {
@@ -218,7 +222,7 @@ namespace Jovo
             foreach (DirectoryInfo diSourceSubDir in source.GetDirectories())
             {
                 DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
-                CopyAll(diSourceSubDir, nextTargetSubDir);
+                CopyAll(diSourceSubDir, nextTargetSubDir, utility);
             }
         }
         #endregion
@@ -245,6 +249,14 @@ namespace Jovo
         public string Text { get; set; }
         public string Domain { get; set; }
         public string Value { get; set; }
+    }
+
+    public class NotificationData
+    {
+        public string Title { get; set; }
+        public string Text { get; set; }
+        public int Timeout { get; set; }
+        public string Method { get; set; }
     }
 
 }

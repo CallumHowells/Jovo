@@ -4,6 +4,8 @@ using System.Linq;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Jovo
 {
@@ -13,16 +15,19 @@ namespace Jovo
 
         // Define Handlers
         ModuleHandler module;
+        UtilityHandler utility;
 
         // Define Controls
+        BackgroundWorker UpdateWorker = new BackgroundWorker();
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
         ToolStripSeparator sep;
         private static NotifyIcon icon = new NotifyIcon();
 
-        public formMain(ModuleHandler _module)
+        public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
             module = _module;
+            utility = _utility;
 
             InitializeComponent();
 
@@ -33,8 +38,24 @@ namespace Jovo
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
 
-            module.GetModuleUpdates();
+            UpdateWorker.WorkerReportsProgress = true;
+            UpdateWorker.DoWork += UpdateWorker_DoWork;
+            UpdateWorker.RunWorkerCompleted += UpdateWorker_RunWorkerCompleted;
+            UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
+            UpdateWorker.RunWorkerAsync();
+        }
 
+        private void UpdateWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            NotificationData data = (NotificationData)e.UserState;
+            if (data.Method == "Show")
+                utility.ShowNotification(data.Title, data.Text, data.Timeout, true);
+            else
+                utility.HideNotification();
+        }
+
+        private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             int prev_cat = 0;
             foreach (ModuleData data in module.InstalledModules)
             {
@@ -77,6 +98,11 @@ namespace Jovo
             item.Image = Properties.Resources.exit;
             item.Click += menu_Click;
             menu.Items.Add(item);
+        }
+
+        private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
         public static void Notification(string title, string message)
@@ -128,5 +154,9 @@ namespace Jovo
             }
         }
 
+        private void formMain_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

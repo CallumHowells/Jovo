@@ -35,8 +35,8 @@
     <ApplicationIcon>Jovo_Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,12 +57,19 @@
     <Compile Include="formChangelog.Designer.cs">
       <DependentUpon>formChangelog.cs</DependentUpon>
     </Compile>
+    <Compile Include="formNotification.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="formNotification.Designer.cs">
+      <DependentUpon>formNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="formSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="formSettings.Designer.cs">
       <DependentUpon>formSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\UtilityHandler.cs" />
     <Compile Include="Jovo.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -85,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="formMain.resx">
       <DependentUpon>formMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="formNotification.resx">
+      <DependentUpon>formNotification.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="formSettings.resx">
       <DependentUpon>formSettings.cs</DependentUpon>
@@ -119,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Jovo_Logo.ico" />
+    <None Include="Resources\jovo_loading.gif" />
     <None Include="Resources\settings.png" />
     <None Include="Resources\exit.png" />
     <None Include="Resources\if_smiley__8_2290989.png" />
