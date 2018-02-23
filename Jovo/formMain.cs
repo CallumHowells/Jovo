@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -19,22 +18,22 @@ namespace Jovo
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
         ToolStripSeparator sep;
-        NotifyIcon icon;
+        private static NotifyIcon icon = new NotifyIcon();
 
         public formMain(ModuleHandler _module)
         {
             module = _module;
-            module.GetModuleUpdates();
 
             InitializeComponent();
 
             // Create NotifyIcon to sit in system tray
-            icon = new NotifyIcon();
             icon.Text = "Jovo";
             icon.Icon = Properties.Resources.Jovo_Logo;
             icon.Visible = true;
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
+
+            module.GetModuleUpdates();
 
             int prev_cat = 0;
             foreach (ModuleData data in module.InstalledModules)
@@ -78,6 +77,16 @@ namespace Jovo
             item.Image = Properties.Resources.exit;
             item.Click += menu_Click;
             menu.Items.Add(item);
+        }
+
+        public static void Notification(string title, string message)
+        {
+            icon.Text = "Jovo";
+            icon.Icon = Properties.Resources.Jovo_Logo;
+            icon.Visible = true;
+
+            icon.ShowBalloonTip(2000, title, message, ToolTipIcon.Info);
+
         }
 
         private void menu_Click(object sender, EventArgs e)

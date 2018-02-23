@@ -160,6 +160,7 @@ namespace Jovo
         {
             GetModules();
             GetServerModules();
+
             foreach (ModuleData AvailableModule in ServerModules)
             {
                 DirectoryInfo localDir = new DirectoryInfo(AppModulePath + "\\" + AvailableModule.Name);
@@ -167,14 +168,18 @@ namespace Jovo
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
+                    formMain.Notification("Installing module", AvailableModule.Name);
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
                 }
                 else if (CompareModuleVersions(AvailableModule))
                 {
+                    formMain.Notification("Updating module", AvailableModule.Name);
+
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
                 }
             }
+
             GetModules();
         }
 
