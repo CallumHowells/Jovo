@@ -401,7 +401,7 @@ namespace Jovo
 
         private void btnFormClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void setting_SelectedValueChanged(object sender, EventArgs e)

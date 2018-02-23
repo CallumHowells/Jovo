@@ -19,10 +19,15 @@ namespace Jovo
         ToolStripMenuItem item;
         ToolStripSeparator sep;
         private static NotifyIcon icon = new NotifyIcon();
+        formSettings frmSettings;
+
 
         public formMain(ModuleHandler _module)
         {
             module = _module;
+
+            frmSettings = new formSettings(module);
+            frmSettings.FormClosing += frmSettings_FormClosing;
 
             InitializeComponent();
 
@@ -79,6 +84,13 @@ namespace Jovo
             menu.Items.Add(item);
         }
 
+        private void frmSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            formSettings frm = (formSettings)sender;
+            frm.Hide();
+            e.Cancel = true;
+        }
+
         public static void Notification(string title, string message)
         {
             icon.Text = "Jovo";
@@ -96,8 +108,7 @@ namespace Jovo
             switch (click.Tag)
             {
                 case "settings":
-                    formSettings frm = new formSettings(module);
-                    frm.ShowDialog();
+                    frmSettings.ShowDialog();
                     break;
                 case "exit":
                     icon.Visible = false;
