@@ -168,13 +168,13 @@ namespace Jovo
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
-                    formMain.Notification("Installing module", AvailableModule.Name);
+                    formMain.Notification("Installing module", AvailableModule.Name + " " + AvailableModule.Version);
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
                 }
                 else if (CompareModuleVersions(AvailableModule))
                 {
-                    formMain.Notification("Updating module", AvailableModule.Name);
+                    formMain.Notification("Updating module", AvailableModule.Name + " " + AvailableModule.Version);
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir);
                 }
@@ -187,7 +187,6 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
-
                 try
                 {
                     if (InstalledModule.Name == module.Name)
