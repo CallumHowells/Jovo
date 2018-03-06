@@ -167,7 +167,7 @@ namespace Jovo
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name + "\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest\ntest", Timeout = 0, Method = "Show" });
+                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
 
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);

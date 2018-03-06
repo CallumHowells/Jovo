@@ -11,22 +11,7 @@ namespace Jovo
     {
         public UtilityHandler() { }
 
-        formNotification frm;
 
-        public void ShowNotification(string Title, string Text, int Timeout, bool SupportsCancellation)
-        {
-            frm = new formNotification(Title, Text, Timeout);
-            frm.Show();
-        }
-
-        public void HideNotification()
-        {
-            try
-            {
-                frm.Close();
-            }
-            catch (Exception) { }
-        }
         
 
     }

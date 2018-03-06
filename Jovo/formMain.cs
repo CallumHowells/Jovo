@@ -17,6 +17,10 @@ namespace Jovo
         ModuleHandler module;
         UtilityHandler utility;
 
+        // Define Sub-Forms
+        formSettings settings;
+        formNotification notification;
+
         // Define Controls
         BackgroundWorker UpdateWorker = new BackgroundWorker();
         ContextMenuStrip menu = new ContextMenuStrip();
@@ -49,9 +53,18 @@ namespace Jovo
         {
             NotificationData data = (NotificationData)e.UserState;
             if (data.Method == "Show")
-                utility.ShowNotification(data.Title, data.Text, data.Timeout, true);
+            {
+                notification = new formNotification(data.Title, data.Text, data.Timeout);
+                notification.Show();
+            }
             else
-                utility.HideNotification();
+            {
+                try
+                {
+                    notification.Hide();
+                }
+                catch (Exception) { }
+            }
         }
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -105,16 +118,6 @@ namespace Jovo
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
-        public static void Notification(string title, string message)
-        {
-            icon.Text = "Jovo";
-            icon.Icon = Properties.Resources.Jovo_Logo;
-            icon.Visible = true;
-
-            icon.ShowBalloonTip(2000, title, message, ToolTipIcon.Info);
-
-        }
-
         private void menu_Click(object sender, EventArgs e)
         {
             // Each context menu item triggers this event, get which is triggered using Tag element //
@@ -122,9 +125,12 @@ namespace Jovo
             switch (click.Tag)
             {
                 case "settings":
-                    formSettings frm = new formSettings(module);
-                    frm.ShowDialog();
+                    if (settings == null)
+                        settings = new formSettings(module);
+                    if (settings.Visible == false)
+                        settings.Show();
                     break;
+
                 case "exit":
                     icon.Visible = false;
                     Application.Exit();
