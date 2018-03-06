@@ -404,6 +404,11 @@ namespace Jovo
             this.Hide();
         }
 
+        private void formSettings_Deactivate(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
         private void setting_SelectedValueChanged(object sender, EventArgs e)
         {
             settingsChanged = true;
@@ -568,5 +573,7 @@ namespace Jovo
 
             return destImage;
         }
+
+
     }
 }

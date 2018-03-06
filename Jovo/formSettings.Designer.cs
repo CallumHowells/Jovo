@@ -324,6 +324,7 @@
             this.Name = "formSettings";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Settings";
+            this.Deactivate += new System.EventHandler(this.formSettings_Deactivate);
             this.Load += new System.EventHandler(this.formSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlInfo.ResumeLayout(false);
