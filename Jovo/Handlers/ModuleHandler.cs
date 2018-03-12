@@ -38,15 +38,12 @@ namespace Jovo
 
         public ModuleData FindModule(string name)
         {
-            ModuleData toReturn = null;
-
-            Parallel.ForEach(InstalledModules, (data) =>
+            foreach(ModuleData data in InstalledModules)
             {
                 if (data.Name == name)
-                    toReturn = data;
-            });
-
-            return toReturn;
+                    return data;
+            }
+            return null;
         }
 
         public void GetSetDirectoryStructure(string appDir)
