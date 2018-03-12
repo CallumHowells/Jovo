@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace Jovo
 {
@@ -70,7 +71,8 @@ namespace Jovo
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             int prev_cat = 0;
-            foreach (ModuleData data in module.InstalledModules)
+            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
+            foreach (ModuleData data in SortedList)
             {
                 if (prev_cat != data.Category)
                 {
