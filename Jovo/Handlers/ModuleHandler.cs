@@ -20,7 +20,6 @@ namespace Jovo
         public List<ModuleData> InstalledModules = new List<ModuleData>();
         public List<ModuleData> ServerModules = new List<ModuleData>();
 
-
         #region InternalModules
         public bool ExecuteModule(ModuleData data)
         {
@@ -39,12 +38,15 @@ namespace Jovo
 
         public ModuleData FindModule(string name)
         {
-            foreach (ModuleData data in InstalledModules)
+            ModuleData toReturn = null;
+
+            Parallel.ForEach(InstalledModules, (data) =>
             {
                 if (data.Name == name)
-                    return data;
-            }
-            return null;
+                    toReturn = data;
+            });
+
+            return toReturn;
         }
 
         public void GetSetDirectoryStructure(string appDir)
