@@ -305,6 +305,7 @@ namespace Jovo
                 lblModuleText.Text = data.Text;
                 lblModuleInfo.Text = data.Info;
                 lblModulePath.Text = data.Path;
+                lblModulePath.Click += path_Clicked;
                 lblModuleName.Text = data.Name;
                 lblModuleVersion.Text = data.Version;
                 lblModulePublishDate.Text = data.PublishDate;
@@ -548,6 +549,12 @@ namespace Jovo
         private void btnFormClose_MouseLeave(object sender, EventArgs e)
         {
             btnFormClose.BackColor = Color.FromArgb(255, 255, 255);
+        }
+
+        private void path_Clicked(object sender, EventArgs e)
+        {
+            Label clicked = (Label)sender;
+            System.Diagnostics.Process.Start(clicked.Text);
         }
         #endregion
 
