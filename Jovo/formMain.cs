@@ -141,7 +141,6 @@ namespace Jovo
                 default:
                     module.ExecuteModule((ModuleData)click.Tag);
                     break;
-
             }
         }
 
@@ -160,11 +159,6 @@ namespace Jovo
                 default:
                     break;
             }
-        }
-
-        private void formMain_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

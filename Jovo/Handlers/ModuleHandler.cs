@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Jovo
 {
@@ -191,7 +190,6 @@ namespace Jovo
         {
             foreach (ModuleData InstalledModule in InstalledModules)
             {
-
                 try
                 {
                     if (InstalledModule.Name == module.Name)
