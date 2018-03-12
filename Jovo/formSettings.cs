@@ -525,6 +525,7 @@ namespace Jovo
 
         private void path_Click(object sender, EventArgs e)
         {
+            this.Deactivate -= formSettings_Deactivate;
             FolderBrowserDialog fld = new FolderBrowserDialog();
             fld.ShowNewFolderButton = true;
             fld.Description = "Select Path...";
@@ -536,6 +537,7 @@ namespace Jovo
                 Button btn = (Button)sender;
                 ((TextBox)pnlSettings.Controls[btn.Name.Replace("btn", "txt")]).Text = fld.SelectedPath;
             }
+            this.Deactivate += formSettings_Deactivate;
         }
 
         private void btnFormClose_MouseEnter(object sender, EventArgs e)
