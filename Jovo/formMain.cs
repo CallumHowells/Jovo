@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Collections.Generic;
 

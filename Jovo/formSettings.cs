@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -47,7 +41,6 @@ namespace Jovo
             lbl.Click += label_Click;
             lbl.Tag = null;
             lbl.TextAlign = ContentAlignment.MiddleLeft;
-            //lbl.Size = new Size(100, 25);
             lbl.Location = new Point(5, 70);
             lbl.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
             this.Controls.Add(lbl);
@@ -190,8 +183,6 @@ namespace Jovo
                     {
                         foreach (SettingData data in module.GetModuleSettings((ModuleData)ModuleTag))
                         {
-                            //Console.WriteLine(setting.Key + "   =>   " + setting.Value);
-
                             Label name = new Label();
                             name.Name = "lbl" + data.Name;
                             name.Text = data.Text;
@@ -582,7 +573,5 @@ namespace Jovo
 
             return destImage;
         }
-
-
     }
 }
