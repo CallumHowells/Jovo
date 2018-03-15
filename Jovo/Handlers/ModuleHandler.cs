@@ -237,6 +237,7 @@ namespace Jovo
         public string PublishDate { get; set; }
         public string Path { get; set; }
         public string Info { get; set; }
+        public bool HasSettings { get; set; }
     }
 
     public class SettingData
