@@ -34,27 +34,27 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlButtons = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.rtbChangelog = new System.Windows.Forms.RichTextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.groupBoxVersion = new System.Windows.Forms.GroupBox();
+            this.lblVersion = new System.Windows.Forms.Label();
+            this.groupBoxPath = new System.Windows.Forms.GroupBox();
+            this.lblPath = new System.Windows.Forms.TextBox();
             this.groupBoxText = new System.Windows.Forms.GroupBox();
             this.lblText = new System.Windows.Forms.Label();
             this.groupBoxName = new System.Windows.Forms.GroupBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.groupBoxPath = new System.Windows.Forms.GroupBox();
-            this.groupBoxVersion = new System.Windows.Forms.GroupBox();
-            this.lblVersion = new System.Windows.Forms.Label();
-            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.lblPath = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.lblDate = new System.Windows.Forms.Label();
-            this.rtbChangelog = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlMain.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBoxInfo.SuspendLayout();
+            this.groupBoxVersion.SuspendLayout();
+            this.groupBoxPath.SuspendLayout();
             this.groupBoxText.SuspendLayout();
             this.groupBoxName.SuspendLayout();
-            this.groupBoxPath.SuspendLayout();
-            this.groupBoxVersion.SuspendLayout();
-            this.groupBoxInfo.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnFormClose
@@ -116,6 +116,93 @@
             this.pnlMain.Size = new System.Drawing.Size(350, 505);
             this.pnlMain.TabIndex = 6;
             // 
+            // rtbChangelog
+            // 
+            this.rtbChangelog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.rtbChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.rtbChangelog.Location = new System.Drawing.Point(10, 397);
+            this.rtbChangelog.Name = "rtbChangelog";
+            this.rtbChangelog.Size = new System.Drawing.Size(333, 96);
+            this.rtbChangelog.TabIndex = 5;
+            this.rtbChangelog.Text = "";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.lblDate);
+            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBox1.Location = new System.Drawing.Point(10, 340);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(333, 50);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Release Date";
+            // 
+            // lblDate
+            // 
+            this.lblDate.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(18, 23);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(300, 13);
+            this.lblDate.TabIndex = 0;
+            // 
+            // groupBoxInfo
+            // 
+            this.groupBoxInfo.Controls.Add(this.lblInfo);
+            this.groupBoxInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxInfo.Location = new System.Drawing.Point(10, 122);
+            this.groupBoxInfo.Name = "groupBoxInfo";
+            this.groupBoxInfo.Size = new System.Drawing.Size(333, 100);
+            this.groupBoxInfo.TabIndex = 2;
+            this.groupBoxInfo.TabStop = false;
+            this.groupBoxInfo.Text = "Info";
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.Location = new System.Drawing.Point(18, 23);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(300, 60);
+            this.lblInfo.TabIndex = 0;
+            // 
+            // groupBoxVersion
+            // 
+            this.groupBoxVersion.Controls.Add(this.lblVersion);
+            this.groupBoxVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxVersion.Location = new System.Drawing.Point(10, 284);
+            this.groupBoxVersion.Name = "groupBoxVersion";
+            this.groupBoxVersion.Size = new System.Drawing.Size(333, 50);
+            this.groupBoxVersion.TabIndex = 3;
+            this.groupBoxVersion.TabStop = false;
+            this.groupBoxVersion.Text = "Version";
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.Location = new System.Drawing.Point(18, 23);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(300, 13);
+            this.lblVersion.TabIndex = 0;
+            // 
+            // groupBoxPath
+            // 
+            this.groupBoxPath.Controls.Add(this.lblPath);
+            this.groupBoxPath.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxPath.Location = new System.Drawing.Point(10, 228);
+            this.groupBoxPath.Name = "groupBoxPath";
+            this.groupBoxPath.Size = new System.Drawing.Size(333, 50);
+            this.groupBoxPath.TabIndex = 2;
+            this.groupBoxPath.TabStop = false;
+            this.groupBoxPath.Text = "Path";
+            // 
+            // lblPath
+            // 
+            this.lblPath.Location = new System.Drawing.Point(6, 19);
+            this.lblPath.Name = "lblPath";
+            this.lblPath.ReadOnly = true;
+            this.lblPath.Size = new System.Drawing.Size(322, 22);
+            this.lblPath.TabIndex = 0;
+            this.lblPath.DoubleClick += new System.EventHandler(this.lblPath_DoubleClick);
+            // 
             // groupBoxText
             // 
             this.groupBoxText.Controls.Add(this.lblText);
@@ -154,92 +241,6 @@
             this.lblName.Size = new System.Drawing.Size(300, 13);
             this.lblName.TabIndex = 0;
             // 
-            // groupBoxPath
-            // 
-            this.groupBoxPath.Controls.Add(this.lblPath);
-            this.groupBoxPath.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxPath.Location = new System.Drawing.Point(10, 228);
-            this.groupBoxPath.Name = "groupBoxPath";
-            this.groupBoxPath.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxPath.TabIndex = 2;
-            this.groupBoxPath.TabStop = false;
-            this.groupBoxPath.Text = "Path";
-            // 
-            // groupBoxVersion
-            // 
-            this.groupBoxVersion.Controls.Add(this.lblVersion);
-            this.groupBoxVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxVersion.Location = new System.Drawing.Point(10, 284);
-            this.groupBoxVersion.Name = "groupBoxVersion";
-            this.groupBoxVersion.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxVersion.TabIndex = 3;
-            this.groupBoxVersion.TabStop = false;
-            this.groupBoxVersion.Text = "Version";
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(18, 23);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(300, 13);
-            this.lblVersion.TabIndex = 0;
-            // 
-            // groupBoxInfo
-            // 
-            this.groupBoxInfo.Controls.Add(this.lblInfo);
-            this.groupBoxInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxInfo.Location = new System.Drawing.Point(10, 122);
-            this.groupBoxInfo.Name = "groupBoxInfo";
-            this.groupBoxInfo.Size = new System.Drawing.Size(333, 100);
-            this.groupBoxInfo.TabIndex = 2;
-            this.groupBoxInfo.TabStop = false;
-            this.groupBoxInfo.Text = "Info";
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.Location = new System.Drawing.Point(18, 23);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(300, 60);
-            this.lblInfo.TabIndex = 0;
-            // 
-            // lblPath
-            // 
-            this.lblPath.Location = new System.Drawing.Point(6, 19);
-            this.lblPath.Name = "lblPath";
-            this.lblPath.ReadOnly = true;
-            this.lblPath.Size = new System.Drawing.Size(322, 22);
-            this.lblPath.TabIndex = 0;
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lblDate);
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBox1.Location = new System.Drawing.Point(10, 340);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(333, 50);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Release Date";
-            // 
-            // lblDate
-            // 
-            this.lblDate.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDate.Location = new System.Drawing.Point(18, 23);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(300, 13);
-            this.lblDate.TabIndex = 0;
-            // 
-            // rtbChangelog
-            // 
-            this.rtbChangelog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtbChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.rtbChangelog.Location = new System.Drawing.Point(10, 397);
-            this.rtbChangelog.Name = "rtbChangelog";
-            this.rtbChangelog.Size = new System.Drawing.Size(333, 96);
-            this.rtbChangelog.TabIndex = 5;
-            this.rtbChangelog.Text = "";
-            // 
             // formModules
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,15 +257,16 @@
             this.Name = "formModules";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Installed Modules";
+            this.Deactivate += new System.EventHandler(this.formModules_Deactivate);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlMain.ResumeLayout(false);
-            this.groupBoxText.ResumeLayout(false);
-            this.groupBoxName.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBoxInfo.ResumeLayout(false);
+            this.groupBoxVersion.ResumeLayout(false);
             this.groupBoxPath.ResumeLayout(false);
             this.groupBoxPath.PerformLayout();
-            this.groupBoxVersion.ResumeLayout(false);
-            this.groupBoxInfo.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxText.ResumeLayout(false);
+            this.groupBoxName.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

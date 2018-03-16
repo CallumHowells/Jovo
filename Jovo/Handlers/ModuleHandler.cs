@@ -183,7 +183,6 @@ namespace Jovo
 
                 FileInfo manifest = new FileInfo( AvailableModule.Path + "\\manifest.json");
                 manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
-                Console.WriteLine(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json");
             }
 
             GetModules();

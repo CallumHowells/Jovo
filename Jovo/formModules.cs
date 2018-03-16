@@ -29,7 +29,7 @@ namespace Jovo
             string modulePath = module.AppModulePath;
             int icony = 1;
             int y = 1;
-            foreach(ModuleData data in module.InstalledModules.OrderByDescending(m => m.Name))
+            foreach (ModuleData data in module.InstalledModules.OrderByDescending(m => m.Name))
             {
                 PictureBox icon = new PictureBox();
                 icon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -48,6 +48,7 @@ namespace Jovo
                 button.AutoSizeMode = AutoSizeMode.GrowAndShrink;
                 button.BackColor = Color.White;
                 button.FlatAppearance.BorderColor = Color.White;
+                button.FlatAppearance.BorderSize = 1;
                 button.FlatAppearance.MouseOverBackColor = Color.White;
                 button.FlatStyle = FlatStyle.Flat;
                 button.Font = new Font("Segoe UI", 10F, FontStyle.Regular);
@@ -76,7 +77,7 @@ namespace Jovo
             lblName.Text = module.Name;
             lblText.Text = module.Text;
             lblInfo.Text = module.Info;
-            lblPath.Text = Application.StartupPath + "\\modules\\" + module.Path;
+            lblPath.Text = module.Path;
             lblVersion.Text = module.Version;
             lblDate.Text = module.PublishDate;
 
@@ -114,7 +115,26 @@ namespace Jovo
         private void btn_Click(object sender, EventArgs e)
         {
             Button btn = (Button)sender;
-            UpdateInfoPanel((ModuleData) btn.Tag);
+            UpdateInfoPanel((ModuleData)btn.Tag);
+        }
+
+        private void lblPath_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                TextBox path = (TextBox)sender;
+                Console.WriteLine(path.Text);
+                System.Diagnostics.Process.Start(path.Text);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
+        private void formModules_Deactivate(object sender, EventArgs e)
+        {
+            Close();
         }
         #endregion
     }
