@@ -129,7 +129,7 @@ namespace Jovo
             ServerModulePath = Jovo.Default.Path_Server_Update;
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
-                if (ServerModulePath.EndsWith("\\") | ServerModulePath.EndsWith("/"))
+                if (!ServerModulePath.EndsWith("\\"))
                 {
                     ServerModulePath += "\\";
                 }
@@ -180,6 +180,10 @@ namespace Jovo
 
                     worker.ReportProgress(0, (object)new NotificationData() { Method = "Hide" });
                 }
+
+                FileInfo manifest = new FileInfo( AvailableModule.Path + "\\manifest.json");
+                manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
+                Console.WriteLine(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json");
             }
 
             GetModules();
