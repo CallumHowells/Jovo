@@ -97,6 +97,14 @@ namespace Jovo
             menu.Items.Add(sep);
 
             item = new ToolStripMenuItem();
+            item.Name = "tsModules";
+            item.Text = "Modules";
+            item.Tag = "modules";
+            //item.Image
+            item.Click += menu_Click;
+            menu.Items.Add(item);
+
+            item = new ToolStripMenuItem();
             item.Name = "tsSettings";
             item.Text = "Settings";
             item.Tag = "settings";
@@ -124,6 +132,11 @@ namespace Jovo
             ToolStripMenuItem click = (ToolStripMenuItem)sender;
             switch (click.Tag)
             {
+                case "modules":
+                    formModules FormModules = new formModules(module);
+                    FormModules.Show();
+                    break;
+
                 case "settings":
                     if (settings == null)
                         settings = new formSettings(module);

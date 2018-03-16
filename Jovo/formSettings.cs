@@ -367,7 +367,6 @@ namespace Jovo
             }
         }
 
-
         private void label_MouseEnter(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;

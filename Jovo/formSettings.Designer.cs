@@ -98,9 +98,9 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(95)))), ((int)(((byte)(197)))));
             this.label1.Location = new System.Drawing.Point(47, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(148, 46);
+            this.label1.Size = new System.Drawing.Size(141, 46);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Settings.";
+            this.label1.Text = "Settings";
             // 
             // pnlLine
             // 
