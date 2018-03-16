@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Threading.Tasks;
 
 namespace Jovo
 {
