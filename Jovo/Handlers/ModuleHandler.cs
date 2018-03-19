@@ -88,12 +88,14 @@ namespace Jovo
 
                 foreach (KeyValuePair<string, JToken> setting in obj)
                 {
-                    SettingData settings = new SettingData();
-                    settings.Name = setting.Key;
-                    settings.Text = setting.Key;
-                    settings.Value = setting.Value.ToString();
-                    settings.Domain = "string";
-                    settings.Module = data.Name;
+                    SettingData settings = new SettingData
+                    {
+                        Name = setting.Key,
+                        Text = setting.Key,
+                        Value = setting.Value.ToString(),
+                        Domain = "string",
+                        Module = data.Name
+                    };
                     moduleSettings.Add(settings);
                 }
 
@@ -159,20 +161,20 @@ namespace Jovo
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
+                    worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
 
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
 
-                    worker.ReportProgress(0, (object)new NotificationData() { Method = "Hide" });
+                    worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
                 else if (CompareModuleVersions(AvailableModule))
                 {
-                    worker.ReportProgress(0, (object)new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
+                    worker.ReportProgress(0, new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
 
-                    worker.ReportProgress(0, (object)new NotificationData() { Method = "Hide" });
+                    worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
 
                 FileInfo manifest = new FileInfo( AvailableModule.Path + "\\manifest.json");
