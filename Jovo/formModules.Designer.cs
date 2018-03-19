@@ -120,7 +120,7 @@
             // 
             this.rtbChangelog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rtbChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.rtbChangelog.Location = new System.Drawing.Point(10, 397);
+            this.rtbChangelog.Location = new System.Drawing.Point(10, 389);
             this.rtbChangelog.Name = "rtbChangelog";
             this.rtbChangelog.Size = new System.Drawing.Size(333, 96);
             this.rtbChangelog.TabIndex = 5;
@@ -130,7 +130,7 @@
             // 
             this.groupBox1.Controls.Add(this.lblDate);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBox1.Location = new System.Drawing.Point(10, 340);
+            this.groupBox1.Location = new System.Drawing.Point(10, 332);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(333, 50);
             this.groupBox1.TabIndex = 4;
@@ -149,7 +149,7 @@
             // 
             this.groupBoxInfo.Controls.Add(this.lblInfo);
             this.groupBoxInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxInfo.Location = new System.Drawing.Point(10, 122);
+            this.groupBoxInfo.Location = new System.Drawing.Point(10, 114);
             this.groupBoxInfo.Name = "groupBoxInfo";
             this.groupBoxInfo.Size = new System.Drawing.Size(333, 100);
             this.groupBoxInfo.TabIndex = 2;
@@ -168,7 +168,7 @@
             // 
             this.groupBoxVersion.Controls.Add(this.lblVersion);
             this.groupBoxVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxVersion.Location = new System.Drawing.Point(10, 284);
+            this.groupBoxVersion.Location = new System.Drawing.Point(10, 276);
             this.groupBoxVersion.Name = "groupBoxVersion";
             this.groupBoxVersion.Size = new System.Drawing.Size(333, 50);
             this.groupBoxVersion.TabIndex = 3;
@@ -187,7 +187,7 @@
             // 
             this.groupBoxPath.Controls.Add(this.lblPath);
             this.groupBoxPath.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxPath.Location = new System.Drawing.Point(10, 228);
+            this.groupBoxPath.Location = new System.Drawing.Point(10, 220);
             this.groupBoxPath.Name = "groupBoxPath";
             this.groupBoxPath.Size = new System.Drawing.Size(333, 50);
             this.groupBoxPath.TabIndex = 2;
@@ -207,7 +207,7 @@
             // 
             this.groupBoxText.Controls.Add(this.lblText);
             this.groupBoxText.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxText.Location = new System.Drawing.Point(10, 66);
+            this.groupBoxText.Location = new System.Drawing.Point(10, 58);
             this.groupBoxText.Name = "groupBoxText";
             this.groupBoxText.Size = new System.Drawing.Size(333, 50);
             this.groupBoxText.TabIndex = 1;
@@ -226,7 +226,7 @@
             // 
             this.groupBoxName.Controls.Add(this.lblName);
             this.groupBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxName.Location = new System.Drawing.Point(10, 10);
+            this.groupBoxName.Location = new System.Drawing.Point(10, 2);
             this.groupBoxName.Name = "groupBoxName";
             this.groupBoxName.Size = new System.Drawing.Size(333, 50);
             this.groupBoxName.TabIndex = 0;

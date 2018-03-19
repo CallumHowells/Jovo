@@ -12,6 +12,8 @@ namespace Jovo
     {
         public ModuleHandler() { }
 
+        UtilityHandler utility = new UtilityHandler();
+
         public string AppPath { get; set; }
         public string AppModulePath { get; set; }
         public string ServerPath { get; set; }
@@ -66,7 +68,7 @@ namespace Jovo
                 {
                     ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
                     data.Path = path;
-                    data.Tag = (object)data;
+                    data.Tag = data;
                     InstalledModules.Add(data);
                 }
             }
@@ -126,7 +128,6 @@ namespace Jovo
                 {
                     ServerModulePath += "\\";
                 }
-                Console.WriteLine(ServerModulePath);
                 ServerModules.Clear();
 
                 JsonSerializer serializer = new JsonSerializer();
@@ -138,10 +139,9 @@ namespace Jovo
                         {
                             ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
                             data.Path = path;
-                            data.Tag = (object)data;
+                            data.Tag = data;
                             ServerModules.Add(data);
                         }
-                        Console.WriteLine(path);
                     }
                 }
             }
@@ -155,9 +155,11 @@ namespace Jovo
             foreach (ModuleData AvailableModule in ServerModules)
             {
                 DirectoryInfo localDir = new DirectoryInfo(AppModulePath + "\\" + AvailableModule.Name);
+                utility.LogEvent("Module found on server: " + AvailableModule.Name);
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
+                    utility.LogEvent("Installing module " + AvailableModule.Name);
                     worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
 
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
@@ -193,6 +195,7 @@ namespace Jovo
                         Version ServerVersion = new Version(module.Version);
                         if (InstalledVersion < ServerVersion)
                         {
+                            utility.LogEvent(String.Format("Updating {0} to version {1}",module.Name, module.Version));
                             return true;
                         }
                     }

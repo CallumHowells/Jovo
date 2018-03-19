@@ -25,7 +25,7 @@ namespace Jovo
             string modulePath = module.AppModulePath;
             int icony = 1;
             int y = 1;
-            foreach (ModuleData data in module.InstalledModules.OrderByDescending(m => m.Name))
+            foreach (ModuleData data in module.InstalledModules.OrderBy(m => m.Name))
             {
                 PictureBox icon = new PictureBox();
                 icon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -119,7 +119,6 @@ namespace Jovo
             try
             {
                 TextBox path = (TextBox)sender;
-                Console.WriteLine(path.Text);
                 System.Diagnostics.Process.Start(path.Text);
             }
             catch (Exception ex)

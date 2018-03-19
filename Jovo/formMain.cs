@@ -5,6 +5,9 @@ using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace Jovo
 {
@@ -26,13 +29,19 @@ namespace Jovo
         ToolStripMenuItem item;
         ToolStripSeparator sep;
         private static NotifyIcon icon = new NotifyIcon();
+        Stopwatch startupTimer = new Stopwatch();
 
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
             module = _module;
             utility = _utility;
 
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExitEvent);
+            AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
+
             InitializeComponent();
+            startupTimer.Start();
+            utility.LogEvent("############################ Program starting... ############################", true, true);
 
             // Create NotifyIcon to sit in system tray
             icon.Text = "Jovo";
@@ -45,6 +54,7 @@ namespace Jovo
             UpdateWorker.DoWork += UpdateWorker_DoWork;
             UpdateWorker.RunWorkerCompleted += UpdateWorker_RunWorkerCompleted;
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
+            utility.LogEvent("Program probably started OK - Updater starting...");
             UpdateWorker.RunWorkerAsync();
         }
 
@@ -68,6 +78,7 @@ namespace Jovo
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            utility.LogEvent("Updates finished - building module list");
             int prev_cat = 0;
             List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
             foreach (ModuleData data in SortedList)
@@ -119,6 +130,9 @@ namespace Jovo
             item.Image = Properties.Resources.exit;
             item.Click += menu_Click;
             menu.Items.Add(item);
+
+            startupTimer.Stop();
+            utility.LogEvent("Startup finished in " + startupTimer.Elapsed.TotalSeconds.ToString() + " seconds");
         }
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -170,6 +184,16 @@ namespace Jovo
                 default:
                     break;
             }
+        }
+
+        private void ProcessExitEvent(object sender, EventArgs e)
+        {
+            utility.LogEvent("Program was exited properly\r\n\r\n", false, true);
+        }
+
+        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e)
+        {
+            utility.LogEvent(String.Format("An exception occured: {0}", e.Exception.ToString()), true, true);
         }
     }
 }
