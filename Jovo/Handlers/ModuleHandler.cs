@@ -37,12 +37,7 @@ namespace Jovo
 
         public ModuleData FindModule(string name)
         {
-            foreach(ModuleData data in InstalledModules)
-            {
-                if (data.Name == name)
-                    return data;
-            }
-            return null;
+            return InstalledModules.Find(m => m.Name == name);
         }
 
         public void GetSetDirectoryStructure(string appDir)
