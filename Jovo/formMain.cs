@@ -6,8 +6,8 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
-using System.Reflection;
 using System.Diagnostics;
+using System.Collections;
 
 namespace Jovo
 {
@@ -78,7 +78,7 @@ namespace Jovo
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            utility.LogEvent("Updates finished - building module list");
+            utility.LogEvent("Updates finished - building module list...");
             int prev_cat = 0;
             List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
             foreach (ModuleData data in SortedList)
@@ -111,7 +111,6 @@ namespace Jovo
             item.Name = "tsModules";
             item.Text = "Modules";
             item.Tag = "modules";
-            //item.Image
             item.Click += menu_Click;
             menu.Items.Add(item);
 
@@ -131,7 +130,6 @@ namespace Jovo
             item.Click += menu_Click;
             menu.Items.Add(item);
 
-            startupTimer.Stop();
             utility.LogEvent("Startup finished in " + startupTimer.Elapsed.TotalSeconds.ToString() + " seconds");
         }
 
@@ -188,12 +186,14 @@ namespace Jovo
 
         private void ProcessExitEvent(object sender, EventArgs e)
         {
-            utility.LogEvent("Program was exited properly\r\n\r\n", false, true);
+            startupTimer.Stop();
+            utility.LogEvent("Program was exited properly\r\n\r\n");
+            utility.LogEvent("Total elapsed time: " + startupTimer.Elapsed, false, true);
         }
 
         private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e)
         {
-            utility.LogEvent(String.Format("An exception occured: {0}", e.Exception.ToString()), true, true);
+            utility.LogEvent(String.Format("{0} - {1}", e.Exception.Source , e.Exception.ToString()), true, true);
         }
     }
 }
