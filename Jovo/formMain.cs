@@ -36,6 +36,8 @@ namespace Jovo
             module = _module;
             utility = _utility;
 
+            utility.ArchiveLog();
+
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExitEvent);
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
 

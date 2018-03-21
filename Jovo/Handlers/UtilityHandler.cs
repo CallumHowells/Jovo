@@ -7,6 +7,22 @@ namespace Jovo
     {
         public UtilityHandler() { }
 
+        public void ArchiveLog()
+        {
+            try
+            {
+                FileInfo logFile = new FileInfo("log.txt");
+                if (DateTime.Now.Subtract(logFile.CreationTime).Hours > 24)
+                {
+                    LogEvent("Log file was archived", true, true);
+                    if (!Directory.Exists("loghistory"))
+                        Directory.CreateDirectory("loghistory");
+
+                    logFile.MoveTo("loghistory\\log " + DateTime.Today.ToString("yyyy-MM-dd") + ".txt");
+                }
+            } catch(Exception) { }
+        }
+
         public void LogEvent(string message, bool newLine = true, bool blankLine = false)
         {
             using (StreamWriter LogWriter = new StreamWriter("log.txt", true))
