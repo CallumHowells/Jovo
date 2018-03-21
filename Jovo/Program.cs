@@ -19,6 +19,8 @@ namespace Jovo
 
             ModuleHandler module = new ModuleHandler();
             UtilityHandler utility = new UtilityHandler();
+
+            utility.LogEvent("############################ Program starting... ############################", true, true);
             module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
 
             Application.Run(new formMain(module, utility));

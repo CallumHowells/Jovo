@@ -26,6 +26,7 @@ namespace Jovo
         {
             try
             {
+                utility.LogEvent("Trying to start module: " + data.Name);
                 if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
                 {
                     Process.Start(data.Path + "\\" + data.Name + ".exe");
@@ -56,6 +57,8 @@ namespace Jovo
                 ServerPath = Jovo.Default.Path_Server_Update;
                 ServerModulePath = ServerPath + "Modules";
             }
+            utility.LogEvent("Looking for module updates at: " + Jovo.Default.Path_Server_Update);
+
         }
 
         public void GetModules(bool log = false)
@@ -73,6 +76,8 @@ namespace Jovo
                         utility.LogEvent($"Found installed module: {data.Name} (v{data.Version})");
                 }
             }
+            if(log)
+                utility.LogEvent(InstalledModules.Count + " modules loaded");
         }
         #endregion
 

@@ -33,17 +33,16 @@ namespace Jovo
 
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
-            module = _module;
             utility = _utility;
-
             utility.ArchiveLog();
+
+            module = _module;
 
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExitEvent);
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
 
             InitializeComponent();
             startupTimer.Start();
-            utility.LogEvent("############################ Program starting... ############################", true, true);
 
             // Create NotifyIcon to sit in system tray
             icon.Text = "Jovo";
