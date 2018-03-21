@@ -146,7 +146,7 @@ namespace Jovo
             switch (click.Tag)
             {
                 case "modules":
-                    formModules FormModules = new formModules(module);
+                    formModules FormModules = new formModules(module, utility);
                     FormModules.Show();
                     break;
 
@@ -191,6 +191,6 @@ namespace Jovo
             utility.LogEvent("Program was exited properly after " + startupTimer.Elapsed + Environment.NewLine, true, true);
         }
 
-        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\r\n", true, true);
+        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\n", true, true);
     }
 }

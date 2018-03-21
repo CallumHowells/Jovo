@@ -10,10 +10,12 @@ namespace Jovo
     public partial class formModules : Form
     {
         ModuleHandler module;
+        UtilityHandler utility;
 
-        public formModules(ModuleHandler _module)
+        public formModules(ModuleHandler _module, UtilityHandler _utility)
         {
             module = _module;
+            utility = _utility;
             InitializeComponent();
             GenerateButtons();
 
@@ -77,7 +79,7 @@ namespace Jovo
             lblVersion.Text = module.Version;
             lblDate.Text = module.PublishDate;
 
-            if (File.Exists(Application.StartupPath + "\\modules\\" + module.Path + "\\changelog.json"))
+            if (File.Exists(module.Path + "\\changelog.json"))
                 GetChangelog(module);
             else
                 rtbChangelog.Text = "No changelog found!";
