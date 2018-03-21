@@ -78,7 +78,7 @@ namespace Jovo
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            utility.LogEvent("Updates finished - building module list...");
+            utility.LogEvent("Updater finished");
             int prev_cat = 0;
             List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
             foreach (ModuleData data in SortedList)
@@ -130,7 +130,8 @@ namespace Jovo
             item.Click += menu_Click;
             menu.Items.Add(item);
 
-            utility.LogEvent("Startup finished in " + startupTimer.Elapsed.TotalSeconds.ToString() + " seconds");
+            utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
+            utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB  ({Environment.WorkingSet / (1024 * 1024)} MB assigned)");
         }
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -151,7 +152,7 @@ namespace Jovo
 
                 case "settings":
                     if (settings == null)
-                        settings = new formSettings(module);
+                        settings = new formSettings(module, utility);
                     if (settings.Visible == false)
                         settings.Show();
                     break;
@@ -187,13 +188,9 @@ namespace Jovo
         private void ProcessExitEvent(object sender, EventArgs e)
         {
             startupTimer.Stop();
-            utility.LogEvent("Program was exited properly\r\n\r\n");
-            utility.LogEvent("Total elapsed time: " + startupTimer.Elapsed, false, true);
+            utility.LogEvent("Program was exited properly after " + startupTimer.Elapsed + Environment.NewLine, true, true);
         }
 
-        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e)
-        {
-            utility.LogEvent(String.Format("{0} - {1}", e.Exception.Source , e.Exception.ToString()), true, true);
-        }
+        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\r\n", true, true);
     }
 }

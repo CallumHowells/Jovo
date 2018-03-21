@@ -58,10 +58,9 @@ namespace Jovo
             }
         }
 
-        public void GetModules()
+        public void GetModules(bool log = false)
         {
             InstalledModules.Clear();
-
             foreach (string path in Directory.GetDirectories(AppModulePath))
             {
                 if (File.Exists(path + "\\manifest.json"))
@@ -70,6 +69,8 @@ namespace Jovo
                     data.Path = path;
                     data.Tag = data;
                     InstalledModules.Add(data);
+                    if(log)
+                        utility.LogEvent($"Found installed module: {data.Name} (v{data.Version})");
                 }
             }
         }
@@ -155,7 +156,6 @@ namespace Jovo
             foreach (ModuleData AvailableModule in ServerModules)
             {
                 DirectoryInfo localDir = new DirectoryInfo(AppModulePath + "\\" + AvailableModule.Name);
-                utility.LogEvent("Module found on server: " + AvailableModule.Name);
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
@@ -176,11 +176,11 @@ namespace Jovo
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
 
-                FileInfo manifest = new FileInfo( AvailableModule.Path + "\\manifest.json");
+                FileInfo manifest = new FileInfo(AvailableModule.Path + "\\manifest.json");
                 manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
             }
 
-            GetModules();
+            GetModules(true);
         }
 
         private bool CompareModuleVersions(ModuleData module)
@@ -195,7 +195,7 @@ namespace Jovo
                         Version ServerVersion = new Version(module.Version);
                         if (InstalledVersion < ServerVersion)
                         {
-                            utility.LogEvent(String.Format("Updating {0} to version {1}",module.Name, module.Version));
+                            utility.LogEvent(String.Format("Updating {0} to version {1}", module.Name, module.Version));
                             return true;
                         }
                     }

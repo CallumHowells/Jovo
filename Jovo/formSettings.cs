@@ -12,11 +12,13 @@ namespace Jovo
     public partial class formSettings : Form
     {
         ModuleHandler module;
+        UtilityHandler utility;
         bool settingsChanged;
 
-        public formSettings(ModuleHandler _module)
+        public formSettings(ModuleHandler _module, UtilityHandler _utility)
         {
             module = _module;
+            utility = _utility;
             InitializeComponent();
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Size.Width + 5), Screen.PrimaryScreen.WorkingArea.Height - (this.Size.Height + 5));
@@ -446,6 +448,7 @@ namespace Jovo
                     }
                 }
                 Jovo.Default.Save();
+                utility.LogEvent("Jovo settings were updated successfully");
                 ShowSaveSuccess(btn.Tag);
                 settingsChanged = false;
             }
@@ -505,8 +508,12 @@ namespace Jovo
                 }
                 if (module.SaveModuleSettings((ModuleData)btn.Tag, save))
                 {
+                    utility.LogEvent("Module settings were updated successfully");
                     ShowSaveSuccess(btn.Tag);
                     settingsChanged = false;
+                } else
+                {
+                    utility.LogEvent("Error occured while saving settings (file does not exist)");
                 }
             }
         }

@@ -20,7 +20,6 @@ namespace Jovo
             ModuleHandler module = new ModuleHandler();
             UtilityHandler utility = new UtilityHandler();
             module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
-            module.GetModules();
 
             Application.Run(new formMain(module, utility));
         }
