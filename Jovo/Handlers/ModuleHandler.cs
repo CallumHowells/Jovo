@@ -131,9 +131,8 @@ namespace Jovo
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
                 if (!ServerModulePath.EndsWith("\\"))
-                {
                     ServerModulePath += "\\";
-                }
+
                 ServerModules.Clear();
 
                 JsonSerializer serializer = new JsonSerializer();

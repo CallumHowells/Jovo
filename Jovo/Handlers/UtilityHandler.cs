@@ -14,14 +14,15 @@ namespace Jovo
                 FileInfo logFile = new FileInfo("log.txt");
 
                 DateTime now = DateTime.Now;
+                DateTime FileCreated = logFile.CreationTime;
 
-                if (now.AddHours(-24) > logFile.CreationTime)
+                if (now.AddHours(-24) > FileCreated)
                 {
                     LogEvent("Log file was archived", true, true);
                     if (!Directory.Exists("loghistory"))
                         Directory.CreateDirectory("loghistory");
 
-                    logFile.MoveTo("loghistory\\log " + DateTime.Today.ToString("yyyy-MM-dd") + ".txt");
+                    logFile.MoveTo("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt");
                 }
             } catch(Exception) { }
         }
