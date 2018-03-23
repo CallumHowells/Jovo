@@ -135,7 +135,6 @@ namespace Jovo
 
                 ServerModules.Clear();
 
-                JsonSerializer serializer = new JsonSerializer();
                 if (Directory.Exists(ServerModulePath))
                 {
                     foreach (string path in Directory.GetDirectories(ServerModulePath))
@@ -148,6 +147,10 @@ namespace Jovo
                             ServerModules.Add(data);
                         }
                     }
+                }
+                else
+                {
+                    utility.LogEvent("Server module directory does not exist or is not visible from here");
                 }
             }
         }
@@ -188,7 +191,7 @@ namespace Jovo
         }
 
         private bool CompareModuleVersions(ModuleData module)
-        {          
+        {
             ModuleData InstalledModule = InstalledModules.Find(m => m.Name == module.Name);
 
             Version InstalledVersion = new Version(InstalledModule.Version);
@@ -198,7 +201,7 @@ namespace Jovo
                 utility.LogEvent(String.Format("Updating {0} to version {1}", module.Name, module.Version));
                 return true;
             }
-            
+
             return false;
         }
 

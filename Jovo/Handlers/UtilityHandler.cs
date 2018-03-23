@@ -16,7 +16,7 @@ namespace Jovo
                 DateTime now = DateTime.Now;
                 DateTime FileCreated = logFile.CreationTime;
 
-                if (now.AddHours(-24) > FileCreated)
+                if (now.AddHours(-24) < FileCreated)
                 {
                     LogEvent("Log file was archived", true, true);
                     if (!Directory.Exists("loghistory"))
@@ -31,8 +31,11 @@ namespace Jovo
         {
             using (StreamWriter LogWriter = new StreamWriter("log.txt", true))
             {
-                if (blankLine)
-                    LogWriter.WriteLine("");
+                if (LogWriter.BaseStream.Position != 0)
+                {
+                    if (blankLine)
+                        LogWriter.WriteLine("");
+                }
 
                 if (!String.IsNullOrEmpty(message))
                 {
