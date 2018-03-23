@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Diagnostics;
-using System.Collections;
 
 namespace Jovo
 {
@@ -22,6 +21,7 @@ namespace Jovo
         // Define Sub-Forms
         formSettings settings;
         formNotification notification;
+        formModules formModules;
 
         // Define Controls
         BackgroundWorker UpdateWorker = new BackgroundWorker();
@@ -34,7 +34,6 @@ namespace Jovo
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
             utility = _utility;
-            utility.ArchiveLog();
 
             module = _module;
 
@@ -147,8 +146,8 @@ namespace Jovo
             switch (click.Tag)
             {
                 case "modules":
-                    formModules FormModules = new formModules(module, utility);
-                    FormModules.Show();
+                    formModules = new formModules(module, utility);
+                    formModules.Show();
                     break;
 
                 case "settings":

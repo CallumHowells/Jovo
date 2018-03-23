@@ -12,7 +12,10 @@ namespace Jovo
             try
             {
                 FileInfo logFile = new FileInfo("log.txt");
-                if (DateTime.Now.Subtract(logFile.CreationTime).Hours > 24)
+
+                DateTime now = DateTime.Now;
+
+                if (now.AddHours(-24) > logFile.CreationTime)
                 {
                     LogEvent("Log file was archived", true, true);
                     if (!Directory.Exists("loghistory"))
