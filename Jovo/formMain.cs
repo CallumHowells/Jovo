@@ -34,7 +34,6 @@ namespace Jovo
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
             utility = _utility;
-
             module = _module;
 
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExitEvent);
@@ -54,7 +53,7 @@ namespace Jovo
             UpdateWorker.DoWork += UpdateWorker_DoWork;
             UpdateWorker.RunWorkerCompleted += UpdateWorker_RunWorkerCompleted;
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
-            utility.LogEvent("Program probably started OK - Updater starting...");
+            utility.LogEvent("Program probably started OK");
             UpdateWorker.RunWorkerAsync();
         }
 
@@ -136,6 +135,7 @@ namespace Jovo
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            utility.LogEvent("Updater starting...");
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 

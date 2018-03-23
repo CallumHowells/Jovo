@@ -10,9 +10,9 @@ namespace Jovo
 {
     public class ModuleHandler
     {
-        public ModuleHandler() { }
-
         UtilityHandler utility = new UtilityHandler();
+
+        public ModuleHandler() { }
 
         public string AppPath { get; set; }
         public string AppModulePath { get; set; }
@@ -72,11 +72,11 @@ namespace Jovo
                     data.Path = path;
                     data.Tag = data;
                     InstalledModules.Add(data);
-                    if(log)
+                    if (log)
                         utility.LogEvent($"Found installed module: {data.Name} (v{data.Version})");
                 }
             }
-            if(log)
+            if (log)
                 utility.LogEvent(InstalledModules.Count + " modules loaded");
         }
         #endregion
@@ -189,27 +189,17 @@ namespace Jovo
         }
 
         private bool CompareModuleVersions(ModuleData module)
-        {
-            foreach (ModuleData InstalledModule in InstalledModules)
+        {          
+            ModuleData InstalledModule = InstalledModules.Find(m => m.Name == module.Name);
+
+            Version InstalledVersion = new Version(InstalledModule.Version);
+            Version ServerVersion = new Version(module.Version);
+            if (InstalledVersion < ServerVersion)
             {
-                try
-                {
-                    if (InstalledModule.Name == module.Name)
-                    {
-                        Version InstalledVersion = new Version(InstalledModule.Version);
-                        Version ServerVersion = new Version(module.Version);
-                        if (InstalledVersion < ServerVersion)
-                        {
-                            utility.LogEvent(String.Format("Updating {0} to version {1}", module.Name, module.Version));
-                            return true;
-                        }
-                    }
-                }
-                catch (Exception VersionCheckException)
-                {
-                    Console.WriteLine(VersionCheckException.Message);
-                }
+                utility.LogEvent(String.Format("Updating {0} to version {1}", module.Name, module.Version));
+                return true;
             }
+            
             return false;
         }
 
