@@ -36,7 +36,6 @@ namespace Jovo
             utility = _utility;
             module = _module;
 
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(ProcessExitEvent);
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
 
             InitializeComponent();
@@ -185,12 +184,12 @@ namespace Jovo
             }
         }
 
-        private void ProcessExitEvent(object sender, EventArgs e)
+        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\n", true, true);
+
+        private void formMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             startupTimer.Stop();
-            utility.LogEvent("Program was exited properly after " + startupTimer.Elapsed + Environment.NewLine, true, true);
+            utility.LogEvent($"Program was exited properly after {startupTimer.Elapsed} ({e.CloseReason})", true, true);
         }
-
-        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\n", true, true);
     }
 }
