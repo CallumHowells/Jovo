@@ -336,11 +336,15 @@ namespace Jovo
             timer.Interval = 3000;
             timer.Tick += save_Tick;
             if (ModuleTag == null)
+            {
                 lblSaveSuccess.Text = "Settings for Jovo were saved successfully!";
+                utility.LogEvent("Jovo settings were changed");
+            }
             else
             {
                 ModuleData data = (ModuleData)ModuleTag;
                 lblSaveSuccess.Text = "Settings for " + data.Text + " were saved successfully!";
+                utility.LogEvent(data.Name + " settings were changed");
             }
             pnlSaveSuccess.Visible = true;
 
