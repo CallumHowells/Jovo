@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace Jovo
 {
@@ -11,10 +12,8 @@ namespace Jovo
         {
             try
             {
-                FileInfo logFile = new FileInfo("log.txt");
-
                 DateTime now = DateTime.Now;
-                DateTime FileCreated = logFile.CreationTime;
+                DateTime FileCreated = File.GetCreationTime("log.txt");
 
                 if (now > FileCreated.AddDays(7))
                 {
@@ -22,8 +21,15 @@ namespace Jovo
                     if (!Directory.Exists("loghistory"))
                         Directory.CreateDirectory("loghistory");
 
-                    logFile.MoveTo("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt");
-                    logFile.Delete();
+
+                    if (!File.Exists("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt"))
+                    {
+                        File.Move("log.txt", "loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt");
+                    } else
+                    {
+                        File.AppendAllText("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt", File.ReadAllText("log.txt"));
+                    }
+                    File.SetCreationTime("log.txt", DateTime.Now);
                 }
             } catch (Exception ArchiveEx)
             {
@@ -33,12 +39,6 @@ namespace Jovo
 
         public void LogEvent(string message, bool newLine = true, bool blankLine = false)
         {
-            if (!File.Exists("log.txt"))
-            {
-                File.Create("log.txt");
-                File.SetCreationTime("log.txt", DateTime.Now);
-            }
-
             using (StreamWriter LogWriter = new StreamWriter("log.txt", true))
             {
                 if (LogWriter.BaseStream.Position != 0)
