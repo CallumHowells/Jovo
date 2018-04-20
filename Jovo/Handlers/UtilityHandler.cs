@@ -12,24 +12,27 @@ namespace Jovo
         {
             try
             {
+                if (File.Exists("log.txt")) { 
                 DateTime now = DateTime.Now;
                 DateTime FileCreated = File.GetCreationTime("log.txt");
 
-                if (now > FileCreated.AddDays(7))
-                {
-                    LogEvent("Log file is being archived", true, true);
-                    if (!Directory.Exists("loghistory"))
-                        Directory.CreateDirectory("loghistory");
+                    if (now > FileCreated.AddDays(7))
+                    {
+                        LogEvent("Log file is being archived", true, true);
+                        if (!Directory.Exists("loghistory"))
+                            Directory.CreateDirectory("loghistory");
 
 
-                    if (!File.Exists("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt"))
-                    {
-                        File.Move("log.txt", "loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt");
-                    } else
-                    {
-                        File.AppendAllText("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt", File.ReadAllText("log.txt"));
+                        if (!File.Exists("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt"))
+                        {
+                            File.Move("log.txt", "loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt");
+                        }
+                        else
+                        {
+                            File.AppendAllText("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt", File.ReadAllText("log.txt"));
+                        }
+                        File.SetCreationTime("log.txt", DateTime.Now);
                     }
-                    File.SetCreationTime("log.txt", DateTime.Now);
                 }
             } catch (Exception ArchiveEx)
             {

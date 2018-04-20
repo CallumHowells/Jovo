@@ -74,6 +74,7 @@ namespace Jovo
                     InstalledModules.Add(data);
                     if (log)
                         utility.LogEvent($"Found installed module: {data.Name} (v{data.Version})");
+
                 }
             }
             if (log)
