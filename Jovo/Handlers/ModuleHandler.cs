@@ -168,7 +168,7 @@ namespace Jovo
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
                     utility.LogEvent("Installing module " + AvailableModule.Name);
-                    worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
+                    worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
 
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
@@ -177,7 +177,7 @@ namespace Jovo
                 }
                 else if (CompareModuleVersions(AvailableModule))
                 {
-                    worker.ReportProgress(0, new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 0, Method = "Show" });
+                    worker.ReportProgress(0, new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -6,12 +7,16 @@ namespace Jovo
 {
     public class UtilityHandler
     {
-        public UtilityHandler() { }
+        static Process process = Process.GetCurrentProcess();
+        string FullPath;
+
+        public UtilityHandler() => FullPath = process.MainModule.FileName;
 
         public void ArchiveLog()
         {
             try
             {
+
                 if (File.Exists("log.txt")) { 
                 DateTime now = DateTime.Now;
                 DateTime FileCreated = File.GetCreationTime("log.txt");
@@ -42,7 +47,7 @@ namespace Jovo
 
         public void LogEvent(string message, bool newLine = true, bool blankLine = false)
         {
-            using (StreamWriter LogWriter = new StreamWriter("log.txt", true))
+            using (StreamWriter LogWriter = new StreamWriter(process.StartInfo.WorkingDirectory + "log.txt", true))
             {
                 if (LogWriter.BaseStream.Position != 0)
                 {
