@@ -235,6 +235,7 @@ namespace Jovo
         public string Path { get; set; }
         public string Info { get; set; }
         public bool HasSettings { get; set; }
+        public bool CreateMenuItem { get; set; }
     }
 
     public class SettingData

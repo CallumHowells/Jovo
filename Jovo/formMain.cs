@@ -81,24 +81,27 @@ namespace Jovo
             List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
             foreach (ModuleData data in SortedList)
             {
-                if (prev_cat != data.Category)
+                if (data.CreateMenuItem)
                 {
-                    sep = new ToolStripSeparator();
-                    menu.Items.Add(sep);
+                    if (prev_cat != data.Category)
+                    {
+                        sep = new ToolStripSeparator();
+                        menu.Items.Add(sep);
+                    }
+
+                    item = new ToolStripMenuItem();
+                    item.Name = data.Name;
+                    item.Text = data.Text;
+                    item.Tag = data;
+                    if (File.Exists(data.Path + "\\" + data.Icon))
+                        item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
+                    else
+                        item.Image = Properties.Resources.settings;
+                    item.Click += menu_Click;
+                    menu.Items.Add(item);
+
+                    prev_cat = data.Category;
                 }
-
-                item = new ToolStripMenuItem();
-                item.Name = data.Name;
-                item.Text = data.Text;
-                item.Tag = data;
-                if (File.Exists(data.Path + "\\" + data.Icon))
-                    item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
-                else
-                    item.Image = Properties.Resources.settings;
-                item.Click += menu_Click;
-                menu.Items.Add(item);
-
-                prev_cat = data.Category;
             }
 
             // Create context menu items and add to menu
