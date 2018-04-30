@@ -16,10 +16,10 @@ namespace Jovo
         {
             try
             {
-
-                if (File.Exists("log.txt")) { 
-                DateTime now = DateTime.Now;
-                DateTime FileCreated = File.GetCreationTime("log.txt");
+                if (File.Exists("log.txt"))
+                {
+                    DateTime now = DateTime.Now;
+                    DateTime FileCreated = File.GetCreationTime("log.txt");
 
                     if (now > FileCreated.AddDays(7))
                     {
@@ -36,10 +36,13 @@ namespace Jovo
                         {
                             File.AppendAllText("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt", File.ReadAllText("log.txt"));
                         }
+
+                        File.Create("log.txt");
                         File.SetCreationTime("log.txt", DateTime.Now);
                     }
                 }
-            } catch (Exception ArchiveEx)
+            }
+            catch (Exception ArchiveEx)
             {
                 LogEvent(ArchiveEx.ToString());
             }

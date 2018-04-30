@@ -214,8 +214,8 @@ namespace Jovo
                                     NumericUpDown num = new NumericUpDown();
                                     num.Name = "num" + data.Name;
                                     num.Minimum = 0;
-                                    num.Maximum = 10000;
-                                    num.Value = (int.TryParse(data.Value, out int value)) ? Convert.ToInt16(data.Value) : 0;
+                                    num.Maximum = Int32.MaxValue;
+                                    num.Value = (int.TryParse(data.Value, out int value)) ? Convert.ToInt32(data.Value) : 0;
                                     num.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
                                     num.Location = new Point(x, y);
                                     num.TextChanged += setting_ValueChanged;
@@ -487,7 +487,7 @@ namespace Jovo
                                          new JProperty("Name", data.Name),
                                          new JProperty("Text", data.Text),
                                          new JProperty("Domain", data.Domain),
-                                         new JProperty("Value", Convert.ToInt16(value.Value)));
+                                         new JProperty("Value", Convert.ToInt32(value.Value)));
 
                                     save.Add(data.Name, set);
                                 }
