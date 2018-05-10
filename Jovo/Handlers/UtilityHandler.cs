@@ -37,7 +37,8 @@ namespace Jovo
                             File.AppendAllText("loghistory\\log " + FileCreated.Date.ToString("yyyy-MM-dd") + ".txt", File.ReadAllText("log.txt"));
                         }
 
-                        File.Create("log.txt");
+
+                        File.Create("log.txt").Close();
                         File.SetCreationTime("log.txt", DateTime.Now);
                     }
                 }
@@ -52,9 +53,10 @@ namespace Jovo
         {
             using (StreamWriter LogWriter = new StreamWriter(process.StartInfo.WorkingDirectory + "log.txt", true))
             {
-                if (LogWriter.BaseStream.Position != 0)
+                if(LogWriter.BaseStream.Position == 0)
+
+                if (LogWriter.BaseStream.Position != 0 && blankLine)
                 {
-                    if (blankLine)
                         LogWriter.WriteLine("");
                 }
 

@@ -123,10 +123,7 @@ namespace Jovo
                 TextBox path = (TextBox)sender;
                 System.Diagnostics.Process.Start(path.Text);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-            }
+            catch (Exception){}
         }
 
         private void formModules_Deactivate(object sender, EventArgs e)

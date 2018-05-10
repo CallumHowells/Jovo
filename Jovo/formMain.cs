@@ -132,7 +132,7 @@ namespace Jovo
             menu.Items.Add(item);
 
             utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
-            utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB  ({Environment.WorkingSet / (1024 * 1024)} MB assigned)");
+            utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
         }
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
