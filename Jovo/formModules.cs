@@ -33,7 +33,11 @@ namespace Jovo
                 icon.SizeMode = PictureBoxSizeMode.StretchImage;
 
                 if (File.Exists(data.Path + "\\" + data.Icon))
-                    icon.Image = Image.FromFile(data.Path + "\\" + data.Icon);
+                {
+                    var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                    var ms = new MemoryStream(bytes);
+                    icon.Image = Image.FromStream(ms);
+                }
                 else
                     icon.Image = Properties.Resources.Jovo_Logo1;
 

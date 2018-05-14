@@ -78,7 +78,7 @@ namespace Jovo
         {
             utility.LogEvent("Updater finished");
             int prev_cat = 0;
-            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
+            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m => m.Category).ToList();
             foreach (ModuleData data in SortedList)
             {
                 if (data.CreateMenuItem)
@@ -94,7 +94,11 @@ namespace Jovo
                     item.Text = data.Text;
                     item.Tag = data;
                     if (File.Exists(data.Path + "\\" + data.Icon))
-                        item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
+                    {
+                        var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                        var ms = new MemoryStream(bytes);
+                        item.Image = Image.FromStream(ms);
+                    }
                     else
                         item.Image = Properties.Resources.settings;
                     item.Click += menu_Click;
