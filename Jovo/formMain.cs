@@ -29,7 +29,9 @@ namespace Jovo
         ToolStripMenuItem item;
         ToolStripSeparator sep;
         private static NotifyIcon icon = new NotifyIcon();
+
         Stopwatch startupTimer = new Stopwatch();
+        bool FirstStartup = true;
 
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
@@ -78,6 +80,7 @@ namespace Jovo
         {
             utility.LogEvent("Updater finished");
             int prev_cat = 0;
+            menu.Items.Clear();
             List<ModuleData> SortedList = module.InstalledModules.OrderBy(m => m.Category).ToList();
             foreach (ModuleData data in SortedList)
             {
@@ -113,6 +116,13 @@ namespace Jovo
             menu.Items.Add(sep);
 
             item = new ToolStripMenuItem();
+            item.Name = "tsUpdate";
+            item.Text = "Check For Updates";
+            item.Tag = "update";
+            item.Click += menu_Click;
+            menu.Items.Add(item);
+
+            item = new ToolStripMenuItem();
             item.Name = "tsModules";
             item.Text = "Modules";
             item.Tag = "modules";
@@ -135,8 +145,12 @@ namespace Jovo
             item.Click += menu_Click;
             menu.Items.Add(item);
 
-            utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
-            utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
+            if (FirstStartup)
+            {
+                utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
+                utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
+                FirstStartup = false;
+            }
         }
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -161,6 +175,11 @@ namespace Jovo
                         settings = new formSettings(module, utility);
                     if (settings.Visible == false)
                         settings.Show();
+                    break;
+
+                case "update":
+                    if (!UpdateWorker.IsBusy)
+                        UpdateWorker.RunWorkerAsync();
                     break;
 
                 case "exit":
