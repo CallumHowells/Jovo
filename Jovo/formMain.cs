@@ -119,6 +119,7 @@ namespace Jovo
             item.Name = "tsUpdate";
             item.Text = "Check For Updates";
             item.Tag = "update";
+            item.Image = Properties.Resources.refresh;
             item.Click += menu_Click;
             menu.Items.Add(item);
 
