@@ -112,6 +112,7 @@ namespace Jovo
             item.Name = "tsModules";
             item.Text = "Modules";
             item.Tag = "modules";
+            item.Image = Properties.Resources.module;
             item.Click += menu_Click;
             menu.Items.Add(item);
 
@@ -127,7 +128,7 @@ namespace Jovo
             item.Name = "tsExit";
             item.Text = "Exit";
             item.Tag = "exit";
-            item.Image = Properties.Resources.exit;
+            item.Image = Properties.Resources.close;
             item.Click += menu_Click;
             menu.Items.Add(item);
 
