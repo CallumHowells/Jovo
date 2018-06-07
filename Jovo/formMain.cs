@@ -29,7 +29,9 @@ namespace Jovo
         ToolStripMenuItem item;
         ToolStripSeparator sep;
         private static NotifyIcon icon = new NotifyIcon();
+
         Stopwatch startupTimer = new Stopwatch();
+        bool FirstStartup = true;
 
         public formMain(ModuleHandler _module, UtilityHandler _utility)
         {
@@ -78,7 +80,8 @@ namespace Jovo
         {
             utility.LogEvent("Updater finished");
             int prev_cat = 0;
-            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m=>m.Category).ToList();
+            menu.Items.Clear();
+            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m => m.Category).ToList();
             foreach (ModuleData data in SortedList)
             {
                 if (data.CreateMenuItem)
@@ -94,7 +97,11 @@ namespace Jovo
                     item.Text = data.Text;
                     item.Tag = data;
                     if (File.Exists(data.Path + "\\" + data.Icon))
-                        item.Image = Image.FromFile(data.Path + "\\" + data.Icon);
+                    {
+                        var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                        var ms = new MemoryStream(bytes);
+                        item.Image = Image.FromStream(ms);
+                    }
                     else
                         item.Image = Properties.Resources.settings;
                     item.Click += menu_Click;
@@ -107,6 +114,13 @@ namespace Jovo
             // Create context menu items and add to menu
             sep = new ToolStripSeparator();
             menu.Items.Add(sep);
+
+            item = new ToolStripMenuItem();
+            item.Name = "tsUpdate";
+            item.Text = "Check For Updates";
+            item.Tag = "update";
+            item.Click += menu_Click;
+            menu.Items.Add(item);
 
             item = new ToolStripMenuItem();
             item.Name = "tsModules";
@@ -132,8 +146,12 @@ namespace Jovo
             item.Click += menu_Click;
             menu.Items.Add(item);
 
-            utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
-            utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
+            if (FirstStartup)
+            {
+                utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
+                utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
+                FirstStartup = false;
+            }
         }
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -158,6 +176,11 @@ namespace Jovo
                         settings = new formSettings(module, utility);
                     if (settings.Visible == false)
                         settings.Show();
+                    break;
+
+                case "update":
+                    if (!UpdateWorker.IsBusy)
+                        UpdateWorker.RunWorkerAsync();
                     break;
 
                 case "exit":
