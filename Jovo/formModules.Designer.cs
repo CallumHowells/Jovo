@@ -37,23 +37,20 @@
             this.rtbChangelog = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lblDate = new System.Windows.Forms.Label();
-            this.groupBoxInfo = new System.Windows.Forms.GroupBox();
-            this.lblInfo = new System.Windows.Forms.Label();
             this.groupBoxVersion = new System.Windows.Forms.GroupBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.groupBoxPath = new System.Windows.Forms.GroupBox();
             this.lblPath = new System.Windows.Forms.TextBox();
-            this.groupBoxText = new System.Windows.Forms.GroupBox();
+            this.lblText2 = new System.Windows.Forms.Label();
+            this.pnlLine = new System.Windows.Forms.Panel();
             this.lblText = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
             this.groupBoxName = new System.Windows.Forms.GroupBox();
-            this.lblName = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBoxInfo.SuspendLayout();
             this.groupBoxVersion.SuspendLayout();
             this.groupBoxPath.SuspendLayout();
-            this.groupBoxText.SuspendLayout();
             this.groupBoxName.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,7 +61,7 @@
             this.btnFormClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFormClose.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFormClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
-            this.btnFormClose.Location = new System.Drawing.Point(557, 1);
+            this.btnFormClose.Location = new System.Drawing.Point(574, 0);
             this.btnFormClose.Name = "btnFormClose";
             this.btnFormClose.Size = new System.Drawing.Size(26, 28);
             this.btnFormClose.TabIndex = 1;
@@ -104,13 +101,14 @@
             // 
             // pnlMain
             // 
+            this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.pnlMain.Controls.Add(this.groupBoxName);
+            this.pnlMain.Controls.Add(this.lblInfo);
+            this.pnlMain.Controls.Add(this.lblText);
             this.pnlMain.Controls.Add(this.rtbChangelog);
             this.pnlMain.Controls.Add(this.groupBox1);
-            this.pnlMain.Controls.Add(this.groupBoxInfo);
             this.pnlMain.Controls.Add(this.groupBoxVersion);
             this.pnlMain.Controls.Add(this.groupBoxPath);
-            this.pnlMain.Controls.Add(this.groupBoxText);
-            this.pnlMain.Controls.Add(this.groupBoxName);
             this.pnlMain.Location = new System.Drawing.Point(245, 83);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(350, 505);
@@ -144,25 +142,6 @@
             this.lblDate.Name = "lblDate";
             this.lblDate.Size = new System.Drawing.Size(300, 13);
             this.lblDate.TabIndex = 0;
-            // 
-            // groupBoxInfo
-            // 
-            this.groupBoxInfo.Controls.Add(this.lblInfo);
-            this.groupBoxInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxInfo.Location = new System.Drawing.Point(10, 114);
-            this.groupBoxInfo.Name = "groupBoxInfo";
-            this.groupBoxInfo.Size = new System.Drawing.Size(333, 100);
-            this.groupBoxInfo.TabIndex = 2;
-            this.groupBoxInfo.TabStop = false;
-            this.groupBoxInfo.Text = "Info";
-            // 
-            // lblInfo
-            // 
-            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblInfo.Location = new System.Drawing.Point(18, 23);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(300, 60);
-            this.lblInfo.TabIndex = 0;
             // 
             // groupBoxVersion
             // 
@@ -203,43 +182,50 @@
             this.lblPath.TabIndex = 0;
             this.lblPath.DoubleClick += new System.EventHandler(this.lblPath_DoubleClick);
             // 
-            // groupBoxText
+            // lblText2
             // 
-            this.groupBoxText.Controls.Add(this.lblText);
-            this.groupBoxText.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxText.Location = new System.Drawing.Point(10, 58);
-            this.groupBoxText.Name = "groupBoxText";
-            this.groupBoxText.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxText.TabIndex = 1;
-            this.groupBoxText.TabStop = false;
-            this.groupBoxText.Text = "Text";
+            this.lblText2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblText2.Location = new System.Drawing.Point(18, 24);
+            this.lblText2.Name = "lblText2";
+            this.lblText2.Size = new System.Drawing.Size(300, 13);
+            this.lblText2.TabIndex = 0;
+            // 
+            // pnlLine
+            // 
+            this.pnlLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
+            this.pnlLine.Location = new System.Drawing.Point(3, 81);
+            this.pnlLine.Name = "pnlLine";
+            this.pnlLine.Size = new System.Drawing.Size(600, 1);
+            this.pnlLine.TabIndex = 6;
             // 
             // lblText
             // 
-            this.lblText.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblText.Location = new System.Drawing.Point(18, 23);
+            this.lblText.Font = new System.Drawing.Font("Segoe UI", 15F);
+            this.lblText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.lblText.Location = new System.Drawing.Point(1, 4);
             this.lblText.Name = "lblText";
-            this.lblText.Size = new System.Drawing.Size(300, 13);
-            this.lblText.TabIndex = 0;
+            this.lblText.Size = new System.Drawing.Size(342, 29);
+            this.lblText.TabIndex = 8;
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.lblInfo.Location = new System.Drawing.Point(3, 33);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(344, 128);
+            this.lblInfo.TabIndex = 7;
             // 
             // groupBoxName
             // 
-            this.groupBoxName.Controls.Add(this.lblName);
+            this.groupBoxName.Controls.Add(this.lblText2);
             this.groupBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxName.Location = new System.Drawing.Point(10, 2);
+            this.groupBoxName.Location = new System.Drawing.Point(10, 164);
             this.groupBoxName.Name = "groupBoxName";
             this.groupBoxName.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxName.TabIndex = 0;
+            this.groupBoxName.TabIndex = 3;
             this.groupBoxName.TabStop = false;
             this.groupBoxName.Text = "Name";
-            // 
-            // lblName
-            // 
-            this.lblName.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblName.Location = new System.Drawing.Point(18, 23);
-            this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(300, 13);
-            this.lblName.TabIndex = 0;
             // 
             // formModules
             // 
@@ -247,6 +233,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 600);
+            this.Controls.Add(this.pnlLine);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlButtons);
             this.Controls.Add(this.pictureBox1);
@@ -261,11 +248,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlMain.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBoxInfo.ResumeLayout(false);
             this.groupBoxVersion.ResumeLayout(false);
             this.groupBoxPath.ResumeLayout(false);
             this.groupBoxPath.PerformLayout();
-            this.groupBoxText.ResumeLayout(false);
             this.groupBoxName.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -279,18 +264,17 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel pnlButtons;
         private System.Windows.Forms.Panel pnlMain;
-        private System.Windows.Forms.GroupBox groupBoxName;
-        private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.GroupBox groupBoxText;
-        private System.Windows.Forms.Label lblText;
+        private System.Windows.Forms.Label lblText2;
         private System.Windows.Forms.GroupBox groupBoxVersion;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.GroupBox groupBoxPath;
-        private System.Windows.Forms.GroupBox groupBoxInfo;
-        private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.TextBox lblPath;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.RichTextBox rtbChangelog;
+        private System.Windows.Forms.Panel pnlLine;
+        private System.Windows.Forms.Label lblInfo;
+        private System.Windows.Forms.Label lblText;
+        private System.Windows.Forms.GroupBox groupBoxName;
     }
 }

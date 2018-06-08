@@ -58,5 +58,17 @@ namespace Jovo {
                 this["Path_Server_Update"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Path_Jovo_Update {
+            get {
+                return ((string)(this["Path_Jovo_Update"]));
+            }
+            set {
+                this["Path_Jovo_Update"] = value;
+            }
+        }
     }
 }

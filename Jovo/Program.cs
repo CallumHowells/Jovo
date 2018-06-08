@@ -9,7 +9,7 @@ namespace Jovo
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -20,6 +20,12 @@ namespace Jovo
 
             utility.LogEvent("############################ Program starting... ############################", true, true);
             module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
+
+            if (args.Length > 0)
+            {
+                Jovo.Default.Path_Jovo_Update = args[0];
+                Jovo.Default.Save();
+            }
 
             Application.Run(new formMain(module, utility));
         }

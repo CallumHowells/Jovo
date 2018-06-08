@@ -34,7 +34,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlLine = new System.Windows.Forms.Panel();
             this.pnlInfo = new System.Windows.Forms.Panel();
-            this.lblModuleChangelog = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.lblModulePath = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -113,7 +112,6 @@
             // pnlInfo
             // 
             this.pnlInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.pnlInfo.Controls.Add(this.lblModuleChangelog);
             this.pnlInfo.Controls.Add(this.groupBox4);
             this.pnlInfo.Controls.Add(this.groupBox3);
             this.pnlInfo.Controls.Add(this.groupBox2);
@@ -124,20 +122,6 @@
             this.pnlInfo.Name = "pnlInfo";
             this.pnlInfo.Size = new System.Drawing.Size(182, 503);
             this.pnlInfo.TabIndex = 4;
-            // 
-            // lblModuleChangelog
-            // 
-            this.lblModuleChangelog.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblModuleChangelog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(102)))), ((int)(((byte)(204)))));
-            this.lblModuleChangelog.Location = new System.Drawing.Point(3, 308);
-            this.lblModuleChangelog.Name = "lblModuleChangelog";
-            this.lblModuleChangelog.Size = new System.Drawing.Size(176, 31);
-            this.lblModuleChangelog.TabIndex = 6;
-            this.lblModuleChangelog.Text = "View Changelog";
-            this.lblModuleChangelog.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblModuleChangelog.Click += new System.EventHandler(this.lblModuleChangelog_Click);
-            this.lblModuleChangelog.MouseEnter += new System.EventHandler(this.lblModuleChangelog_MouseEnter);
-            this.lblModuleChangelog.MouseLeave += new System.EventHandler(this.lblModuleChangelog_MouseLeave);
             // 
             // groupBox4
             // 
@@ -358,7 +342,6 @@
         private System.Windows.Forms.Label lblModuleName;
         private System.Windows.Forms.Label lblModuleText;
         private System.Windows.Forms.Label lblModuleInfo;
-        private System.Windows.Forms.Label lblModuleChangelog;
         private System.Windows.Forms.Panel pnlNoSettings;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Label label3;

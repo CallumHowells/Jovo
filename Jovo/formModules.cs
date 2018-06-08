@@ -76,8 +76,8 @@ namespace Jovo
 
         private void UpdateInfoPanel(ModuleData module)
         {
-            lblName.Text = module.Name;
-            lblText.Text = module.Text;
+            lblText.Text = module.Name;
+            lblText2.Text = module.Text;
             lblInfo.Text = module.Info;
             lblPath.Text = module.Path;
             lblVersion.Text = module.Version;

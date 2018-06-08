@@ -293,7 +293,6 @@ namespace Jovo
                 lblModuleName.Text = "jovo";
                 lblModuleVersion.Text = "1.0.0.0";
                 lblModulePublishDate.Text = "01/02/2018 23:04";
-                lblModuleChangelog.Visible = false;
             }
             else
             {
@@ -305,10 +304,6 @@ namespace Jovo
                 lblModuleName.Text = data.Name;
                 lblModuleVersion.Text = data.Version;
                 lblModulePublishDate.Text = data.PublishDate;
-                if (File.Exists(data.Path + "\\changelog.json"))
-                    lblModuleChangelog.Visible = true;
-                else
-                    lblModuleChangelog.Visible = false;
             }
         }
 
@@ -388,16 +383,6 @@ namespace Jovo
         private void lblModuleChangelog_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Changelog form doesnt work yet.");
-        }
-
-        private void lblModuleChangelog_MouseEnter(object sender, EventArgs e)
-        {
-            lblModuleChangelog.ForeColor = Color.FromArgb(36, 133, 229);
-        }
-
-        private void lblModuleChangelog_MouseLeave(object sender, EventArgs e)
-        {
-            lblModuleChangelog.ForeColor = Color.FromArgb(0, 102, 204);
         }
 
         private void btnFormClose_Click(object sender, EventArgs e)
