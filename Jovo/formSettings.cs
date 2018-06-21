@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -120,7 +122,7 @@ namespace Jovo
                         pnlSettings.Controls.Add(name);
                         y += 15;
 
-                        if (setting.Name.Contains("Module"))
+                        if (setting.Name.Contains("Module_Name"))
                         {
                             ComboBox value = new ComboBox();
                             value.Name = "cbx" + setting.Name;
@@ -210,6 +212,18 @@ namespace Jovo
                                     y += 22;
                                     break;
 
+                                case "password":
+                                    TextBox pas = new TextBox();
+                                    pas.Name = "txt" + data.Name;
+                                    pas.Text = data.Value;
+                                    pas.UseSystemPasswordChar = true;
+                                    pas.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                    pas.Location = new Point(x, y);
+                                    pas.TextChanged += setting_TextChanged;
+                                    pnlSettings.Controls.Add(pas);
+                                    y += 22;
+                                    break;
+
                                 case "integer":
                                     NumericUpDown num = new NumericUpDown();
                                     num.Name = "num" + data.Name;
@@ -257,6 +271,14 @@ namespace Jovo
                                     break;
 
                                 default:
+                                    TextBox som = new TextBox();
+                                    som.Name = "txt" + data.Name;
+                                    som.Text = data.Value;
+                                    som.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                    som.Location = new Point(x, y);
+                                    som.TextChanged += setting_TextChanged;
+                                    pnlSettings.Controls.Add(som);
+                                    y += 22;
                                     break;
                             }
 
@@ -291,8 +313,9 @@ namespace Jovo
                 lblModuleInfo.Text = "Jovo is a multi-functional tool for consolidating modules until one centralised menu for easy access via the Windows system tray.";
                 lblModulePath.Text = module.AppPath;
                 lblModuleName.Text = "jovo";
-                lblModuleVersion.Text = "1.0.0.0";
-                lblModulePublishDate.Text = "01/02/2018 23:04";
+                dynamic vers = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("manifest.json"));
+                lblModuleVersion.Text = vers.Version.ToString();
+                lblModulePublishDate.Text = new FileInfo(Assembly.GetExecutingAssembly().Location).LastWriteTime.ToString("");
             }
             else
             {
@@ -392,7 +415,7 @@ namespace Jovo
 
         private void formSettings_Deactivate(object sender, EventArgs e)
         {
-            this.Hide();
+            //this.Hide();
         }
 
         private void setting_SelectedValueChanged(object sender, EventArgs e)

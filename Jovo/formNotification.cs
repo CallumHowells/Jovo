@@ -6,11 +6,16 @@ namespace Jovo
 {
     public partial class formNotification : Form
     {
+        UtilityHandler utility;
         Timer timeoutTimer;
+        bool update;
 
-        public formNotification(string Title, string Text, int Timeout)
+        public formNotification(string Title, string Text, int Timeout, bool JovoUpdate, UtilityHandler _utility)
         {
             InitializeComponent();
+
+            utility = _utility;
+            update = JovoUpdate;
 
             if (Timeout != 0)
             {
@@ -29,13 +34,15 @@ namespace Jovo
             Text = Text.Replace("\n", Environment.NewLine);
             lblText.Text = Text;
 
+            pbImage.Image = (update) ? Properties.Resources.Jovo_Logo1 : Properties.Resources.jovo_loading;
+             
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Size.Width + 5), Screen.PrimaryScreen.WorkingArea.Height - (this.Size.Height + 5));
             pbImage.Location = new Point(13, (this.Size.Height - pbImage.Height) / 2);
 
-            this.Click += dismiss_Click;
-            lblTitle.Click += dismiss_Click;
-            lblText.Click += dismiss_Click;
-            pbImage.Click += dismiss_Click;
+            this.Click += doWork_Click;
+            lblTitle.Click += doWork_Click;
+            lblText.Click += doWork_Click;
+            pbImage.Click += doWork_Click;
         }
 
         private void timeoutTick(object sender, EventArgs e)
@@ -45,10 +52,19 @@ namespace Jovo
             this.Close();
         }
 
-        private void dismiss_Click(object sender, EventArgs e)
+        private void doWork_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+            if (update)
+            {
+                utility.LogEvent("Notification Clicked");
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void formNotification_Load(object sender, EventArgs e)

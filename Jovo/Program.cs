@@ -21,9 +21,17 @@ namespace Jovo
             utility.LogEvent("############################ Program starting... ############################", true, true);
             module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
 
-            if (args.Length > 0)
+            utility.LogEvent("Args received : " + args.Length);
+
+            foreach (string arg in args)
             {
-                Jovo.Default.Path_Jovo_Update = args[0];
+                utility.LogEvent("Start Argument : " + arg);
+            }
+
+            if (args.Length >= 2)
+            {
+                Jovo.Default.Jovo_Updater_Local_Path = args[0].Trim('"');
+                Jovo.Default.Jovo_Update_Remote_Path = args[1].Trim('"');
                 Jovo.Default.Save();
             }
 

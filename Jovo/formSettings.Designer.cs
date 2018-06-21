@@ -245,7 +245,7 @@
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(186, 71);
             this.label3.TabIndex = 2;
-            this.label3.Text = "This Module doesn\'t contain any configurable settings.";
+            this.label3.Text = "We couldn\'t find a valid settings file for this Module.";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2

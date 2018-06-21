@@ -2,16 +2,19 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Jovo" GeneratedClassName="Jovo">
   <Profiles />
   <Settings>
-    <Setting Name="System_Tray_Icon_Middle_Click_Module" Type="System.String" Scope="User">
+    <Setting Name="System_Tray_Icon_Middle_Click_Module_Name" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="System_Tray_Icon_Left_Click_Module" Type="System.String" Scope="User">
+    <Setting Name="System_Tray_Icon_Left_Click_Module_Name" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Path_Server_Update" Type="System.String" Scope="User">
+    <Setting Name="Module_Update_Remote_Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="Path_Jovo_Update" Type="System.String" Scope="User">
+    <Setting Name="Jovo_Update_Remote_Path" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Jovo_Updater_Local_Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

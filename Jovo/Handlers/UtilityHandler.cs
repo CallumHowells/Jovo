@@ -51,27 +51,31 @@ namespace Jovo
 
         public void LogEvent(string message, bool newLine = true, bool blankLine = false)
         {
-            using (StreamWriter LogWriter = new StreamWriter(process.StartInfo.WorkingDirectory + "log.txt", true))
+            try
             {
-                if(LogWriter.BaseStream.Position == 0)
-
-                if (LogWriter.BaseStream.Position != 0 && blankLine)
+                using (StreamWriter LogWriter = new StreamWriter(process.StartInfo.WorkingDirectory + "log.txt", true))
                 {
-                        LogWriter.WriteLine("");
-                }
+                    if (LogWriter.BaseStream.Position == 0)
 
-                if (!String.IsNullOrEmpty(message))
-                {
-                    string output = DateTime.Now.ToString() + " - " + message;
+                        if (LogWriter.BaseStream.Position != 0 && blankLine)
+                        {
+                            LogWriter.WriteLine("");
+                        }
 
-                    if (newLine)
-                        LogWriter.WriteLine(output);
-                    else
-                        LogWriter.Write(output);
+                    if (!String.IsNullOrEmpty(message))
+                    {
+                        string output = DateTime.Now.ToString() + " - " + message;
+
+                        if (newLine)
+                            LogWriter.WriteLine(output);
+                        else
+                            LogWriter.Write(output);
+                    }
                 }
             }
+            catch (Exception)
+            {
+            }
         }
-
-
     }
 }

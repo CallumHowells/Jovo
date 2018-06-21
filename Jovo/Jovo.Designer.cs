@@ -26,48 +26,60 @@ namespace Jovo {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string System_Tray_Icon_Middle_Click_Module {
+        public string System_Tray_Icon_Middle_Click_Module_Name {
             get {
-                return ((string)(this["System_Tray_Icon_Middle_Click_Module"]));
+                return ((string)(this["System_Tray_Icon_Middle_Click_Module_Name"]));
             }
             set {
-                this["System_Tray_Icon_Middle_Click_Module"] = value;
+                this["System_Tray_Icon_Middle_Click_Module_Name"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string System_Tray_Icon_Left_Click_Module {
+        public string System_Tray_Icon_Left_Click_Module_Name {
             get {
-                return ((string)(this["System_Tray_Icon_Left_Click_Module"]));
+                return ((string)(this["System_Tray_Icon_Left_Click_Module_Name"]));
             }
             set {
-                this["System_Tray_Icon_Left_Click_Module"] = value;
+                this["System_Tray_Icon_Left_Click_Module_Name"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Path_Server_Update {
+        public string Module_Update_Remote_Path {
             get {
-                return ((string)(this["Path_Server_Update"]));
+                return ((string)(this["Module_Update_Remote_Path"]));
             }
             set {
-                this["Path_Server_Update"] = value;
+                this["Module_Update_Remote_Path"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Path_Jovo_Update {
+        public string Jovo_Update_Remote_Path {
             get {
-                return ((string)(this["Path_Jovo_Update"]));
+                return ((string)(this["Jovo_Update_Remote_Path"]));
             }
             set {
-                this["Path_Jovo_Update"] = value;
+                this["Jovo_Update_Remote_Path"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Jovo_Updater_Local_Path {
+            get {
+                return ((string)(this["Jovo_Updater_Local_Path"]));
+            }
+            set {
+                this["Jovo_Updater_Local_Path"] = value;
             }
         }
     }

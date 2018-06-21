@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Forms;
+using System.Threading;
 
 namespace Jovo
 {
@@ -47,17 +49,17 @@ namespace Jovo
             if (!Directory.Exists(AppModulePath))
                 Directory.CreateDirectory(AppModulePath);
 
-            if (!String.IsNullOrWhiteSpace(Jovo.Default.Path_Server_Update))
+            if (!String.IsNullOrWhiteSpace(Jovo.Default.Module_Update_Remote_Path))
             {
                 ServerPath = null;
                 ServerModulePath = null;
             }
             else
             {
-                ServerPath = Jovo.Default.Path_Server_Update;
+                ServerPath = Jovo.Default.Module_Update_Remote_Path;
                 ServerModulePath = ServerPath + "Modules";
             }
-            utility.LogEvent("Looking for module updates at: " + Jovo.Default.Path_Server_Update);
+            utility.LogEvent("Looking for module updates at: " + Jovo.Default.Module_Update_Remote_Path);
 
         }
 
@@ -94,12 +96,14 @@ namespace Jovo
 
                 foreach (KeyValuePair<string, JToken> setting in obj)
                 {
+                    JToken token = JObject.Parse(setting.Value.ToString());
+
                     SettingData settings = new SettingData
                     {
-                        Name = setting.Key,
-                        Text = setting.Key,
-                        Value = setting.Value.ToString(),
-                        Domain = "string",
+                        Name = (string)token.SelectToken("Name"),
+                        Text = (string)token.SelectToken("Text"),
+                        Value = (string)token.SelectToken("Value"),
+                        Domain = (string)token.SelectToken("Domain"),
                         Module = data.Name
                     };
                     moduleSettings.Add(settings);
@@ -128,7 +132,7 @@ namespace Jovo
         #region ServerSideModules
         public void GetServerModules()
         {
-            ServerModulePath = Jovo.Default.Path_Server_Update;
+            ServerModulePath = Jovo.Default.Module_Update_Remote_Path;
             if (!String.IsNullOrWhiteSpace(ServerModulePath))
             {
                 if (!ServerModulePath.EndsWith("\\"))
@@ -218,6 +222,42 @@ namespace Jovo
                 DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
                 CopyAll(diSourceSubDir, nextTargetSubDir, utility);
             }
+        }
+        #endregion
+
+        #region JovoUpdate
+        public bool CheckForJovoUpdates(string remoteManifest)
+        {
+            dynamic remote = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(remoteManifest));
+            dynamic local = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("manifest.json"));
+
+            var remoteVer = new Version(remote.Version.ToString());
+            var localVer = new Version(local.Version.ToString());
+
+            if (remoteVer > localVer)
+                return true;
+            else
+                return false;
+        }
+
+        public void DoJovoUpdate(string updaterFileName)
+        {
+            
+            Process current = Process.GetCurrentProcess();
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                WorkingDirectory = Path.GetDirectoryName(updaterFileName),
+                FileName = "Jovo.exe",
+                Arguments = "\"" + current.Id.ToString()  + "\""
+            };
+
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(updaterFileName));
+            Process Jovo = Process.Start(startInfo);
+
+            Thread.Sleep(1000);
+
+            Application.Exit();
         }
         #endregion
     }

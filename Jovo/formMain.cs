@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Diagnostics;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace Jovo
 {
@@ -25,6 +27,7 @@ namespace Jovo
 
         // Define Controls
         BackgroundWorker UpdateWorker = new BackgroundWorker();
+        BackgroundWorker JovoUpdateWorker = new BackgroundWorker();
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
         ToolStripSeparator sep;
@@ -56,6 +59,11 @@ namespace Jovo
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
             utility.LogEvent("Program probably started OK");
             UpdateWorker.RunWorkerAsync();
+            
+            JovoUpdateWorker.DoWork += JovoUpdateWorker_DoWork;
+            JovoUpdateWorker.RunWorkerCompleted += JovoUpdateWorker_RunWorkerCompleted;
+            utility.LogEvent("Jovo Update BackgroundWorker Started...");
+            JovoUpdateWorker.RunWorkerAsync();
         }
 
         private void UpdateWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -63,7 +71,7 @@ namespace Jovo
             NotificationData data = (NotificationData)e.UserState;
             if (data.Method == "Show")
             {
-                notification = new formNotification(data.Title, data.Text, data.Timeout);
+                notification = new formNotification(data.Title, data.Text, data.Timeout, false, utility);
                 notification.Show();
             }
             else
@@ -161,6 +169,44 @@ namespace Jovo
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
+        private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if ((string)e.Result == "UPDATE")
+            {
+                utility.LogEvent("Update Notification Shown");
+                notification = new formNotification("Jovo Update Available", "Click to Install", 0, true, utility);
+                DialogResult dr = notification.ShowDialog();
+                if (dr == DialogResult.OK)
+                {
+                    utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
+                    module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
+                }
+            }
+            else
+                JovoUpdateWorker.RunWorkerAsync();
+        }
+
+        private void JovoUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = "";
+
+            if (File.Exists(Jovo.Default.Jovo_Update_Remote_Path + "\\manifest.json"))
+            {
+                if (module.CheckForJovoUpdates(Jovo.Default.Jovo_Update_Remote_Path + "\\manifest.json"))
+                    e.Result = "UPDATE";
+                else
+                {
+                    e.Result = "NOUPDATE";
+                    Thread.Sleep(10000);
+                }
+            }
+            else
+            {
+                e.Result = "NOUPDATE";
+                Thread.Sleep(10000);
+            }
+        }
+
         private void menu_Click(object sender, EventArgs e)
         {
             // Each context menu item triggers this event, get which is triggered using Tag element //
@@ -189,6 +235,10 @@ namespace Jovo
                     Application.Exit();
                     break;
 
+                case "test":
+                    // nothing here :'(
+                    break;
+
                 default:
                     module.ExecuteModule((ModuleData)click.Tag);
                     break;
@@ -201,10 +251,10 @@ namespace Jovo
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Left_Click_Module));
+                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Left_Click_Module_Name));
                     break;
                 case MouseButtons.Middle:
-                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Middle_Click_Module));
+                    module.ExecuteModule(module.FindModule(Jovo.Default.System_Tray_Icon_Middle_Click_Module_Name));
                     break;
 
                 default:
