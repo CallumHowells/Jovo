@@ -30,8 +30,15 @@ namespace Jovo
 
             if (args.Length >= 2)
             {
+                //Module_Update_Remote_Path
+                string[] temp = args[1].Split('\\');
+                temp[temp.Length - 1] = "modules";
+                string module_path = String.Join("\\", temp);
+
+
                 Jovo.Default.Jovo_Updater_Local_Path = args[0].Trim('"');
                 Jovo.Default.Jovo_Update_Remote_Path = args[1].Trim('"');
+                Jovo.Default.Module_Update_Remote_Path = module_path;
                 Jovo.Default.Save();
             }
 
