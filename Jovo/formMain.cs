@@ -9,6 +9,7 @@ using System.Runtime.ExceptionServices;
 using System.Diagnostics;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace Jovo
 {
@@ -59,7 +60,7 @@ namespace Jovo
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
             utility.LogEvent("Program probably started OK");
             UpdateWorker.RunWorkerAsync();
-            
+
             JovoUpdateWorker.DoWork += JovoUpdateWorker_DoWork;
             JovoUpdateWorker.RunWorkerCompleted += JovoUpdateWorker_RunWorkerCompleted;
             utility.LogEvent("Jovo Update BackgroundWorker Started...");
@@ -165,7 +166,7 @@ namespace Jovo
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            utility.LogEvent("Updater starting...");
+            utility.LogEvent("Module Updater starting...");
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
@@ -262,7 +263,10 @@ namespace Jovo
             }
         }
 
-        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e) => utility.LogEvent($"{e.Exception.Source} - {e.Exception.ToString()}\n", true, true);
+        private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e)
+        {
+            utility.LogEvent($"### Exception: {e.Exception.ToString()}\n", true, true);
+        }
 
         private void formMain_FormClosing(object sender, FormClosingEventArgs e)
         {
