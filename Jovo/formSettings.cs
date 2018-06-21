@@ -415,7 +415,7 @@ namespace Jovo
 
         private void formSettings_Deactivate(object sender, EventArgs e)
         {
-            //this.Hide();
+            this.Hide();
         }
 
         private void setting_SelectedValueChanged(object sender, EventArgs e)
@@ -440,7 +440,7 @@ namespace Jovo
             {
                 foreach (SettingsProperty setting in Jovo.Default.Properties)
                 {
-                    if (setting.Name.Contains("Module"))
+                    if (setting.Name.Contains("Module_Name"))
                     {
                         foreach (Control cntrl in pnlSettings.Controls)
                             if (cntrl.Name == "cbx" + setting.Name)
