@@ -188,8 +188,8 @@ namespace Jovo
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
 
-                FileInfo manifest = new FileInfo(AvailableModule.Path + "\\manifest.json");
-                manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
+                //FileInfo manifest = new FileInfo(AvailableModule.Path + "\\manifest.json");
+                //manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
             }
 
             GetModules(true);
@@ -242,14 +242,14 @@ namespace Jovo
 
         public void DoJovoUpdate(string updaterFileName)
         {
-            
+
             Process current = Process.GetCurrentProcess();
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 WorkingDirectory = Path.GetDirectoryName(updaterFileName),
                 FileName = "Jovo.exe",
-                Arguments = "\"" + current.Id.ToString()  + "\""
+                Arguments = "\"" + current.Id.ToString() + "\""
             };
 
             Directory.SetCurrentDirectory(Path.GetDirectoryName(updaterFileName));
@@ -274,8 +274,9 @@ namespace Jovo
         public string PublishDate { get; set; }
         public string Path { get; set; }
         public string Info { get; set; }
-        public bool HasSettings { get; set; }
-        public bool CreateMenuItem { get; set; }
+        public bool HasSettings { get; set; } = false;
+        public bool CreateMenuItem { get; set; } = true;
+        public bool IsActive { get; set; } = true;
     }
 
     public class SettingData

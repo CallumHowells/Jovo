@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -11,23 +12,83 @@ namespace Jovo
     {
         ModuleHandler module;
         UtilityHandler utility;
+        enum ButtonFilter { All, Installed, NotInstalled };
 
         public formModules(ModuleHandler _module, UtilityHandler _utility)
         {
             module = _module;
             utility = _utility;
             InitializeComponent();
-            GenerateButtons();
+            GenerateButtons(ButtonFilter.All);
+            GenerateHeaders();
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Size.Width + 5), Screen.PrimaryScreen.WorkingArea.Height - (this.Size.Height + 5));
         }
 
-        private void GenerateButtons()
+        private void GenerateHeaders()
         {
+            string[] headers = { "All Modules", "Installed Modules", "Not Installed Modules" };
+
+            //FillInfoPanel(null);
+            //GenerateSettingPanel(null);
+
+            int x = 5;
+            bool first = true;
+            foreach (string headerText in headers)
+            {
+                Label header = new Label();
+                header.Name = "lbl" + headerText.Replace(" ", String.Empty);
+                header.Text = headerText;
+                header.AutoSize = true;
+                header.ForeColor = Color.FromArgb(30, 30, 30);
+                header.BackColor = Color.Transparent;
+                header.MouseEnter += label_MouseEnter;
+                header.MouseLeave += label_MouseLeave;
+                header.Click += label_Click;
+                header.Tag = headerText.Replace(" ", String.Empty);
+                header.TextAlign = ContentAlignment.MiddleLeft;
+                //header.Size = new Size(100, 25);
+                header.Location = new Point(x, 70);
+                header.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+                this.Controls.Add(header);
+
+                Panel under = new Panel();
+                under.Name = "pnlHead" + headerText.Replace(" ", String.Empty);
+                under.Size = new Size(header.Size.Width, 3);
+                under.Location = new Point(x, 95);
+                under.BackColor = Color.FromArgb(51, 153, 255);
+                under.Visible = first;
+                this.Controls.Add(under);
+                x += header.Size.Width + 5;
+                first = false;
+            }
+        }
+
+        private void GenerateButtons(ButtonFilter filter)
+        {
+            pnlButtons.Controls.Clear();
+
+            List<ModuleData> filtered = new List<ModuleData>();
+            switch (filter)
+            {
+                case ButtonFilter.All:
+                    filtered = module.InstalledModules.OrderBy(m => m.Name).ToList();
+                    break;
+
+                case ButtonFilter.Installed:
+                    filtered = module.InstalledModules.OrderBy(m => m.Name).ToList();
+                    break;
+
+                case ButtonFilter.NotInstalled:
+                    filtered = module.InstalledModules.OrderBy(m => m.Name).ToList();
+                    break;
+            }
+
             string modulePath = module.AppModulePath;
             int icony = 1;
             int y = 1;
-            foreach (ModuleData data in module.InstalledModules.OrderBy(m => m.Name))
+
+            foreach (ModuleData data in filtered)
             {
                 PictureBox icon = new PictureBox();
                 icon.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -87,6 +148,8 @@ namespace Jovo
                 GetChangelog(module);
             else
                 rtbChangelog.Text = "No changelog found!";
+
+            lblToggleActive.Text = (module.IsActive) ? "Uninstall Module" : "Install Module";
         }
 
         private void GetChangelog(ModuleData module)
@@ -95,6 +158,84 @@ namespace Jovo
         }
 
         #region Event Handlers
+        private void label_Click(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+
+            switch (lbl.Name)
+            {
+                case "lblAllModules":
+                    GenerateButtons(ButtonFilter.All);
+                    break;
+                case "lblInstalledModules":
+                    GenerateButtons(ButtonFilter.Installed);
+                    break;
+                case "lblNotInstalledModules":
+                    GenerateButtons(ButtonFilter.NotInstalled);
+                    break;
+            }
+
+            string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
+            foreach (Control cntrl in this.Controls)
+            {
+                if (cntrl.Name.Contains("pnlHead"))
+                {
+                    Panel pnl = (Panel)cntrl;
+                    if (pnl.Name == pnlName)
+                    {
+                        pnl.Visible = true;
+                    }
+                    else
+                        pnl.Visible = false;
+                }
+            }
+        }
+
+        private void label_MouseEnter(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(51, 153, 255);
+        }
+
+        private void label_MouseLeave(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(30, 30, 30);
+        }
+
+        private void button_Click(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
+            foreach (Control cntrl in this.Controls)
+            {
+                if (cntrl.Name.Contains("pnlHead"))
+                {
+                    Panel pnl = (Panel)cntrl;
+                    if (pnl.Name == pnlName)
+                    {
+                        pnl.Visible = true;
+                        //FillInfoPanel(lbl.Tag);
+                        //GenerateSettingPanel(lbl.Tag);
+                    }
+                    else
+                        pnl.Visible = false;
+                }
+            }
+        }
+
+        private void button_MouseEnter(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(51, 153, 255);
+        }
+
+        private void button_MouseLeave(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(30, 30, 30);
+        }
+
         private void btnFormClose_Click(object sender, EventArgs e)
         {
             Close();
@@ -127,12 +268,12 @@ namespace Jovo
                 TextBox path = (TextBox)sender;
                 System.Diagnostics.Process.Start(path.Text);
             }
-            catch (Exception){}
+            catch (Exception) { }
         }
 
         private void formModules_Deactivate(object sender, EventArgs e)
         {
-            Close();
+            //Close();
         }
         #endregion
     }

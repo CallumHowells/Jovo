@@ -34,24 +34,27 @@
             this.label1 = new System.Windows.Forms.Label();
             this.pnlButtons = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.groupBoxName = new System.Windows.Forms.GroupBox();
+            this.lblText2 = new System.Windows.Forms.Label();
+            this.lblInfo = new System.Windows.Forms.Label();
+            this.lblText = new System.Windows.Forms.Label();
             this.rtbChangelog = new System.Windows.Forms.RichTextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxRelDate = new System.Windows.Forms.GroupBox();
             this.lblDate = new System.Windows.Forms.Label();
             this.groupBoxVersion = new System.Windows.Forms.GroupBox();
             this.lblVersion = new System.Windows.Forms.Label();
             this.groupBoxPath = new System.Windows.Forms.GroupBox();
             this.lblPath = new System.Windows.Forms.TextBox();
-            this.lblText2 = new System.Windows.Forms.Label();
             this.pnlLine = new System.Windows.Forms.Panel();
-            this.lblText = new System.Windows.Forms.Label();
-            this.lblInfo = new System.Windows.Forms.Label();
-            this.groupBoxName = new System.Windows.Forms.GroupBox();
+            this.groupBoxChangelog = new System.Windows.Forms.GroupBox();
+            this.lblToggleActive = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlMain.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxName.SuspendLayout();
+            this.groupBoxRelDate.SuspendLayout();
             this.groupBoxVersion.SuspendLayout();
             this.groupBoxPath.SuspendLayout();
-            this.groupBoxName.SuspendLayout();
+            this.groupBoxChangelog.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnFormClose
@@ -94,109 +97,55 @@
             // pnlButtons
             // 
             this.pnlButtons.AutoScroll = true;
-            this.pnlButtons.Location = new System.Drawing.Point(4, 83);
+            this.pnlButtons.Location = new System.Drawing.Point(6, 98);
             this.pnlButtons.Name = "pnlButtons";
-            this.pnlButtons.Size = new System.Drawing.Size(235, 505);
+            this.pnlButtons.Size = new System.Drawing.Size(235, 502);
             this.pnlButtons.TabIndex = 5;
             // 
             // pnlMain
             // 
             this.pnlMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.pnlMain.Controls.Add(this.lblToggleActive);
+            this.pnlMain.Controls.Add(this.groupBoxChangelog);
+            this.pnlMain.Controls.Add(this.groupBoxPath);
             this.pnlMain.Controls.Add(this.groupBoxName);
             this.pnlMain.Controls.Add(this.lblInfo);
             this.pnlMain.Controls.Add(this.lblText);
-            this.pnlMain.Controls.Add(this.rtbChangelog);
-            this.pnlMain.Controls.Add(this.groupBox1);
+            this.pnlMain.Controls.Add(this.groupBoxRelDate);
             this.pnlMain.Controls.Add(this.groupBoxVersion);
-            this.pnlMain.Controls.Add(this.groupBoxPath);
-            this.pnlMain.Location = new System.Drawing.Point(245, 83);
+            this.pnlMain.Location = new System.Drawing.Point(245, 98);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(350, 505);
+            this.pnlMain.Size = new System.Drawing.Size(355, 512);
             this.pnlMain.TabIndex = 6;
             // 
-            // rtbChangelog
+            // groupBoxName
             // 
-            this.rtbChangelog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.rtbChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.rtbChangelog.Location = new System.Drawing.Point(10, 389);
-            this.rtbChangelog.Name = "rtbChangelog";
-            this.rtbChangelog.Size = new System.Drawing.Size(333, 96);
-            this.rtbChangelog.TabIndex = 5;
-            this.rtbChangelog.Text = "";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.lblDate);
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBox1.Location = new System.Drawing.Point(10, 332);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(333, 50);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Release Date";
-            // 
-            // lblDate
-            // 
-            this.lblDate.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDate.Location = new System.Drawing.Point(18, 23);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(300, 13);
-            this.lblDate.TabIndex = 0;
-            // 
-            // groupBoxVersion
-            // 
-            this.groupBoxVersion.Controls.Add(this.lblVersion);
-            this.groupBoxVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxVersion.Location = new System.Drawing.Point(10, 276);
-            this.groupBoxVersion.Name = "groupBoxVersion";
-            this.groupBoxVersion.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxVersion.TabIndex = 3;
-            this.groupBoxVersion.TabStop = false;
-            this.groupBoxVersion.Text = "Version";
-            // 
-            // lblVersion
-            // 
-            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(18, 23);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(300, 13);
-            this.lblVersion.TabIndex = 0;
-            // 
-            // groupBoxPath
-            // 
-            this.groupBoxPath.Controls.Add(this.lblPath);
-            this.groupBoxPath.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxPath.Location = new System.Drawing.Point(10, 220);
-            this.groupBoxPath.Name = "groupBoxPath";
-            this.groupBoxPath.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxPath.TabIndex = 2;
-            this.groupBoxPath.TabStop = false;
-            this.groupBoxPath.Text = "Path";
-            // 
-            // lblPath
-            // 
-            this.lblPath.Location = new System.Drawing.Point(6, 19);
-            this.lblPath.Name = "lblPath";
-            this.lblPath.ReadOnly = true;
-            this.lblPath.Size = new System.Drawing.Size(322, 22);
-            this.lblPath.TabIndex = 0;
-            this.lblPath.DoubleClick += new System.EventHandler(this.lblPath_DoubleClick);
+            this.groupBoxName.Controls.Add(this.lblText2);
+            this.groupBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.groupBoxName.Location = new System.Drawing.Point(173, 226);
+            this.groupBoxName.Name = "groupBoxName";
+            this.groupBoxName.Size = new System.Drawing.Size(176, 35);
+            this.groupBoxName.TabIndex = 3;
+            this.groupBoxName.TabStop = false;
+            this.groupBoxName.Text = "Name";
             // 
             // lblText2
             // 
             this.lblText2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblText2.Location = new System.Drawing.Point(18, 24);
+            this.lblText2.Location = new System.Drawing.Point(6, 15);
             this.lblText2.Name = "lblText2";
-            this.lblText2.Size = new System.Drawing.Size(300, 13);
+            this.lblText2.Size = new System.Drawing.Size(164, 13);
             this.lblText2.TabIndex = 0;
             // 
-            // pnlLine
+            // lblInfo
             // 
-            this.pnlLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
-            this.pnlLine.Location = new System.Drawing.Point(3, 81);
-            this.pnlLine.Name = "pnlLine";
-            this.pnlLine.Size = new System.Drawing.Size(600, 1);
-            this.pnlLine.TabIndex = 6;
+            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
+            this.lblInfo.Location = new System.Drawing.Point(4, 33);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.Size = new System.Drawing.Size(164, 310);
+            this.lblInfo.TabIndex = 7;
             // 
             // lblText
             // 
@@ -207,25 +156,111 @@
             this.lblText.Size = new System.Drawing.Size(342, 29);
             this.lblText.TabIndex = 8;
             // 
-            // lblInfo
+            // rtbChangelog
             // 
-            this.lblInfo.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(69)))), ((int)(((byte)(69)))));
-            this.lblInfo.Location = new System.Drawing.Point(3, 33);
-            this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(344, 128);
-            this.lblInfo.TabIndex = 7;
+            this.rtbChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.rtbChangelog.Location = new System.Drawing.Point(5, 17);
+            this.rtbChangelog.Name = "rtbChangelog";
+            this.rtbChangelog.Size = new System.Drawing.Size(334, 77);
+            this.rtbChangelog.TabIndex = 5;
+            this.rtbChangelog.Text = "";
             // 
-            // groupBoxName
+            // groupBoxRelDate
             // 
-            this.groupBoxName.Controls.Add(this.lblText2);
-            this.groupBoxName.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBoxName.Location = new System.Drawing.Point(10, 164);
-            this.groupBoxName.Name = "groupBoxName";
-            this.groupBoxName.Size = new System.Drawing.Size(333, 50);
-            this.groupBoxName.TabIndex = 3;
-            this.groupBoxName.TabStop = false;
-            this.groupBoxName.Text = "Name";
+            this.groupBoxRelDate.Controls.Add(this.lblDate);
+            this.groupBoxRelDate.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxRelDate.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.groupBoxRelDate.Location = new System.Drawing.Point(173, 308);
+            this.groupBoxRelDate.Name = "groupBoxRelDate";
+            this.groupBoxRelDate.Size = new System.Drawing.Size(176, 35);
+            this.groupBoxRelDate.TabIndex = 4;
+            this.groupBoxRelDate.TabStop = false;
+            this.groupBoxRelDate.Text = "Release Date";
+            // 
+            // lblDate
+            // 
+            this.lblDate.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Location = new System.Drawing.Point(6, 15);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(164, 13);
+            this.lblDate.TabIndex = 0;
+            // 
+            // groupBoxVersion
+            // 
+            this.groupBoxVersion.Controls.Add(this.lblVersion);
+            this.groupBoxVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.groupBoxVersion.Location = new System.Drawing.Point(173, 267);
+            this.groupBoxVersion.Name = "groupBoxVersion";
+            this.groupBoxVersion.Size = new System.Drawing.Size(176, 35);
+            this.groupBoxVersion.TabIndex = 3;
+            this.groupBoxVersion.TabStop = false;
+            this.groupBoxVersion.Text = "Version";
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.Location = new System.Drawing.Point(6, 15);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(164, 13);
+            this.lblVersion.TabIndex = 0;
+            // 
+            // groupBoxPath
+            // 
+            this.groupBoxPath.Controls.Add(this.lblPath);
+            this.groupBoxPath.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.groupBoxPath.Location = new System.Drawing.Point(5, 349);
+            this.groupBoxPath.Name = "groupBoxPath";
+            this.groupBoxPath.Size = new System.Drawing.Size(344, 43);
+            this.groupBoxPath.TabIndex = 2;
+            this.groupBoxPath.TabStop = false;
+            this.groupBoxPath.Text = "Path";
+            // 
+            // lblPath
+            // 
+            this.lblPath.BackColor = System.Drawing.SystemColors.Window;
+            this.lblPath.Location = new System.Drawing.Point(5, 15);
+            this.lblPath.Name = "lblPath";
+            this.lblPath.ReadOnly = true;
+            this.lblPath.Size = new System.Drawing.Size(334, 22);
+            this.lblPath.TabIndex = 0;
+            this.lblPath.DoubleClick += new System.EventHandler(this.lblPath_DoubleClick);
+            // 
+            // pnlLine
+            // 
+            this.pnlLine.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
+            this.pnlLine.Location = new System.Drawing.Point(0, 97);
+            this.pnlLine.Name = "pnlLine";
+            this.pnlLine.Size = new System.Drawing.Size(600, 1);
+            this.pnlLine.TabIndex = 6;
+            // 
+            // groupBoxChangelog
+            // 
+            this.groupBoxChangelog.Controls.Add(this.rtbChangelog);
+            this.groupBoxChangelog.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBoxChangelog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(100)))), ((int)(((byte)(100)))));
+            this.groupBoxChangelog.Location = new System.Drawing.Point(5, 398);
+            this.groupBoxChangelog.Name = "groupBoxChangelog";
+            this.groupBoxChangelog.Size = new System.Drawing.Size(344, 99);
+            this.groupBoxChangelog.TabIndex = 6;
+            this.groupBoxChangelog.TabStop = false;
+            this.groupBoxChangelog.Text = "Changelog";
+            // 
+            // lblToggleActive
+            // 
+            this.lblToggleActive.BackColor = System.Drawing.Color.Transparent;
+            this.lblToggleActive.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblToggleActive.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.lblToggleActive.Location = new System.Drawing.Point(192, 188);
+            this.lblToggleActive.Name = "lblToggleActive";
+            this.lblToggleActive.Size = new System.Drawing.Size(132, 36);
+            this.lblToggleActive.TabIndex = 7;
+            this.lblToggleActive.Text = "Toggle Active";
+            this.lblToggleActive.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblToggleActive.Click += new System.EventHandler(this.button_Click);
+            this.lblToggleActive.MouseEnter += new System.EventHandler(this.button_MouseEnter);
+            this.lblToggleActive.MouseLeave += new System.EventHandler(this.button_MouseLeave);
             // 
             // formModules
             // 
@@ -247,11 +282,12 @@
             this.Deactivate += new System.EventHandler(this.formModules_Deactivate);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlMain.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxName.ResumeLayout(false);
+            this.groupBoxRelDate.ResumeLayout(false);
             this.groupBoxVersion.ResumeLayout(false);
             this.groupBoxPath.ResumeLayout(false);
             this.groupBoxPath.PerformLayout();
-            this.groupBoxName.ResumeLayout(false);
+            this.groupBoxChangelog.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,12 +305,14 @@
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.GroupBox groupBoxPath;
         private System.Windows.Forms.TextBox lblPath;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxRelDate;
         private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.RichTextBox rtbChangelog;
         private System.Windows.Forms.Panel pnlLine;
         private System.Windows.Forms.Label lblInfo;
         private System.Windows.Forms.Label lblText;
         private System.Windows.Forms.GroupBox groupBoxName;
+        private System.Windows.Forms.GroupBox groupBoxChangelog;
+        private System.Windows.Forms.Label lblToggleActive;
     }
 }
