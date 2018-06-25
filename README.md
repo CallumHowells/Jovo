@@ -20,10 +20,10 @@ The module's `manifest.json` file is used to configure the module with the json 
    "Version":"1.0.0.0",
    "PublishDate":"01/01/2018 12:00:00",
    "Info":"Test Module.",
-	'HasSettings': 'false',
-	'CreateMenuItem': 'true',
-   'IsActive': 'true',
-	'RequiresNetwork': '192.168.0.1'
+   "HasSettings": "false",
+   "CreateMenuItem": "true",
+   "IsActive": "true",
+   "RequiresNetwork": "192.168.0.1"
 }
 ```
 JSON Item | Use
