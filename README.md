@@ -11,7 +11,7 @@ TODO
 The module's `manifest.json` file is used to configure the module with the json file below. See the table below for info on each JSON item to correctly configure the Module.
 
 ```json
-{  
+{
    "Name":"testModule",
    "Icon":"TestModule.ico",
    "Text":"Test Module",
@@ -19,7 +19,11 @@ The module's `manifest.json` file is used to configure the module with the json 
    "Category":0,
    "Version":"1.0.0.0",
    "PublishDate":"01/01/2018 12:00:00",
-   "Info":"Test Module."
+   "Info":"Test Module.",
+	'HasSettings': 'false',
+	'CreateMenuItem': 'true',
+   'IsActive': 'true',
+	'RequiresNetwork': '192.168.0.1'
 }
 ```
 JSON Item | Use
@@ -27,12 +31,15 @@ JSON Item | Use
 Name | Used by Jovo to recall the Module.
 Icon | Icon shown in the context menu.
 Text | Display Name of the Module shown to the user.
-Tag | Can't remember what this is.
+Tag | Internal use only.
 Category | Seperates items into different groups on the context menu.
 Version | Version number of the Module.
 PublishDate | Date at which the Module was published.
 Info | General information about the Module.
-
+HasSettings | Does the Module have a settings file. Default FALSE.
+CreateMenuItem | Should Jovo generate a menu item for this Module? Default TRUE.
+IsActive | Toggled if used chooses not to use this Module. Default TRUE.
+RequiresNetwork | Value should be IP Address or PC Name, Module cannot be opened if connection is not live. Default ''.
 
 
 The module's `settings.json` file is modified using Jovo then read by the Module. See the table below for info on settings configuration.
@@ -49,10 +56,10 @@ The module's `settings.json` file is modified using Jovo then read by the Module
 ```
 JSON Item | Use
 ------------- | -------------
-First Value | Should be same as the Name.
+First Value | Should be the same as the Name.
 Name | Used by Jovo to handle the setting.
 Text | Display Name of the setting shown to the user.
-Domain | Data type to be stored. `string, integer, path, boolean`
+Domain | Data type to be stored. `string, password, integer, path, boolean`
 Value | Value of the setting.
 
 ## Built With
@@ -61,7 +68,7 @@ Value | Value of the setting.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/CallumHowells/Jovo/tags).
+We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
