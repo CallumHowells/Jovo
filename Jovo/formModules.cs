@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -12,6 +13,7 @@ namespace Jovo
     {
         ModuleHandler module;
         UtilityHandler utility;
+        ButtonFilter currentFilter;
         enum ButtonFilter { All, Installed, NotInstalled };
 
         public formModules(ModuleHandler _module, UtilityHandler _utility)
@@ -19,7 +21,10 @@ namespace Jovo
             module = _module;
             utility = _utility;
             InitializeComponent();
-            GenerateButtons(ButtonFilter.All);
+
+            currentFilter = ButtonFilter.All;
+
+            GenerateButtons(currentFilter);
             GenerateHeaders();
 
             this.Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - (this.Size.Width + 5), Screen.PrimaryScreen.WorkingArea.Height - (this.Size.Height + 5));
@@ -27,7 +32,7 @@ namespace Jovo
 
         private void GenerateHeaders()
         {
-            string[] headers = { "All Modules", "Installed Modules", "Not Installed Modules" };
+            string[] headers = { "All Modules", "Installed Modules", "Available Modules" };
 
             //FillInfoPanel(null);
             //GenerateSettingPanel(null);
@@ -76,11 +81,11 @@ namespace Jovo
                     break;
 
                 case ButtonFilter.Installed:
-                    filtered = module.InstalledModules.OrderBy(m => m.Name).ToList();
+                    filtered = module.InstalledModules.Where(m => m.IsActive == true).OrderBy(m => m.Name).ToList();
                     break;
 
                 case ButtonFilter.NotInstalled:
-                    filtered = module.InstalledModules.OrderBy(m => m.Name).ToList();
+                    filtered = module.InstalledModules.Where(m => m.IsActive == false).OrderBy(m => m.Name).ToList();
                     break;
             }
 
@@ -149,6 +154,7 @@ namespace Jovo
             else
                 rtbChangelog.Text = "No changelog found!";
 
+            lblToggleActive.Tag = module;
             lblToggleActive.Text = (module.IsActive) ? "Uninstall Module" : "Install Module";
         }
 
@@ -165,13 +171,16 @@ namespace Jovo
             switch (lbl.Name)
             {
                 case "lblAllModules":
-                    GenerateButtons(ButtonFilter.All);
+                    currentFilter = ButtonFilter.All;
+                    GenerateButtons(currentFilter);
                     break;
                 case "lblInstalledModules":
-                    GenerateButtons(ButtonFilter.Installed);
+                    currentFilter = ButtonFilter.Installed;
+                    GenerateButtons(currentFilter);
                     break;
-                case "lblNotInstalledModules":
-                    GenerateButtons(ButtonFilter.NotInstalled);
+                case "lblAvailableModules":
+                    currentFilter = ButtonFilter.NotInstalled;
+                    GenerateButtons(currentFilter);
                     break;
             }
 
@@ -203,34 +212,27 @@ namespace Jovo
             lbl.ForeColor = Color.FromArgb(30, 30, 30);
         }
 
-        private void button_Click(object sender, EventArgs e)
+        private void btnUtility_Click(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;
-            string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
-            foreach (Control cntrl in this.Controls)
-            {
-                if (cntrl.Name.Contains("pnlHead"))
-                {
-                    Panel pnl = (Panel)cntrl;
-                    if (pnl.Name == pnlName)
-                    {
-                        pnl.Visible = true;
-                        //FillInfoPanel(lbl.Tag);
-                        //GenerateSettingPanel(lbl.Tag);
-                    }
-                    else
-                        pnl.Visible = false;
-                }
-            }
+
+            ModuleData newModule = (ModuleData)lbl.Tag;
+            if (newModule.IsActive)
+                newModule.IsActive = false;
+            else
+                newModule.IsActive = true;
+
+            module.WriteModuleManifest(newModule);
+            GenerateButtons(currentFilter);
         }
 
-        private void button_MouseEnter(object sender, EventArgs e)
+        private void btnUtility_MouseEnter(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;
             lbl.ForeColor = Color.FromArgb(51, 153, 255);
         }
 
-        private void button_MouseLeave(object sender, EventArgs e)
+        private void btnUtility_MouseLeave(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;
             lbl.ForeColor = Color.FromArgb(30, 30, 30);

@@ -82,6 +82,17 @@ namespace Jovo
             if (log)
                 utility.LogEvent(InstalledModules.Count + " modules loaded");
         }
+
+        public void WriteModuleManifest(ModuleData module)
+        {
+            string manifestStr = JsonConvert.SerializeObject(module, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                Formatting = Formatting.Indented
+            });
+
+            File.WriteAllText(module.Path + "\\manifest.json", manifestStr);
+        }
         #endregion
 
         #region Settings
@@ -277,6 +288,7 @@ namespace Jovo
         public bool HasSettings { get; set; } = false;
         public bool CreateMenuItem { get; set; } = true;
         public bool IsActive { get; set; } = true;
+        public string RequiresNetwork { get; set; } = "";
     }
 
     public class SettingData

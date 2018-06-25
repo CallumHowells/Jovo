@@ -258,9 +258,9 @@
             this.lblToggleActive.TabIndex = 7;
             this.lblToggleActive.Text = "Toggle Active";
             this.lblToggleActive.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lblToggleActive.Click += new System.EventHandler(this.button_Click);
-            this.lblToggleActive.MouseEnter += new System.EventHandler(this.button_MouseEnter);
-            this.lblToggleActive.MouseLeave += new System.EventHandler(this.button_MouseLeave);
+            this.lblToggleActive.Click += new System.EventHandler(this.btnUtility_Click);
+            this.lblToggleActive.MouseEnter += new System.EventHandler(this.btnUtility_MouseEnter);
+            this.lblToggleActive.MouseLeave += new System.EventHandler(this.btnUtility_MouseLeave);
             // 
             // formModules
             // 
