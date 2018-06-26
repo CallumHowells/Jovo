@@ -47,6 +47,31 @@ namespace Jovo
             {
                 LogEvent(ArchiveEx.ToString());
             }
+            finally
+            {
+                PurgeLogHistory();
+            }
+        }
+
+        public void PurgeLogHistory()
+        {
+            try
+            {
+                if (Directory.Exists("loghistory"))
+                {
+                    foreach (string file in Directory.GetFiles("loghistory"))
+                    {
+                        FileInfo log = new FileInfo(file);
+                        if (log.CreationTime < DateTime.Now.AddMonths(-1))
+                        {
+                            log.Delete();
+                        }
+                    }
+                }
+            } catch (Exception PurgeLogsEx)
+            {
+                LogEvent(PurgeLogsEx.ToString());
+            }
         }
 
         public void LogEvent(string message, bool newLine = true, bool blankLine = false)

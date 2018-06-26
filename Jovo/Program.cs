@@ -21,12 +21,12 @@ namespace Jovo
             utility.LogEvent("############################ Program starting... ############################", true, true);
             module.GetSetDirectoryStructure(System.Reflection.Assembly.GetEntryAssembly().Location);
 
-            utility.LogEvent("Args received : " + args.Length);
+            utility.LogEvent("Startup Args received : " + args.Length);
 
-            foreach (string arg in args)
-            {
-                utility.LogEvent("Start Argument : " + arg);
-            }
+            //foreach (string arg in args)
+            //{
+            //    utility.LogEvent("Start Argument : " + arg);
+            //}
 
             if (args.Length >= 2)
             {
