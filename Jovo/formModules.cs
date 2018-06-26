@@ -137,7 +137,8 @@ namespace Jovo
                 icony += 31;
             }
 
-            UpdateInfoPanel(filtered.Last());
+            if(filtered.Count > 0)
+                UpdateInfoPanel(filtered.Last());
         }
 
         private void UpdateInfoPanel(ModuleData module)
