@@ -22,13 +22,14 @@ namespace Jovo
         UtilityHandler utility;
 
         // Define Sub-Forms
-        formSettings settings;
-        formNotification notification;
+        formSettings formSettings;
+        formNotification formNotification;
         formModules formModules;
 
         // Define Controls
         BackgroundWorker UpdateWorker = new BackgroundWorker();
         BackgroundWorker JovoUpdateWorker = new BackgroundWorker();
+        BackgroundWorker ConnectionWorker = new BackgroundWorker();
         ContextMenuStrip menu = new ContextMenuStrip();
         ToolStripMenuItem item;
         ToolStripSeparator sep;
@@ -65,6 +66,11 @@ namespace Jovo
             JovoUpdateWorker.RunWorkerCompleted += JovoUpdateWorker_RunWorkerCompleted;
             utility.LogEvent("Jovo Update BackgroundWorker Started...");
             JovoUpdateWorker.RunWorkerAsync();
+
+            ConnectionWorker.WorkerReportsProgress = true;
+            ConnectionWorker.DoWork += ConnectionWorker_DoWork;
+            ConnectionWorker.RunWorkerCompleted += ConnectionWorker_RunWorkerCompleted;
+            ConnectionWorker.ProgressChanged += ConnectionWorker_ProgressChanged;
         }
 
         private void UpdateWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -72,14 +78,14 @@ namespace Jovo
             NotificationData data = (NotificationData)e.UserState;
             if (data.Method == "Show")
             {
-                notification = new formNotification(data.Title, data.Text, data.Timeout, false, utility);
-                notification.Show();
+                formNotification = new formNotification(data.Title, data.Text, data.Timeout, false, utility);
+                formNotification.Show();
             }
             else
             {
                 try
                 {
-                    notification.Hide();
+                    formNotification.Hide();
                 }
                 catch (Exception) { }
             }
@@ -89,35 +95,35 @@ namespace Jovo
         {
             utility.LogEvent("Updater finished");
             int prev_cat = 0;
+            int first_cat = -1;
             menu.Items.Clear();
-            List<ModuleData> SortedList = module.InstalledModules.OrderBy(m => m.Category).ToList();
+            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.CreateMenuItem == true).OrderBy(m => m.Category).ToList();
             foreach (ModuleData data in SortedList)
             {
-                if (data.CreateMenuItem)
+                if ((prev_cat != data.Category) && (first_cat != -1))
                 {
-                    if (prev_cat != data.Category)
-                    {
-                        sep = new ToolStripSeparator();
-                        menu.Items.Add(sep);
-                    }
-
-                    item = new ToolStripMenuItem();
-                    item.Name = data.Name;
-                    item.Text = data.Text;
-                    item.Tag = data;
-                    if (File.Exists(data.Path + "\\" + data.Icon))
-                    {
-                        var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
-                        var ms = new MemoryStream(bytes);
-                        item.Image = Image.FromStream(ms);
-                    }
-                    else
-                        item.Image = Properties.Resources.settings;
-                    item.Click += menu_Click;
-                    menu.Items.Add(item);
-
-                    prev_cat = data.Category;
+                    sep = new ToolStripSeparator();
+                    menu.Items.Add(sep);
                 }
+
+                first_cat = (first_cat == -1) ? data.Category : -1;
+
+                item = new ToolStripMenuItem();
+                item.Name = data.Name;
+                item.Text = data.Text;
+                item.Tag = data;
+                if (File.Exists(data.Path + "\\" + data.Icon))
+                {
+                    var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                    var ms = new MemoryStream(bytes);
+                    item.Image = Image.FromStream(ms);
+                }
+                else
+                    item.Image = Properties.Resources.settings;
+                item.Click += menu_Click;
+                menu.Items.Add(item);
+
+                prev_cat = data.Category;
             }
 
             // Create context menu items and add to menu
@@ -161,6 +167,9 @@ namespace Jovo
                 utility.LogEvent($"Startup finished in {startupTimer.Elapsed.TotalSeconds.ToString()} seconds");
                 utility.LogEvent($"Total memory usage: {Process.GetCurrentProcess().PrivateMemorySize64 / (1024 * 1024)} MB allocated ({Environment.WorkingSet / (1024 * 1024)} MB mapped)");
                 FirstStartup = false;
+
+                utility.LogEvent("Connection BackgroundWorker Started...");
+                ConnectionWorker.RunWorkerAsync();
             }
         }
 
@@ -170,13 +179,99 @@ namespace Jovo
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
+        private void ConnectionWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            bool connected = (e.ProgressPercentage == 100) ? true : false;
+            ModuleData data = (ModuleData)e.UserState;
+            ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
+
+            if (connected)
+            {
+                if (File.Exists(data.Path + "\\" + data.Icon))
+                {
+                    var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                    var ms = new MemoryStream(bytes);
+                    _item.Image = Image.FromStream(ms);
+                }
+                else
+                    _item.Image = Properties.Resources.settings;
+
+                _item.Click += menu_Click;
+                _item.ToolTipText = "Connected to " + data.RequiresNetwork;
+                _item.Enabled = true;
+            }
+            else
+            {
+                if (File.Exists(data.Path + "\\" + data.Icon))
+                {
+                    try
+                    {
+                        var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                        var ms = new MemoryStream(bytes);
+
+
+                        Image imageBackground = Image.FromStream(ms);
+                        Image imageOverlay = Properties.Resources.disconnected;
+
+                        Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                        using (Graphics gr = Graphics.FromImage(img))
+                        {
+                            gr.DrawImage(imageBackground, new Point(0, 0));
+                            gr.DrawImage(imageOverlay, imageBackground.Width / 2, imageBackground.Height / 2);
+                        }
+
+                        _item.Image = img;
+                    }
+                    catch (Exception) { }
+                }
+                else
+                    _item.Image = Properties.Resources.settings;
+
+                _item.Click -= menu_Click;
+                _item.ToolTipText = "Unable to connect to " + data.RequiresNetwork;
+                _item.Enabled = true;
+            }
+        }
+
+        private void ConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ConnectionWorker.RunWorkerAsync();
+        }
+
+        private void ConnectionWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bg = (BackgroundWorker)sender;
+            utility.LogEvent("Module Updater starting...");
+            foreach (ToolStripMenuItem ts in menu.Items.OfType<ToolStripMenuItem>())
+            {
+                if (ts.Name.Substring(0, 2) != "ts")
+                {
+                    ModuleData data = (ModuleData)ts.Tag;
+                    if (!String.IsNullOrWhiteSpace(data.RequiresNetwork))
+                    {
+                        if (utility.TestConnection(data.RequiresNetwork))
+                        {
+                            // Connected
+                            bg.ReportProgress(100, data);
+                        }
+                        else
+                        {
+                            // Not Connected
+                            bg.ReportProgress(0, data);
+                        }
+                    }
+                }
+            }
+            Thread.Sleep(10000);
+        }
+
         private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if ((string)e.Result == "UPDATE")
             {
                 utility.LogEvent("Update Notification Shown");
-                notification = new formNotification("Jovo Update Available", "Click to Install", 0, true, utility);
-                DialogResult dr = notification.ShowDialog();
+                formNotification = new formNotification("Jovo Update Available", "Click to Install", 0, true, utility);
+                DialogResult dr = formNotification.ShowDialog();
                 if (dr == DialogResult.OK)
                 {
                     utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
@@ -216,14 +311,18 @@ namespace Jovo
             {
                 case "modules":
                     formModules = new formModules(module, utility);
-                    formModules.Show();
+                    formModules.ShowDialog();
+                    UpdateWorker.RunWorkerAsync();
                     break;
 
                 case "settings":
-                    if (settings == null)
-                        settings = new formSettings(module, utility);
-                    if (settings.Visible == false)
-                        settings.Show();
+                    if (formSettings == null)
+                        formSettings = new formSettings(module, utility);
+                    if (formSettings.Visible == false)
+                    {
+                        formSettings.ShowDialog();
+                        UpdateWorker.RunWorkerAsync();
+                    }
                     break;
 
                 case "update":
