@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
 
 namespace Jovo
@@ -68,7 +70,8 @@ namespace Jovo
                         }
                     }
                 }
-            } catch (Exception PurgeLogsEx)
+            }
+            catch (Exception PurgeLogsEx)
             {
                 LogEvent(PurgeLogsEx.ToString());
             }
@@ -102,5 +105,33 @@ namespace Jovo
             {
             }
         }
+
+        public bool TestConnection(string ipAddress)
+        {
+            IPAddress ip = null;
+
+            try
+            {
+                if (ipAddress.Contains("\\"))
+                    ip = Dns.GetHostEntry(ipAddress.Replace("\\", String.Empty)).AddressList[0];
+                else if (ipAddress.Contains("http://"))
+                    ip = Dns.GetHostAddresses(new Uri(ipAddress).Host)[0];
+                else
+                    ip = IPAddress.Parse(ipAddress);
+
+                Ping p = new Ping();
+                PingReply reply = p.Send(ip);
+
+                if (reply.Status == IPStatus.Success)
+                    return true;
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
     }
 }

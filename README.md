@@ -39,7 +39,7 @@ Info | General information about the Module.
 HasSettings | Does the Module have a settings file. Default FALSE.
 CreateMenuItem | Should Jovo generate a menu item for this Module? Default TRUE.
 IsActive | Toggled if used chooses not to use this Module. Default TRUE.
-RequiresNetwork | Value should be IP Address or PC Name, Module cannot be opened if connection is not live. Default ''.
+RequiresNetwork | Value should be IP Address, PC Name or URL, Module cannot be opened if connection is not live. Default ''. IP Address format -> x.x.x.x, PC Name format -> \\\\PCName, URL format -> http://google.com
 
 
 The module's `settings.json` file is modified using Jovo then read by the Module. See the table below for info on settings configuration.
