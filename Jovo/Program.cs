@@ -16,6 +16,7 @@ namespace Jovo
 
             ModuleHandler module = new ModuleHandler();
             UtilityHandler utility = new UtilityHandler();
+            KeyboardHook hook = new KeyboardHook();
             utility.ArchiveLog();
 
             utility.LogEvent("############################ Program starting... ############################", true, true);
@@ -42,7 +43,7 @@ namespace Jovo
                 Jovo.Default.Save();
             }
 
-            Application.Run(new formMain(module, utility));
+            Application.Run(new formMain(module, utility, hook));
         }
     }
 }

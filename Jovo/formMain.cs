@@ -20,6 +20,7 @@ namespace Jovo
         // Define Handlers
         ModuleHandler module;
         UtilityHandler utility;
+        KeyboardHook hook;
 
         // Define Sub-Forms
         formSettings formSettings;
@@ -38,12 +39,14 @@ namespace Jovo
         Stopwatch startupTimer = new Stopwatch();
         bool FirstStartup = true;
 
-        public formMain(ModuleHandler _module, UtilityHandler _utility)
+        public formMain(ModuleHandler _module, UtilityHandler _utility, KeyboardHook _hook)
         {
             utility = _utility;
             module = _module;
+            hook = _hook;
 
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
+            hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
             InitializeComponent();
             startupTimer.Start();
@@ -106,7 +109,7 @@ namespace Jovo
                     menu.Items.Add(sep);
                 }
 
-                first_cat = (first_cat == -1) ? data.Category : -1;
+                first_cat = (first_cat == -1) ? data.Category : first_cat;
 
                 item = new ToolStripMenuItem();
                 item.Name = data.Name;
@@ -120,6 +123,10 @@ namespace Jovo
                 }
                 else
                     item.Image = Properties.Resources.settings;
+
+                if (!String.IsNullOrEmpty(data.KeyboardShortcut))
+                    item.ShortcutKeys = utility.GetModuleKeyboardShortcut(data.KeyboardShortcut, hook);
+
                 item.Click += menu_Click;
                 menu.Items.Add(item);
 
@@ -372,5 +379,17 @@ namespace Jovo
             startupTimer.Stop();
             utility.LogEvent($"Program was exited properly after {startupTimer.Elapsed} ({e.CloseReason})", true, true);
         }
+
+        private void hook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.CreateMenuItem == true && m.KeyboardShortcut != "").OrderBy(m => m.Category).ToList();
+            foreach (ModuleData data in SortedList)
+            {
+                if (utility.CheckKeyboardShortcut(data, e.Modifier, e.Key))
+                    module.ExecuteModule(data);
+            }
+            
+        }
+
     }
 }
