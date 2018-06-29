@@ -46,6 +46,7 @@ namespace Jovo
 
             InitializeComponent();
             startupTimer.Start();
+            utility.LogEvent("Program probably started OK");
 
             // Create NotifyIcon to sit in system tray
             icon.Text = "Jovo";
@@ -58,12 +59,12 @@ namespace Jovo
             UpdateWorker.DoWork += UpdateWorker_DoWork;
             UpdateWorker.RunWorkerCompleted += UpdateWorker_RunWorkerCompleted;
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
-            utility.LogEvent("Program probably started OK");
+            utility.LogEvent("Module Updater starting...");
             UpdateWorker.RunWorkerAsync();
 
             JovoUpdateWorker.DoWork += JovoUpdateWorker_DoWork;
             JovoUpdateWorker.RunWorkerCompleted += JovoUpdateWorker_RunWorkerCompleted;
-            utility.LogEvent("Jovo Update BackgroundWorker Started...");
+            utility.LogEvent("Jovo Updater Starting...");
             JovoUpdateWorker.RunWorkerAsync();
         }
 
@@ -166,7 +167,6 @@ namespace Jovo
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            utility.LogEvent("Module Updater starting...");
             module.GetModuleUpdates(utility, (BackgroundWorker)sender);
         }
 
@@ -265,7 +265,7 @@ namespace Jovo
 
         private void FirstChance_Handler(object sender, FirstChanceExceptionEventArgs e)
         {
-            utility.LogEvent($"### Exception: {e.Exception.ToString()}\n", true, true);
+            utility.LogEvent($"### Exception: {e.Exception.ToString()}\r\n", true, true);
         }
 
         private void formMain_FormClosing(object sender, FormClosingEventArgs e)

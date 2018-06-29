@@ -246,14 +246,17 @@ namespace Jovo
             var localVer = new Version(local.Version.ToString());
 
             if (remoteVer > localVer)
+            {
+                utility.LogEvent("Newer version of main application found!");
                 return true;
+            }
             else
                 return false;
         }
 
         public void DoJovoUpdate(string updaterFileName)
         {
-
+            utility.LogEvent("Trying to start application updater...");
             Process current = Process.GetCurrentProcess();
 
             ProcessStartInfo startInfo = new ProcessStartInfo
