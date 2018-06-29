@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Diagnostics;
 using System.Threading;
-using Newtonsoft.Json;
-using System.Collections;
 
 namespace Jovo
 {
