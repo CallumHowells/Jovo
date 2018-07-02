@@ -246,7 +246,6 @@ namespace Jovo
         private void ConnectionWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bg = (BackgroundWorker)sender;
-            utility.LogEvent("Module Updater starting...");
             foreach (ToolStripMenuItem ts in menu.Items.OfType<ToolStripMenuItem>())
             {
                 if (ts.Name.Substring(0, 2) != "ts")

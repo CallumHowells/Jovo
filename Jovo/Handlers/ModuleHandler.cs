@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Threading;
-using System.Linq;
 
 namespace Jovo
 {
@@ -271,7 +270,7 @@ namespace Jovo
             Process Jovo = Process.Start(startInfo);
 
             Thread.Sleep(1000);
-
+            
             Application.Exit();
         }
         #endregion
