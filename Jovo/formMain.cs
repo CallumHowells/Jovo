@@ -316,7 +316,7 @@ namespace Jovo
                 case "modules":
                     formModules = new formModules(module, utility);
                     formModules.ShowDialog();
-                    UpdateWorker.RunWorkerAsync();
+                    //UpdateWorker.RunWorkerAsync();
                     break;
 
                 case "settings":
@@ -325,7 +325,7 @@ namespace Jovo
                     if (formSettings.Visible == false)
                     {
                         formSettings.ShowDialog();
-                        UpdateWorker.RunWorkerAsync();
+                        //UpdateWorker.RunWorkerAsync();
                     }
                     break;
 
