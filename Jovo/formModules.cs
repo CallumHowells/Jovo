@@ -276,7 +276,7 @@ namespace Jovo
 
         private void formModules_Deactivate(object sender, EventArgs e)
         {
-            //Close();
+            Close();
         }
         #endregion
     }
