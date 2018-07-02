@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Threading;
+using System.Linq;
 
 namespace Jovo
 {
@@ -292,6 +293,7 @@ namespace Jovo
         public bool CreateMenuItem { get; set; } = true;
         public bool IsActive { get; set; } = true;
         public string RequiresNetwork { get; set; } = "";
+        public string KeyboardShortcut { get; set; } = "";
     }
 
     public class SettingData

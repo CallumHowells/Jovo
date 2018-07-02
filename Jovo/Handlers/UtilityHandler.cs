@@ -133,5 +133,64 @@ namespace Jovo
             }
         }
 
+        public Keys GetModuleKeyboardShortcut(string KeyboardShortcut, KeyboardHook hook)
+        {
+
+            ModifierKeys modifiers = new ModifierKeys();
+            Keys shortcut = new Keys();
+            Keys returnKeys = new Keys();
+
+            try
+            {
+                foreach (string key in KeyboardShortcut.Split('+'))
+                {
+                    Keys ckey = (Keys)Enum.Parse(typeof(Keys), key, true);
+                    switch (ckey)
+                    {
+                        case Keys.Alt:
+                            modifiers = modifiers | ModifierKeys.Alt;
+                            break;
+
+                        case Keys.Control:
+                            modifiers = modifiers | ModifierKeys.Control;
+                            break;
+
+                        case Keys.Shift:
+                            modifiers = modifiers | ModifierKeys.Shift;
+                            break;
+                        default:
+                            shortcut = shortcut | ckey;
+                            break;
+                    }
+
+                    returnKeys = returnKeys | ckey;
+                }
+
+                hook.RegisterHotKey(modifiers, shortcut);
+            }
+            catch (Exception) { }
+
+            return returnKeys;
+        }
+
+        public bool CheckKeyboardShortcut(ModuleData data, ModifierKeys modifier, Keys key)
+        {
+            string pressed = modifier.ToString().Replace(", ", "+") + "+" + key.ToString();
+            int keysPressed = pressed.Split('+').Length;
+            int shortcutKeys = data.KeyboardShortcut.Split('+').Length;
+            int matchingKeys = 0;
+
+            foreach (string k in data.KeyboardShortcut.Split('+'))
+            {
+                if (!pressed.Contains(k))
+                    return false;
+                matchingKeys++;
+            }
+
+            if ((matchingKeys == shortcutKeys) && (matchingKeys == keysPressed) && (keysPressed == shortcutKeys))
+                return true;
+            else
+                return false;
+        }
     }
 }

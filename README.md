@@ -23,7 +23,8 @@ The module's `manifest.json` file is used to configure the module with the json 
    "HasSettings": "false",
    "CreateMenuItem": "true",
    "IsActive": "true",
-   "RequiresNetwork": "192.168.0.1"
+   "RequiresNetwork": "192.168.0.1",
+   "KeyboardShortcut": "Control+Shift+NumPad1"
 }
 ```
 JSON Item | Use
@@ -40,7 +41,7 @@ HasSettings | Does the Module have a settings file. Default FALSE.
 CreateMenuItem | Should Jovo generate a menu item for this Module? Default TRUE.
 IsActive | Toggled if used chooses not to use this Module. Default TRUE.
 RequiresNetwork | Value should be IP Address, PC Name or URL, Module cannot be opened if connection is not live. Default ''. IP Address format -> x.x.x.x, PC Name format -> \\\\PCName, URL format -> http://google.com
-
+KeyboardShortcut | Keyboard shortcut keys seperated by plus sign (+). Supports upto 4 keys.
 
 The module's `settings.json` file is modified using Jovo then read by the Module. See the table below for info on settings configuration.
 
