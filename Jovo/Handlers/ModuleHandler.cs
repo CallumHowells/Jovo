@@ -102,21 +102,28 @@ namespace Jovo
 
             if (File.Exists(data.Path + "\\settings.json"))
             {
-                JToken tkn = JObject.Parse(File.ReadAllText(data.Path + "\\settings.json"));
-                JObject obj = tkn.Value<JObject>();
+                //JToken tkn = JObject.Parse(File.ReadAllText(data.Path + "\\settings.json"));
+                //JObject obj = tkn.Value<JObject>();
 
-                foreach (KeyValuePair<string, JToken> setting in obj)
+                //foreach (KeyValuePair<string, JToken> setting in obj)
+                //{
+                //    JToken token = JObject.Parse(setting.Value.ToString());
+
+                //    SettingData settings = new SettingData
+                //    {
+                //        Name = (string)token.SelectToken("Name"),
+                //        Text = (string)token.SelectToken("Text"),
+                //        Value = (string)token.SelectToken("Value"),
+                //        Domain = (string)token.SelectToken("Domain"),
+                //        Module = data.Name
+                //    };
+                //    moduleSettings.Add(settings);
+                //}
+
+                List<SettingData> tempSettings = JsonConvert.DeserializeObject<List<SettingData>>(File.ReadAllText(data.Path + "\\settings.json"));
+                foreach(SettingData settings in tempSettings)
                 {
-                    JToken token = JObject.Parse(setting.Value.ToString());
-
-                    SettingData settings = new SettingData
-                    {
-                        Name = (string)token.SelectToken("Name"),
-                        Text = (string)token.SelectToken("Text"),
-                        Value = (string)token.SelectToken("Value"),
-                        Domain = (string)token.SelectToken("Domain"),
-                        Module = data.Name
-                    };
+                    settings.Module = data.Name;
                     moduleSettings.Add(settings);
                 }
 
@@ -126,14 +133,13 @@ namespace Jovo
             return null;
         }
 
-        public bool SaveModuleSettings(ModuleData data, JObject json)
+        public bool SaveModuleSettings(ModuleData data, List<SettingData> settings)
         {
             File.Delete(data.Path + "\\settings.json");
 
             using (StreamWriter file = File.CreateText(data.Path + "\\settings.json"))
-            using (JsonTextWriter writer = new JsonTextWriter(file))
             {
-                json.WriteTo(writer);
+                file.WriteLine(JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
 
             return File.Exists(data.Path + "\\settings.json");

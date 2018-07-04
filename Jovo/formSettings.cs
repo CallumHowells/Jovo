@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -465,7 +466,7 @@ namespace Jovo
             }
             else
             {
-                JObject save = new JObject();
+                List<SettingData> save = new List<SettingData>();
                 foreach (SettingData data in module.GetModuleSettings((ModuleData)btn.Tag))
                 {
                     foreach (Control cntrl in pnlSettings.Controls)
@@ -476,13 +477,21 @@ namespace Jovo
                                 {
                                     ComboBox value = (ComboBox)cntrl;
 
-                                    JObject set = new JObject(
-                                         new JProperty("Name", data.Name),
-                                         new JProperty("Text", data.Text),
-                                         new JProperty("Domain", data.Domain),
-                                         new JProperty("Value", value.SelectedItem));
+                                    //JObject set = new JObject(
+                                    //     new JProperty("Name", data.Name),
+                                    //     new JProperty("Text", data.Text),
+                                    //     new JProperty("Domain", data.Domain),
+                                    //     new JProperty("Value", value.SelectedItem));
 
-                                    save.Add(data.Name, set);
+                                    SettingData set = new SettingData
+                                    {
+                                        Name = data.Name,
+                                        Text = data.Text,
+                                        Domain = data.Domain,
+                                        Value = value.SelectedItem.ToString()
+                                    };
+
+                                    save.Add(set);
                                 }
                                 break;
 
@@ -491,13 +500,21 @@ namespace Jovo
                                 {
                                     NumericUpDown value = (NumericUpDown)cntrl;
 
-                                    JObject set = new JObject(
-                                         new JProperty("Name", data.Name),
-                                         new JProperty("Text", data.Text),
-                                         new JProperty("Domain", data.Domain),
-                                         new JProperty("Value", Convert.ToInt32(value.Value)));
+                                    //JObject set = new JObject(
+                                    //     new JProperty("Name", data.Name),
+                                    //     new JProperty("Text", data.Text),
+                                    //     new JProperty("Domain", data.Domain),
+                                    //     new JProperty("Value", Convert.ToInt32(value.Value)));
 
-                                    save.Add(data.Name, set);
+                                    SettingData set = new SettingData
+                                    {
+                                        Name = data.Name,
+                                        Text = data.Text,
+                                        Domain = data.Domain,
+                                        Value = value.Value.ToString()
+                                    };
+
+                                    save.Add(set);
                                 }
                                 break;
 
@@ -506,13 +523,21 @@ namespace Jovo
                                 {
                                     TextBox value = (TextBox)cntrl;
 
-                                    JObject set = new JObject(
-                                         new JProperty("Name", data.Name),
-                                         new JProperty("Text", data.Text),
-                                         new JProperty("Domain", data.Domain),
-                                         new JProperty("Value", value.Text));
+                                    //JObject set = new JObject(
+                                    //     new JProperty("Name", data.Name),
+                                    //     new JProperty("Text", data.Text),
+                                    //     new JProperty("Domain", data.Domain),
+                                    //     new JProperty("Value", value.Text));
 
-                                    save.Add(data.Name, set);
+                                    SettingData set = new SettingData
+                                    {
+                                        Name = data.Name,
+                                        Text = data.Text,
+                                        Domain = data.Domain,
+                                        Value = value.Text
+                                    };
+
+                                    save.Add(set);
                                 }
                                 break;
                         }
