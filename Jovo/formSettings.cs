@@ -314,8 +314,8 @@ namespace Jovo
                 lblModuleInfo.Text = "Jovo is a multi-functional tool for consolidating modules until one centralised menu for easy access via the Windows system tray.";
                 lblModulePath.Text = module.AppPath;
                 lblModuleName.Text = "jovo";
-                dynamic vers = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("manifest.json"));
-                lblModuleVersion.Text = vers.Version.ToString();
+                VersionControl vers = JsonConvert.DeserializeObject<VersionControl>(File.ReadAllText("manifest.json"));
+                lblModuleVersion.Text = vers.version.ToString();
                 lblModulePublishDate.Text = new FileInfo(Assembly.GetExecutingAssembly().Location).LastWriteTime.ToString("");
             }
             else
