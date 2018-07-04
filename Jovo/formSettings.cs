@@ -477,12 +477,6 @@ namespace Jovo
                                 {
                                     ComboBox value = (ComboBox)cntrl;
 
-                                    //JObject set = new JObject(
-                                    //     new JProperty("Name", data.Name),
-                                    //     new JProperty("Text", data.Text),
-                                    //     new JProperty("Domain", data.Domain),
-                                    //     new JProperty("Value", value.SelectedItem));
-
                                     SettingData set = new SettingData
                                     {
                                         Name = data.Name,
@@ -500,12 +494,6 @@ namespace Jovo
                                 {
                                     NumericUpDown value = (NumericUpDown)cntrl;
 
-                                    //JObject set = new JObject(
-                                    //     new JProperty("Name", data.Name),
-                                    //     new JProperty("Text", data.Text),
-                                    //     new JProperty("Domain", data.Domain),
-                                    //     new JProperty("Value", Convert.ToInt32(value.Value)));
-
                                     SettingData set = new SettingData
                                     {
                                         Name = data.Name,
@@ -522,12 +510,6 @@ namespace Jovo
                                 if (cntrl.Name == "txt" + data.Name)
                                 {
                                     TextBox value = (TextBox)cntrl;
-
-                                    //JObject set = new JObject(
-                                    //     new JProperty("Name", data.Name),
-                                    //     new JProperty("Text", data.Text),
-                                    //     new JProperty("Domain", data.Domain),
-                                    //     new JProperty("Value", value.Text));
 
                                     SettingData set = new SettingData
                                     {
