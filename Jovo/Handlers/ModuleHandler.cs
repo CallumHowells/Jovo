@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Threading;
+using System.Linq;
 
 namespace Jovo
 {
@@ -190,6 +191,14 @@ namespace Jovo
 
                 //FileInfo manifest = new FileInfo(AvailableModule.Path + "\\manifest.json");
                 //manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
+            }
+
+            List<ModuleData> ComparedModules = InstalledModules;
+            ComparedModules.RemoveAll(x => ServerModules.Any(y => y.Name == x.Name));
+            foreach (ModuleData data in ComparedModules)
+            {
+                Directory.Delete(data.Path, true);
+                utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
             }
 
             GetModules(true);
