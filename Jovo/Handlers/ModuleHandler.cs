@@ -102,21 +102,11 @@ namespace Jovo
 
             if (File.Exists(data.Path + "\\settings.json"))
             {
-                JToken tkn = JObject.Parse(File.ReadAllText(data.Path + "\\settings.json"));
-                JObject obj = tkn.Value<JObject>();
+                List<SettingData> tempSettings = JsonConvert.DeserializeObject<List<SettingData>>(File.ReadAllText(data.Path + "\\settings.json"));
 
-                foreach (KeyValuePair<string, JToken> setting in obj)
+                foreach (SettingData settings in tempSettings)
                 {
-                    JToken token = JObject.Parse(setting.Value.ToString());
-
-                    SettingData settings = new SettingData
-                    {
-                        Name = (string)token.SelectToken("Name"),
-                        Text = (string)token.SelectToken("Text"),
-                        Value = (string)token.SelectToken("Value"),
-                        Domain = (string)token.SelectToken("Domain"),
-                        Module = data.Name
-                    };
+                    settings.Module = data.Name;
                     moduleSettings.Add(settings);
                 }
 
@@ -126,14 +116,13 @@ namespace Jovo
             return null;
         }
 
-        public bool SaveModuleSettings(ModuleData data, JObject json)
+        public bool SaveModuleSettings(ModuleData data, List<SettingData> settings)
         {
             File.Delete(data.Path + "\\settings.json");
 
             using (StreamWriter file = File.CreateText(data.Path + "\\settings.json"))
-            using (JsonTextWriter writer = new JsonTextWriter(file))
             {
-                json.WriteTo(writer);
+                file.WriteLine(JsonConvert.SerializeObject(settings, Formatting.Indented));
             }
 
             return File.Exists(data.Path + "\\settings.json");
@@ -239,13 +228,10 @@ namespace Jovo
         #region JovoUpdate
         public bool CheckForJovoUpdates(string remoteManifest)
         {
-            dynamic remote = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText(remoteManifest));
-            dynamic local = JsonConvert.DeserializeObject<dynamic>(File.ReadAllText("manifest.json"));
+            VersionControl remote = JsonConvert.DeserializeObject<VersionControl>(File.ReadAllText(remoteManifest));
+            VersionControl local = JsonConvert.DeserializeObject<VersionControl>(File.ReadAllText("manifest.json"));
 
-            var remoteVer = new Version(remote.Version.ToString());
-            var localVer = new Version(local.Version.ToString());
-
-            if (remoteVer > localVer)
+            if (local.NewVersion(remote.version))
             {
                 utility.LogEvent("Newer version of main application found!");
                 return true;
@@ -270,7 +256,7 @@ namespace Jovo
             Process Jovo = Process.Start(startInfo);
 
             Thread.Sleep(1000);
-            
+
             Application.Exit();
         }
         #endregion
@@ -297,11 +283,13 @@ namespace Jovo
 
     public class SettingData
     {
-        public string Module { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
         public string Domain { get; set; }
         public string Value { get; set; }
+
+        [JsonIgnore]
+        public string Module { get; set; }
     }
 
     public class NotificationData
@@ -310,6 +298,29 @@ namespace Jovo
         public string Text { get; set; }
         public int Timeout { get; set; }
         public string Method { get; set; }
+    }
+
+    public class VersionControl
+    {
+        public Version version { get; set; }
+
+        public bool NewVersion(string External)
+        {
+            Version vExternal; Version.TryParse(External, out vExternal);
+
+            if (vExternal > version)
+                return true;
+            else
+                return false;
+        }
+
+        public bool NewVersion(Version External)
+        {
+            if (External > version)
+                return true;
+            else
+                return false;
+        }
     }
 
 }
