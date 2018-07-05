@@ -193,9 +193,8 @@ namespace Jovo
                 //manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
             }
 
-            List<ModuleData> ComparedModules = InstalledModules;
-            ComparedModules.RemoveAll(x => ServerModules.Any(y => y.Name == x.Name));
-            foreach (ModuleData data in ComparedModules)
+
+            foreach (ModuleData data in InstalledModules)
             {
                 Directory.Delete(data.Path, true);
                 utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
@@ -288,6 +287,56 @@ namespace Jovo
         public bool IsActive { get; set; } = true;
         public string RequiresNetwork { get; set; } = "";
         public string KeyboardShortcut { get; set; } = "";
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as ModuleData);
+        }
+
+        public bool Equals(ModuleData m)
+        {
+            if(Object.ReferenceEquals(m, null))
+            {
+                return false;
+            }
+
+            if(Object.ReferenceEquals(this, m))
+            {
+                return true;
+            }
+
+            if(m == null || GetType() != m.GetType())
+            {
+                return false;
+            }
+
+            return (Name == m.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
+
+        public static bool operator ==(ModuleData left, ModuleData right)
+        {
+            if(Object.ReferenceEquals(left, null))
+            {
+                if(Object.ReferenceEquals(right, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ModuleData left, ModuleData right)
+        {
+            return !(left == right);
+        }
     }
 
     public class SettingData
