@@ -11,6 +11,7 @@ namespace Jovo
     {
         static Process process = Process.GetCurrentProcess();
         string FullPath;
+        public bool IsDevUser { get; set; }
 
         public UtilityHandler() => FullPath = process.MainModule.FileName;
 

@@ -46,18 +46,17 @@ KeyboardShortcut | Keyboard shortcut keys seperated by plus sign (+). Supports u
 The module's `settings.json` file is modified using Jovo then read by the Module. See the table below for info on settings configuration.
 
 ```json
-{  
-   "Server_IP":{  
+[  
+   {  
       "Name":"Server_IP",
       "Text":"Server IP Address",
       "Domain":"string",
       "Value":"192.168.16.5"
    }
-}
+]
 ```
 JSON Item | Use
 ------------- | -------------
-First Value | Should be the same as the Name.
 Name | Used by Jovo to handle the setting.
 Text | Display Name of the setting shown to the user.
 Domain | Data type to be stored. `string, password, integer, path, boolean`

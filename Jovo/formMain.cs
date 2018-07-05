@@ -43,6 +43,8 @@ namespace Jovo
             module = _module;
             hook = _hook;
 
+            utility.IsDevUser = (Path.GetFileName(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)) == "Debug") ? true : false;
+
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
@@ -51,8 +53,8 @@ namespace Jovo
             utility.LogEvent("Program probably started OK");
 
             // Create NotifyIcon to sit in system tray
-            icon.Text = "Jovo";
-            icon.Icon = Properties.Resources.Jovo_Logo;
+            icon.Text = "Jovo" + ((utility.IsDevUser) ? " Development Enviroment" : "");
+            icon.Icon = (utility.IsDevUser) ? Properties.Resources.Jovo_Logo_TestEnv : Properties.Resources.Jovo_Logo;
             icon.Visible = true;
             icon.ContextMenuStrip = menu;
             icon.MouseDown += icon_Click;
@@ -75,6 +77,7 @@ namespace Jovo
             ConnectionWorker.ProgressChanged += ConnectionWorker_ProgressChanged;
         }
 
+        #region BackgroundWorker
         private void UpdateWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             NotificationData data = (NotificationData)e.UserState;
@@ -306,7 +309,9 @@ namespace Jovo
                 Thread.Sleep(10000);
             }
         }
+        #endregion
 
+        #region Event Handlers
         private void menu_Click(object sender, EventArgs e)
         {
             // Each context menu item triggers this event, get which is triggered using Tag element //
@@ -385,7 +390,19 @@ namespace Jovo
                 if (utility.CheckKeyboardShortcut(data, e.Modifier, e.Key))
                     module.ExecuteModule(data);
             }
-            
+
+        }
+        #endregion
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // Turn on WS_EX_TOOLWINDOW style bit
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= 0x80;
+                return cp;
+            }
         }
 
     }
