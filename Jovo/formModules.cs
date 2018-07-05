@@ -20,6 +20,8 @@ namespace Jovo
         {
             module = _module;
             utility = _utility;
+
+
             InitializeComponent();
 
             currentFilter = ButtonFilter.All;

@@ -64,7 +64,7 @@ namespace Jovo
             UpdateWorker.RunWorkerCompleted += UpdateWorker_RunWorkerCompleted;
             UpdateWorker.ProgressChanged += UpdateWorker_ProgressChanged;
             utility.LogEvent("Module Updater starting...");
-            UpdateWorker.RunWorkerAsync();
+            UpdateWorker.RunWorkerAsync(true);
 
             JovoUpdateWorker.DoWork += JovoUpdateWorker_DoWork;
             JovoUpdateWorker.RunWorkerCompleted += JovoUpdateWorker_RunWorkerCompleted;
@@ -98,7 +98,9 @@ namespace Jovo
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            utility.LogEvent("Updater finished");
+            if((bool)e.Result)
+                utility.LogEvent("Updater finished");
+
             int prev_cat = 0;
             int first_cat = -1;
             menu.Items.Clear();
@@ -184,7 +186,9 @@ namespace Jovo
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            module.GetModuleUpdates(utility, (BackgroundWorker)sender);
+            bool outputResults = (bool) e.Argument;
+            module.GetModuleUpdates(utility, (BackgroundWorker)sender, outputResults);
+            e.Result = outputResults;
         }
 
         private void ConnectionWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -319,9 +323,12 @@ namespace Jovo
             switch (click.Tag)
             {
                 case "modules":
-                    formModules = new formModules(module, utility);
-                    formModules.ShowDialog();
-                    //UpdateWorker.RunWorkerAsync();
+                    if (module.InstalledModules.Count > 0)
+                    {
+                        formModules = new formModules(module, utility);
+                        formModules.ShowDialog();
+                    }
+                    UpdateWorker.RunWorkerAsync(false);
                     break;
 
                 case "settings":
@@ -330,13 +337,13 @@ namespace Jovo
                     if (formSettings.Visible == false)
                     {
                         formSettings.ShowDialog();
-                        //UpdateWorker.RunWorkerAsync();
+                        UpdateWorker.RunWorkerAsync(false);
                     }
                     break;
 
                 case "update":
                     if (!UpdateWorker.IsBusy)
-                        UpdateWorker.RunWorkerAsync();
+                        UpdateWorker.RunWorkerAsync(true);
                     break;
 
                 case "exit":

@@ -161,7 +161,7 @@ namespace Jovo
             }
         }
 
-        public void GetModuleUpdates(UtilityHandler utility, BackgroundWorker worker)
+        public void GetModuleUpdates(UtilityHandler utility, BackgroundWorker worker, bool OutputResult = true)
         {
             GetModules();
             GetServerModules();
@@ -172,7 +172,9 @@ namespace Jovo
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    utility.LogEvent("Installing module " + AvailableModule.Name);
+                    if(OutputResult)
+                        utility.LogEvent("Installing module " + AvailableModule.Name);
+
                     worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
 
                     Directory.CreateDirectory(AppModulePath + "\\" + AvailableModule.Name);
@@ -196,11 +198,14 @@ namespace Jovo
 
             foreach (ModuleData data in InstalledModules)
             {
-                Directory.Delete(data.Path, true);
-                utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
+                if (!ServerModules.Contains(data))
+                {
+                    Directory.Delete(data.Path, true);
+                    utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
+                }
             }
 
-            GetModules(true);
+            GetModules(OutputResult);
         }
 
         private bool CompareModuleVersions(ModuleData module)
