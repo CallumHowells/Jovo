@@ -73,7 +73,6 @@ namespace Jovo
                 {
                     ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
                     data.Path = path;
-                    data.Tag = data;
                     InstalledModules.Add(data);
                     if (log)
                         utility.LogEvent($"Found installed module: {data.Name} (v{data.Version})");
@@ -149,7 +148,6 @@ namespace Jovo
                         {
                             ModuleData data = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(path + "\\manifest.json"));
                             data.Path = path;
-                            data.Tag = data;
                             ServerModules.Add(data);
                         }
                     }
@@ -281,7 +279,6 @@ namespace Jovo
         public string Name { get; set; }
         public string Icon { get; set; }
         public string Text { get; set; }
-        public object Tag { get; set; }
         public int Category { get; set; }
         public string Version { get; set; }
         public string PublishDate { get; set; }

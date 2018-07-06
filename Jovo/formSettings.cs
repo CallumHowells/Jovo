@@ -75,7 +75,7 @@ namespace Jovo
                     header.MouseEnter += label_MouseEnter;
                     header.MouseLeave += label_MouseLeave;
                     header.Click += label_Click;
-                    header.Tag = data.Tag;
+                    header.Tag = data;
                     header.TextAlign = ContentAlignment.MiddleLeft;
                     //header.Size = new Size(100, 25);
                     header.Location = new Point(x, 70);
@@ -524,11 +524,13 @@ namespace Jovo
                                 break;
                         }
                 }
+
                 if (module.SaveModuleSettings((ModuleData)btn.Tag, save))
                 {
                     ShowSaveSuccess(btn.Tag);
                     settingsChanged = false;
-                } else
+                }
+                else
                 {
                     utility.LogEvent("Error occured while saving settings (file does not exist)");
                 }

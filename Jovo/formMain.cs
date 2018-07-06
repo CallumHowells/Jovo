@@ -98,13 +98,16 @@ namespace Jovo
 
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if((bool)e.Result)
+            if ((bool)e.Result)
                 utility.LogEvent("Updater finished");
+            else
+                utility.LogEvent("Update failed");
 
             int prev_cat = 0;
             int first_cat = -1;
             menu.Items.Clear();
             List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.CreateMenuItem == true).OrderBy(m => m.Category).ToList();
+
             foreach (ModuleData data in SortedList)
             {
                 if ((prev_cat != data.Category) && (first_cat != -1))
@@ -186,7 +189,7 @@ namespace Jovo
 
         private void UpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            bool outputResults = (bool) e.Argument;
+            bool outputResults = (bool)e.Argument;
             module.GetModuleUpdates(utility, (BackgroundWorker)sender, outputResults);
             e.Result = outputResults;
         }
