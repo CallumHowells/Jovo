@@ -74,7 +74,6 @@ namespace Jovo
             ConnectionWorker.WorkerReportsProgress = true;
             ConnectionWorker.DoWork += ConnectionWorker_DoWork;
             ConnectionWorker.RunWorkerCompleted += ConnectionWorker_RunWorkerCompleted;
-            ConnectionWorker.ProgressChanged += ConnectionWorker_ProgressChanged;
         }
 
         #region BackgroundWorker
@@ -192,91 +191,80 @@ namespace Jovo
             module.GetModuleUpdates(utility, (BackgroundWorker)sender, outputResults);
             e.Result = outputResults;
         }
-
-        private void ConnectionWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        
+        private void ConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            bool connected = (e.ProgressPercentage == 100) ? true : false;
-            ModuleData data = (ModuleData)e.UserState;
-            ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
-
-            if (connected)
+            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList();
+            foreach (ModuleData data in SortedList)
             {
-                if (File.Exists(data.Path + "\\" + data.Icon))
+                if (data.IsConnected)
                 {
-                    var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
-                    var ms = new MemoryStream(bytes);
-                    _item.Image = Image.FromStream(ms);
-                }
-                else
-                    _item.Image = Properties.Resources.settings;
+                    ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
 
-                _item.Click -= menu_Click;
-                _item.Click += menu_Click;
-                _item.ToolTipText = "Connected to " + data.RequiresNetwork;
-                _item.Enabled = true;
-            }
-            else
-            {
-                if (File.Exists(data.Path + "\\" + data.Icon))
-                {
-                    try
+                    if (File.Exists(data.Path + "\\" + data.Icon))
                     {
                         var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
                         var ms = new MemoryStream(bytes);
-
-
-                        Image imageBackground = Image.FromStream(ms);
-                        Image imageOverlay = Properties.Resources.disconnected;
-
-                        Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
-                        using (Graphics gr = Graphics.FromImage(img))
-                        {
-                            gr.DrawImage(imageBackground, new Point(0, 0));
-                            gr.DrawImage(imageOverlay, imageBackground.Width / 2, imageBackground.Height / 2);
-                        }
-
-                        _item.Image = img;
+                        _item.Image = Image.FromStream(ms);
                     }
-                    catch (Exception) { }
+                    else
+                        _item.Image = Properties.Resources.settings;
+
+                    _item.ToolTipText = "Connected to " + data.RequiresNetwork;
+                    _item.Enabled = true;
                 }
                 else
-                    _item.Image = Properties.Resources.settings;
+                {
+                    ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
 
-                _item.Click -= menu_Click;
-                _item.ToolTipText = "Unable to connect to " + data.RequiresNetwork;
-                _item.Enabled = true;
+                    if (File.Exists(data.Path + "\\" + data.Icon))
+                    {
+                        try
+                        {
+                            var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                            var ms = new MemoryStream(bytes);
+
+
+                            Image imageBackground = Image.FromStream(ms);
+                            Image imageOverlay = Properties.Resources.disconnected;
+
+                            Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                            using (Graphics gr = Graphics.FromImage(img))
+                            {
+                                gr.DrawImage(imageBackground, new Point(0, 0));
+                                gr.DrawImage(imageOverlay, imageBackground.Width / 2, imageBackground.Height / 2);
+                            }
+
+                            _item.Image = img;
+                        }
+                        catch (Exception) { }
+                    }
+                    else
+                        _item.Image = Properties.Resources.settings;
+
+                    _item.ToolTipText = "Unable to connect to " + data.RequiresNetwork;
+                    _item.Enabled = true;
+                }
             }
-        }
 
-        private void ConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
             ConnectionWorker.RunWorkerAsync();
         }
 
         private void ConnectionWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker bg = (BackgroundWorker)sender;
-            foreach (ToolStripMenuItem ts in menu.Items.OfType<ToolStripMenuItem>())
+            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList();
+            foreach (ModuleData data in SortedList)
             {
-                if (ts.Name.Substring(0, 2) != "ts")
+                if (!String.IsNullOrWhiteSpace(data.RequiresNetwork))
                 {
-                    ModuleData data = (ModuleData)ts.Tag;
-                    if (!String.IsNullOrWhiteSpace(data.RequiresNetwork))
-                    {
-                        if (utility.TestConnection(data.RequiresNetwork))
-                        {
-                            // Connected
-                            bg.ReportProgress(100, data);
-                        }
-                        else
-                        {
-                            // Not Connected
-                            bg.ReportProgress(0, data);
-                        }
-                    }
+                    if (utility.TestConnection(data.RequiresNetwork))
+                        module.InstalledModules.Find(m => m.Name == data.Name).IsConnected = true;
+                    else
+                        module.InstalledModules.Find(m => m.Name == data.Name).IsConnected = false;
                 }
             }
-            Thread.Sleep(10000);
+
+            Thread.Sleep(2000);
         }
 
         private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -359,7 +347,7 @@ namespace Jovo
                     break;
 
                 default:
-                    module.ExecuteModule((ModuleData)click.Tag);
+                    module.ExecuteModule(module.FindModule(((ModuleData)click.Tag).Name));
                     break;
             }
         }
@@ -398,9 +386,10 @@ namespace Jovo
             foreach (ModuleData data in SortedList)
             {
                 if (utility.CheckKeyboardShortcut(data, e.Modifier, e.Key))
-                    module.ExecuteModule(data);
+                {
+                    module.ExecuteModule(module.FindModule(data.Name));
+                }
             }
-
         }
         #endregion
 

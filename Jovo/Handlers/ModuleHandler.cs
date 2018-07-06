@@ -29,15 +29,20 @@ namespace Jovo
         {
             try
             {
-                utility.LogEvent("Trying to start module: " + data.Name);
-                if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
+                if (data.IsConnected)
                 {
-                    Process.Start(data.Path + "\\" + data.Name + ".exe");
-                    utility.LogEvent("... Success", false);
-                    return true;
+                    utility.LogEvent("Trying to start module: " + data.Name);
+                    if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
+                    {
+                        Process.Start(data.Path + "\\" + data.Name + ".exe");
+                        utility.LogEvent("... Success", false);
+                        return true;
+                    }
+                    utility.LogEvent("... Failed (doesn't exist)", false);
+                    return false;
                 }
-                utility.LogEvent("... Failed (doesn't exist)", false);
-                return false;
+                else
+                    return false;
             }
             catch (Exception)
             { return false; }
@@ -290,6 +295,7 @@ namespace Jovo
         public bool CreateMenuItem { get; set; } = true;
         public bool IsActive { get; set; } = true;
         public string RequiresNetwork { get; set; } = "";
+        public bool IsConnected { get; set; } = true;
         public string KeyboardShortcut { get; set; } = "";
 
         public override bool Equals(object obj)
