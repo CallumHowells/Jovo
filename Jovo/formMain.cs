@@ -191,16 +191,15 @@ namespace Jovo
             module.GetModuleUpdates(utility, (BackgroundWorker)sender, outputResults);
             e.Result = outputResults;
         }
-        
+
         private void ConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList();
-            foreach (ModuleData data in SortedList)
+            foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList())
             {
+                ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
+
                 if (data.IsConnected)
                 {
-                    ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
-
                     if (File.Exists(data.Path + "\\" + data.Icon))
                     {
                         var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
@@ -215,8 +214,6 @@ namespace Jovo
                 }
                 else
                 {
-                    ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
-
                     if (File.Exists(data.Path + "\\" + data.Icon))
                     {
                         try
@@ -252,19 +249,18 @@ namespace Jovo
 
         private void ConnectionWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList();
-            foreach (ModuleData data in SortedList)
+            foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList())
             {
                 if (!String.IsNullOrWhiteSpace(data.RequiresNetwork))
                 {
                     if (utility.TestConnection(data.RequiresNetwork))
-                        module.InstalledModules.Find(m => m.Name == data.Name).IsConnected = true;
+                        data.IsConnected = true;
                     else
-                        module.InstalledModules.Find(m => m.Name == data.Name).IsConnected = false;
+                        data.IsConnected = false;
                 }
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
         }
 
         private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
