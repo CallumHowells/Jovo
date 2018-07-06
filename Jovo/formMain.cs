@@ -100,8 +100,6 @@ namespace Jovo
         {
             if ((bool)e.Result)
                 utility.LogEvent("Updater finished");
-            else
-                utility.LogEvent("Update failed");
 
             int prev_cat = 0;
             int first_cat = -1;
