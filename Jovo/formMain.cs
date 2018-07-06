@@ -209,6 +209,7 @@ namespace Jovo
                 else
                     _item.Image = Properties.Resources.settings;
 
+                _item.Click -= menu_Click;
                 _item.Click += menu_Click;
                 _item.ToolTipText = "Connected to " + data.RequiresNetwork;
                 _item.Enabled = true;
