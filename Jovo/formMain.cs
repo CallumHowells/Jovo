@@ -218,12 +218,8 @@ namespace Jovo
                     {
                         try
                         {
-                            var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
-                            var ms = new MemoryStream(bytes);
-
-
-                            Image imageBackground = Image.FromStream(ms);
-                            Image imageOverlay = Properties.Resources.disconnected;
+                            Image imageBackground = Image.FromFile(data.Path + "\\" + data.Icon);
+                            Image imageOverlay = utility.ResizeImage(Properties.Resources.disconnected, new Size(imageBackground.Width / 2, imageBackground.Height / 2), true);
 
                             Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
                             using (Graphics gr = Graphics.FromImage(img))
@@ -260,7 +256,7 @@ namespace Jovo
                 }
             }
 
-            Thread.Sleep(10000);
+            Thread.Sleep(2000);
         }
 
         private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
