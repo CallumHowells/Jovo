@@ -256,7 +256,7 @@ namespace Jovo
                 }
             }
 
-            Thread.Sleep(2000);
+            Thread.Sleep(10000);
         }
 
         private void JovoUpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
