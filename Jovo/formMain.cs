@@ -99,10 +99,11 @@ namespace Jovo
         private void UpdateWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if ((bool)e.Result)
-                utility.LogEvent("Updater finished");
+                utility.LogEvent("Updater finished - building menu");
 
             int prev_cat = 0;
             int first_cat = -1;
+
             menu.Items.Clear();
             List<ModuleData> SortedList = module.InstalledModules.Where(m => m.IsActive == true && m.CreateMenuItem == true).OrderBy(m => m.Category).ToList();
 

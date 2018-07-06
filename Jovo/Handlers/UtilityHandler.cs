@@ -93,12 +93,10 @@ namespace Jovo
 
                     if (!String.IsNullOrEmpty(message))
                     {
-                        string output = DateTime.Now.ToString() + " - " + message;
-
                         if (newLine)
-                            LogWriter.WriteLine(output);
+                            LogWriter.Write(Environment.NewLine + DateTime.Now.ToString() + " - " + message);
                         else
-                            LogWriter.Write(output);
+                            LogWriter.Write(message);
                     }
                 }
             }

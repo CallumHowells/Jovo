@@ -33,8 +33,10 @@ namespace Jovo
                 if (File.Exists(data.Path + "\\" + data.Name + ".exe"))
                 {
                     Process.Start(data.Path + "\\" + data.Name + ".exe");
+                    utility.LogEvent("... Success", false);
                     return true;
                 }
+                utility.LogEvent("... Failed (doesn't exist)", false);
                 return false;
             }
             catch (Exception)
