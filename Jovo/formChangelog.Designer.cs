@@ -35,7 +35,12 @@
             this.pnlLine = new System.Windows.Forms.Panel();
             this.btnFormClose = new System.Windows.Forms.Button();
             this.pnlVersion = new System.Windows.Forms.Panel();
+            this.pnlError = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pnlError.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlChangelog
@@ -101,12 +106,44 @@
             this.pnlVersion.Size = new System.Drawing.Size(600, 93);
             this.pnlVersion.TabIndex = 16;
             // 
+            // pnlError
+            // 
+            this.pnlError.Controls.Add(this.label2);
+            this.pnlError.Controls.Add(this.pictureBox2);
+            this.pnlError.Location = new System.Drawing.Point(200, 303);
+            this.pnlError.Name = "pnlError";
+            this.pnlError.Size = new System.Drawing.Size(192, 121);
+            this.pnlError.TabIndex = 17;
+            this.pnlError.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(155)))), ((int)(((byte)(155)))), ((int)(((byte)(155)))));
+            this.label2.Location = new System.Drawing.Point(3, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(186, 31);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Changelog Syntax Error";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::Jovo.Properties.Resources.if_smiley__8_2290989;
+            this.pictureBox2.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(186, 76);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
             // formChangelog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 600);
+            this.Controls.Add(this.pnlError);
             this.Controls.Add(this.pnlVersion);
             this.Controls.Add(this.pnlChangelog);
             this.Controls.Add(this.pictureBox1);
@@ -119,6 +156,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "formChangelog";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.pnlError.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -131,5 +170,8 @@
         private System.Windows.Forms.Panel pnlLine;
         private System.Windows.Forms.Button btnFormClose;
         private System.Windows.Forms.Panel pnlVersion;
+        private System.Windows.Forms.Panel pnlError;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }

@@ -22,28 +22,36 @@ namespace Jovo
             InitializeComponent();
 
             this.Location = pos;
-            lblMainTitle.Text = "Changelog - " + ModuleName;
 
-            TagColours.Add("initialrelease", Color.FromArgb(134, 95, 197));
-            TagColours.Add("initial", Color.FromArgb(134, 95, 197));
+            if (changelog != null)
+            {
+                lblMainTitle.Text = "Changelog - " + ModuleName;
 
-            TagColours.Add("maycontainbugs", Color.FromArgb(192, 57, 43));
-            TagColours.Add("containsbugs", Color.FromArgb(192, 57, 43));
-            TagColours.Add("bugs", Color.FromArgb(192, 57, 43));
+                TagColours.Add("initialrelease", Color.FromArgb(134, 95, 197));
+                TagColours.Add("initial", Color.FromArgb(134, 95, 197));
 
-            TagColours.Add("stable", Color.FromArgb(30, 130, 76));
-            TagColours.Add("stablebuild", Color.FromArgb(30, 130, 76));
+                TagColours.Add("maycontainbugs", Color.FromArgb(192, 57, 43));
+                TagColours.Add("containsbugs", Color.FromArgb(192, 57, 43));
+                TagColours.Add("bugs", Color.FromArgb(192, 57, 43));
 
-            TagColours.Add("bugfix", Color.FromArgb(219, 10, 91));
-            TagColours.Add("fix", Color.FromArgb(219, 10, 91));
+                TagColours.Add("stable", Color.FromArgb(30, 130, 76));
+                TagColours.Add("stablebuild", Color.FromArgb(30, 130, 76));
 
-            TagColours.Add("cuttingedge", Color.FromArgb(211, 84, 0));
-            TagColours.Add("devbuild", Color.FromArgb(211, 84, 0));
-            TagColours.Add("dev", Color.FromArgb(211, 84, 0));
+                TagColours.Add("bugfix", Color.FromArgb(219, 10, 91));
+                TagColours.Add("fix", Color.FromArgb(219, 10, 91));
 
-            TagColours.Add("default", Color.FromArgb(30, 139, 195));
+                TagColours.Add("cuttingedge", Color.FromArgb(211, 84, 0));
+                TagColours.Add("devbuild", Color.FromArgb(211, 84, 0));
+                TagColours.Add("dev", Color.FromArgb(211, 84, 0));
 
-            GenerateVersionInfo(GenerateHeaders());
+                TagColours.Add("default", Color.FromArgb(30, 139, 195));
+
+                GenerateVersionInfo(GenerateHeaders());
+            }
+            else
+            {
+                pnlError.Visible = true;
+            }
         }
 
         private string GenerateHeaders()
@@ -115,8 +123,8 @@ namespace Jovo
             desc.ForeColor = Color.FromArgb(r, g, b);
             desc.BackColor = Color.Transparent;
             desc.TextAlign = ContentAlignment.TopLeft;
-            desc.Location = new Point(10, 31); 
-            desc.Size = new Size(568, 26); 
+            desc.Location = new Point(10, 31);
+            desc.Size = new Size(568, 26);
             desc.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular);
             pnlVersion.Controls.Add(desc);
 
