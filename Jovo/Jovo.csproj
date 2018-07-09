@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Jovo_Logo.ico" />
+    <None Include="Resources\changelog.png" />
     <None Include="Resources\Jovo_Logo_TestEnv.ico" />
     <None Include="Resources\Jovo_Logo_TestEnv.png" />
     <None Include="Resources\disconnected.png" />

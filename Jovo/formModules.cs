@@ -14,6 +14,7 @@ namespace Jovo
         ModuleHandler module;
         UtilityHandler utility;
         ButtonFilter currentFilter;
+        bool changelogOpen;
         enum ButtonFilter { All, Installed, NotInstalled };
 
         public formModules(ModuleHandler _module, UtilityHandler _utility)
@@ -25,6 +26,7 @@ namespace Jovo
             InitializeComponent();
 
             currentFilter = ButtonFilter.All;
+            changelogOpen = false;
 
             GenerateButtons(currentFilter);
             GenerateHeaders();
@@ -139,31 +141,36 @@ namespace Jovo
                 icony += 31;
             }
 
-            if(filtered.Count > 0)
+            if (filtered.Count > 0)
                 UpdateInfoPanel(filtered.Last());
         }
 
-        private void UpdateInfoPanel(ModuleData module)
+        private void UpdateInfoPanel(ModuleData data)
         {
-            lblText.Text = module.Name;
-            lblText2.Text = module.Text;
-            lblInfo.Text = module.Info;
-            lblPath.Text = module.Path;
-            lblVersion.Text = module.Version;
-            lblDate.Text = module.PublishDate;
+            lblText.Text = data.Name;
+            lblText2.Text = data.Text;
+            lblInfo.Text = data.Info;
+            lblPath.Text = data.Path;
+            lblVersion.Text = data.Version;
+            lblDate.Text = data.PublishDate;
 
-            if (File.Exists(module.Path + "\\changelog.json"))
-                GetChangelog(module);
+            if (File.Exists(data.Path + "\\changelog.json"))
+            {
+                lblViewChangelog.Tag = data;
+                lblViewChangelog.Visible = true;
+            }
             else
-                rtbChangelog.Text = "No changelog found!";
+                lblViewChangelog.Visible = false;
 
-            lblToggleActive.Tag = module;
-            lblToggleActive.Text = (module.IsActive) ? "Uninstall Module" : "Install Module";
+            lblToggleActive.Tag = data;
+            lblToggleActive.Text = (data.IsActive) ? "Uninstall Module" : "Install Module";
         }
 
-        private void GetChangelog(ModuleData module)
+        private void ShowChangelog(ModuleData data)
         {
-            rtbChangelog.Text = "Not implemented";
+            formChangelog frm = new formChangelog(module.GetModuleChangelog(data), new Point(this.Location.X, this.Location.Y), data.Name);
+            changelogOpen = true;
+            frm.ShowDialog();
         }
 
         #region Event Handlers
@@ -218,15 +225,22 @@ namespace Jovo
         private void btnUtility_Click(object sender, EventArgs e)
         {
             Label lbl = (Label)sender;
+            switch (lbl.Name)
+            {
+                case "lblToggleActive":
+                    ModuleData newModule = (ModuleData)lbl.Tag;
+                    if (newModule.IsActive)
+                        newModule.IsActive = false;
+                    else
+                        newModule.IsActive = true;
 
-            ModuleData newModule = (ModuleData)lbl.Tag;
-            if (newModule.IsActive)
-                newModule.IsActive = false;
-            else
-                newModule.IsActive = true;
-
-            module.WriteModuleManifest(newModule);
-            GenerateButtons(currentFilter);
+                    module.WriteModuleManifest(newModule);
+                    GenerateButtons(currentFilter);
+                    break;
+                case "lblViewChangelog":
+                    ShowChangelog((ModuleData)lbl.Tag);
+                    break;
+            }
         }
 
         private void btnUtility_MouseEnter(object sender, EventArgs e)
@@ -278,7 +292,13 @@ namespace Jovo
 
         private void formModules_Deactivate(object sender, EventArgs e)
         {
+            if (!changelogOpen)
             Close();
+        }
+
+        private void formModules_Activated(object sender, EventArgs e)
+        {
+            changelogOpen = false;
         }
         #endregion
     }

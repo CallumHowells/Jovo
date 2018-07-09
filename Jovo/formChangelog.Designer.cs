@@ -28,22 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pnlSettings = new System.Windows.Forms.Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formChangelog));
+            this.pnlChangelog = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblMainTitle = new System.Windows.Forms.Label();
             this.pnlLine = new System.Windows.Forms.Panel();
             this.btnFormClose = new System.Windows.Forms.Button();
+            this.pnlVersion = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // pnlSettings
+            // pnlChangelog
             // 
-            this.pnlSettings.AutoScroll = true;
-            this.pnlSettings.BackColor = System.Drawing.Color.White;
-            this.pnlSettings.Location = new System.Drawing.Point(12, 104);
-            this.pnlSettings.Name = "pnlSettings";
-            this.pnlSettings.Size = new System.Drawing.Size(576, 216);
-            this.pnlSettings.TabIndex = 15;
+            this.pnlChangelog.AutoScroll = true;
+            this.pnlChangelog.BackColor = System.Drawing.Color.White;
+            this.pnlChangelog.Location = new System.Drawing.Point(5, 194);
+            this.pnlChangelog.Name = "pnlChangelog";
+            this.pnlChangelog.Size = new System.Drawing.Size(595, 400);
+            this.pnlChangelog.TabIndex = 15;
             // 
             // pictureBox1
             // 
@@ -55,16 +57,15 @@
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
             // 
-            // label1
+            // lblMainTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(95)))), ((int)(((byte)(197)))));
-            this.label1.Location = new System.Drawing.Point(47, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 46);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "Changelog";
+            this.lblMainTitle.Font = new System.Drawing.Font("Segoe UI", 25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMainTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(95)))), ((int)(((byte)(197)))));
+            this.lblMainTitle.Location = new System.Drawing.Point(47, 12);
+            this.lblMainTitle.Name = "lblMainTitle";
+            this.lblMainTitle.Size = new System.Drawing.Size(521, 46);
+            this.lblMainTitle.TabIndex = 11;
+            this.lblMainTitle.Text = "Changelog";
             // 
             // pnlLine
             // 
@@ -88,6 +89,17 @@
             this.btnFormClose.Text = "X";
             this.btnFormClose.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnFormClose.UseVisualStyleBackColor = true;
+            this.btnFormClose.Click += new System.EventHandler(this.btnFormClose_Click);
+            // 
+            // pnlVersion
+            // 
+            this.pnlVersion.AutoScroll = true;
+            this.pnlVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.pnlVersion.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pnlVersion.Location = new System.Drawing.Point(0, 98);
+            this.pnlVersion.Name = "pnlVersion";
+            this.pnlVersion.Size = new System.Drawing.Size(600, 93);
+            this.pnlVersion.TabIndex = 16;
             // 
             // formChangelog
             // 
@@ -95,26 +107,29 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 600);
-            this.Controls.Add(this.pnlSettings);
+            this.Controls.Add(this.pnlVersion);
+            this.Controls.Add(this.pnlChangelog);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lblMainTitle);
             this.Controls.Add(this.pnlLine);
             this.Controls.Add(this.btnFormClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "formChangelog";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "formChangelog";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel pnlSettings;
+        private System.Windows.Forms.Panel pnlChangelog;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblMainTitle;
         private System.Windows.Forms.Panel pnlLine;
         private System.Windows.Forms.Button btnFormClose;
+        private System.Windows.Forms.Panel pnlVersion;
     }
 }

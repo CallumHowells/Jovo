@@ -177,7 +177,7 @@ namespace Jovo
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
-                    if(OutputResult)
+                    if (OutputResult)
                         utility.LogEvent("Installing module " + AvailableModule.Name);
 
                     worker.ReportProgress(0, new NotificationData() { Title = "Installing Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
@@ -278,6 +278,28 @@ namespace Jovo
             Application.Exit();
         }
         #endregion
+
+        #region ChangelogHandling
+        public List<Changelog> GetModuleChangelog(ModuleData data)
+        {
+            List<Changelog> change = new List<Changelog>();
+
+            string path = (data == null) ? Application.StartupPath + "\\changelog.json" : data.Path + "\\changelog.json";
+
+            if (File.Exists(path))
+            {
+                try
+                {
+                    change = JsonConvert.DeserializeObject<List<Changelog>>(File.ReadAllText(path));
+                }
+                catch (Exception)
+                { return null; }
+
+                return change;
+            }
+            return null;
+        }
+        #endregion
     }
 
 
@@ -305,17 +327,17 @@ namespace Jovo
 
         public bool Equals(ModuleData m)
         {
-            if(Object.ReferenceEquals(m, null))
+            if (Object.ReferenceEquals(m, null))
             {
                 return false;
             }
 
-            if(Object.ReferenceEquals(this, m))
+            if (Object.ReferenceEquals(this, m))
             {
                 return true;
             }
 
-            if(m == null || GetType() != m.GetType())
+            if (m == null || GetType() != m.GetType())
             {
                 return false;
             }
@@ -330,9 +352,9 @@ namespace Jovo
 
         public static bool operator ==(ModuleData left, ModuleData right)
         {
-            if(Object.ReferenceEquals(left, null))
+            if (Object.ReferenceEquals(left, null))
             {
-                if(Object.ReferenceEquals(right, null))
+                if (Object.ReferenceEquals(right, null))
                 {
                     return true;
                 }
@@ -391,4 +413,21 @@ namespace Jovo
         }
     }
 
+    public class Changelog
+    {
+        public string Version { get; set; }
+        public string VersionDate { get; set; } = "";
+        public string Title { get; set; }
+        public string Description { get; set; } = "";
+        public string Author { get; set; } = "";
+        public string Tags { get; set; } = "";
+        public List<ChangelogChange> Changes { get; set; }
+
+    }
+
+    public class ChangelogChange
+    {
+        public string Title { get; set; }
+        public string Type { get; set; }
+    }
 }

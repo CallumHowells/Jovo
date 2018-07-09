@@ -24,6 +24,7 @@ namespace Jovo
         formSettings formSettings;
         formNotification formNotification;
         formModules formModules;
+        formChangelog formChangelog;
 
         // Define Controls
         BackgroundWorker UpdateWorker = new BackgroundWorker();
@@ -147,6 +148,14 @@ namespace Jovo
             item.Text = "Check For Updates";
             item.Tag = "update";
             item.Image = Properties.Resources.refresh;
+            item.Click += menu_Click;
+            menu.Items.Add(item);
+
+            item = new ToolStripMenuItem();
+            item.Name = "tsChangelog";
+            item.Text = "View Changelog";
+            item.Tag = "changelog";
+            item.Image = Properties.Resources.changelog;
             item.Click += menu_Click;
             menu.Items.Add(item);
 
@@ -328,6 +337,11 @@ namespace Jovo
                 case "update":
                     if (!UpdateWorker.IsBusy)
                         UpdateWorker.RunWorkerAsync(true);
+                    break;
+
+                case "changelog":
+                    formChangelog = new formChangelog(module.GetModuleChangelog(null), new Point(Screen.PrimaryScreen.WorkingArea.Width - (600 + 5), Screen.PrimaryScreen.WorkingArea.Height - (600 + 5)), "Jovo");
+                    formChangelog.ShowDialog();
                     break;
 
                 case "exit":

@@ -16,7 +16,6 @@ namespace Jovo
     {
         ModuleHandler module;
         UtilityHandler utility;
-        bool changelogOpen;
         bool settingsChanged;
         bool warningPrompted;
 
@@ -33,7 +32,6 @@ namespace Jovo
         {
             settingsChanged = false;
             warningPrompted = false;
-            changelogOpen = false;
             GenerateSettingHeaders();
         }
 
@@ -393,12 +391,6 @@ namespace Jovo
             lbl.ForeColor = Color.FromArgb(30, 30, 30);
         }
 
-        private void lblModuleChangelog_Click(object sender, EventArgs e)
-        {
-            changelogOpen = true;
-            
-        }
-
         private void btnFormClose_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -406,7 +398,6 @@ namespace Jovo
 
         private void formSettings_Deactivate(object sender, EventArgs e)
         {
-            if (!changelogOpen)
                 this.Hide();
         }
 
