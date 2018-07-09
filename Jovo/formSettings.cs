@@ -16,7 +16,9 @@ namespace Jovo
     {
         ModuleHandler module;
         UtilityHandler utility;
+        bool changelogOpen;
         bool settingsChanged;
+        bool warningPrompted;
 
         public formSettings(ModuleHandler _module, UtilityHandler _utility)
         {
@@ -30,6 +32,8 @@ namespace Jovo
         private void formSettings_Load(object sender, EventArgs e)
         {
             settingsChanged = false;
+            warningPrompted = false;
+            changelogOpen = false;
             GenerateSettingHeaders();
         }
 
@@ -96,77 +100,191 @@ namespace Jovo
 
         private void GenerateSettingPanel(object ModuleTag)
         {
-            if (!UserChangedSettings(ModuleTag))
+            pnlSettings.Controls.Clear();
+            foreach (Control cntrl in this.Controls)
             {
-                pnlSettings.Controls.Clear();
-                foreach (Control cntrl in this.Controls)
+                if (cntrl.Name.Contains("btnSave"))
                 {
-                    if (cntrl.Name.Contains("btnSave"))
+                    Button btn = (Button)cntrl;
+                    btn.Dispose();
+                }
+            }
+
+            if (ModuleTag == null)
+            {
+                int x = 10;
+                int y = 5;
+                foreach (SettingsProperty setting in Jovo.Default.Properties)
+                {
+                    Label name = new Label();
+                    name.Name = "lbl" + setting.Name;
+                    name.Text = setting.Name.Replace("_", " ");
+                    name.ForeColor = Color.FromArgb(30, 30, 30);
+                    name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
+                    name.Location = new Point(x, y);
+                    pnlSettings.Controls.Add(name);
+                    y += 15;
+
+                    if (setting.Name.Contains("Module_Name"))
                     {
-                        Button btn = (Button)cntrl;
-                        btn.Dispose();
+                        ComboBox value = new ComboBox();
+                        value.Name = "cbx" + setting.Name;
+                        value.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                        value.Location = new Point(x, y);
+                        value.SelectedValueChanged += setting_SelectedValueChanged;
+                        value.DropDownStyle = ComboBoxStyle.DropDownList;
+                        foreach (ModuleData data in module.InstalledModules)
+                            value.Items.Add(data.Name);
+                        value.SelectedItem = Jovo.Default[setting.Name].ToString();
+                        pnlSettings.Controls.Add(value);
+                        y += 21;
                     }
+                    else if (setting.Name.Contains("Path"))
+                    {
+                        TextBox pth = new TextBox();
+                        pth.Name = "txt" + setting.Name;
+                        pth.Text = Jovo.Default[setting.Name].ToString();
+                        pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
+                        pth.Location = new Point(x, y);
+                        pth.TextChanged += setting_TextChanged;
+                        pnlSettings.Controls.Add(pth);
+
+                        Button pthbrowse = new Button();
+                        pthbrowse.Name = "btn" + setting.Name;
+                        pthbrowse.Text = "...";
+                        pthbrowse.Size = new Size(24, 22);
+                        pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
+                        pthbrowse.Click += path_Click;
+                        pnlSettings.Controls.Add(pthbrowse);
+                        y += 22;
+                    }
+                    else
+                    {
+                        TextBox value = new TextBox();
+                        value.Name = "txt" + setting.Name;
+                        value.Text = Jovo.Default[setting.Name].ToString();
+                        value.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                        value.Location = new Point(x, y);
+                        value.TextChanged += setting_TextChanged;
+                        pnlSettings.Controls.Add(value);
+                        y += 22;
+                    }
+
+                    y += 10;
                 }
 
-                if (ModuleTag == null)
+                Button btn = new Button();
+                btn.Name = "btnSave";
+                btn.Text = "Save Changes";
+                btn.Tag = null;
+                btn.Size = new Size(400, 23);
+                btn.Location = new Point(12, 565);
+                btn.Click += save_Click;
+                this.Controls.Add(btn);
+
+                ShowNoSettings(false);
+            }
+            else
+            {
+                int x = 10;
+                int y = 5;
+
+                try
                 {
-                    int x = 10;
-                    int y = 5;
-                    foreach (SettingsProperty setting in Jovo.Default.Properties)
+                    foreach (SettingData data in module.GetModuleSettings((ModuleData)ModuleTag))
                     {
                         Label name = new Label();
-                        name.Name = "lbl" + setting.Name;
-                        name.Text = setting.Name.Replace("_", " ");
+                        name.Name = "lbl" + data.Name;
+                        name.Text = data.Text;
                         name.ForeColor = Color.FromArgb(30, 30, 30);
                         name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
                         name.Location = new Point(x, y);
                         pnlSettings.Controls.Add(name);
                         y += 15;
 
-                        if (setting.Name.Contains("Module_Name"))
+                        switch (data.Domain)
                         {
-                            ComboBox value = new ComboBox();
-                            value.Name = "cbx" + setting.Name;
-                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
-                            value.Location = new Point(x, y);
-                            value.SelectedValueChanged += setting_SelectedValueChanged;
-                            value.DropDownStyle = ComboBoxStyle.DropDownList;
-                            foreach (ModuleData data in module.InstalledModules)
-                                value.Items.Add(data.Name);
-                            value.SelectedItem = Jovo.Default[setting.Name].ToString();
-                            pnlSettings.Controls.Add(value);
-                            y += 21;
-                        }
-                        else if (setting.Name.Contains("Path"))
-                        {
-                            TextBox pth = new TextBox();
-                            pth.Name = "txt" + setting.Name;
-                            pth.Text = Jovo.Default[setting.Name].ToString();
-                            pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
-                            pth.Location = new Point(x, y);
-                            pth.TextChanged += setting_TextChanged;
-                            pnlSettings.Controls.Add(pth);
+                            case "string":
+                                TextBox str = new TextBox();
+                                str.Name = "txt" + data.Name;
+                                str.Text = data.Value;
+                                str.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                str.Location = new Point(x, y);
+                                str.TextChanged += setting_TextChanged;
+                                pnlSettings.Controls.Add(str);
+                                y += 22;
+                                break;
 
-                            Button pthbrowse = new Button();
-                            pthbrowse.Name = "btn" + setting.Name;
-                            pthbrowse.Text = "...";
-                            pthbrowse.Size = new Size(24, 22);
-                            pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
-                            pthbrowse.Click += path_Click;
-                            pnlSettings.Controls.Add(pthbrowse);
-                            y += 22;
+                            case "password":
+                                TextBox pas = new TextBox();
+                                pas.Name = "txt" + data.Name;
+                                pas.Text = data.Value;
+                                pas.UseSystemPasswordChar = true;
+                                pas.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                pas.Location = new Point(x, y);
+                                pas.TextChanged += setting_TextChanged;
+                                pnlSettings.Controls.Add(pas);
+                                y += 22;
+                                break;
+
+                            case "integer":
+                                NumericUpDown num = new NumericUpDown();
+                                num.Name = "num" + data.Name;
+                                num.Minimum = 0;
+                                num.Maximum = Int32.MaxValue;
+                                num.Value = (int.TryParse(data.Value, out int value)) ? Convert.ToInt32(data.Value) : 0;
+                                num.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                num.Location = new Point(x, y);
+                                num.TextChanged += setting_ValueChanged;
+                                pnlSettings.Controls.Add(num);
+                                y += 22;
+                                break;
+
+                            case "path":
+                                TextBox pth = new TextBox();
+                                pth.Name = "txt" + data.Name;
+                                pth.Text = data.Value;
+                                pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
+                                pth.Location = new Point(x, y);
+                                pth.TextChanged += setting_TextChanged;
+                                pnlSettings.Controls.Add(pth);
+
+                                Button pthbrowse = new Button();
+                                pthbrowse.Name = "btn" + data.Name;
+                                pthbrowse.Text = "...";
+                                pthbrowse.Size = new Size(24, 22);
+                                pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
+                                pthbrowse.Click += path_Click;
+                                pnlSettings.Controls.Add(pthbrowse);
+                                y += 22;
+                                break;
+
+                            case "boolean":
+                                ComboBox cmb = new ComboBox();
+                                cmb.Name = "cbx" + data.Name;
+                                cmb.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                                cmb.Location = new Point(x, y);
+                                cmb.SelectedValueChanged += setting_SelectedValueChanged;
+                                cmb.DropDownStyle = ComboBoxStyle.DropDownList;
+                                cmb.Items.Add("True");
+                                cmb.Items.Add("False");
+                                cmb.SelectedItem = data.Value;
+                                pnlSettings.Controls.Add(cmb);
+                                y += 21;
+                                break;
+
+                            default:
+                                TextBox som = new TextBox();
+                                som.Name = "txt" + data.Name;
+                                som.Text = data.Value;
+                                som.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
+                                som.Location = new Point(x, y);
+                                som.TextChanged += setting_TextChanged;
+                                pnlSettings.Controls.Add(som);
+                                y += 22;
+                                break;
                         }
-                        else
-                        {
-                            TextBox value = new TextBox();
-                            value.Name = "txt" + setting.Name;
-                            value.Text = Jovo.Default[setting.Name].ToString();
-                            value.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                            value.Location = new Point(x, y);
-                            value.TextChanged += setting_TextChanged;
-                            pnlSettings.Controls.Add(value);
-                            y += 22;
-                        }
+
 
                         y += 10;
                     }
@@ -174,7 +292,7 @@ namespace Jovo
                     Button btn = new Button();
                     btn.Name = "btnSave";
                     btn.Text = "Save Changes";
-                    btn.Tag = null;
+                    btn.Tag = ModuleTag;
                     btn.Size = new Size(400, 23);
                     btn.Location = new Point(12, 565);
                     btn.Click += save_Click;
@@ -182,128 +300,11 @@ namespace Jovo
 
                     ShowNoSettings(false);
                 }
-                else
-                {
-                    int x = 10;
-                    int y = 5;
-
-                    try
-                    {
-                        foreach (SettingData data in module.GetModuleSettings((ModuleData)ModuleTag))
-                        {
-                            Label name = new Label();
-                            name.Name = "lbl" + data.Name;
-                            name.Text = data.Text;
-                            name.ForeColor = Color.FromArgb(30, 30, 30);
-                            name.Size = new Size(pnlSettings.Size.Width - (x + 30), 13);
-                            name.Location = new Point(x, y);
-                            pnlSettings.Controls.Add(name);
-                            y += 15;
-
-                            switch (data.Domain)
-                            {
-                                case "string":
-                                    TextBox str = new TextBox();
-                                    str.Name = "txt" + data.Name;
-                                    str.Text = data.Value;
-                                    str.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                                    str.Location = new Point(x, y);
-                                    str.TextChanged += setting_TextChanged;
-                                    pnlSettings.Controls.Add(str);
-                                    y += 22;
-                                    break;
-
-                                case "password":
-                                    TextBox pas = new TextBox();
-                                    pas.Name = "txt" + data.Name;
-                                    pas.Text = data.Value;
-                                    pas.UseSystemPasswordChar = true;
-                                    pas.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                                    pas.Location = new Point(x, y);
-                                    pas.TextChanged += setting_TextChanged;
-                                    pnlSettings.Controls.Add(pas);
-                                    y += 22;
-                                    break;
-
-                                case "integer":
-                                    NumericUpDown num = new NumericUpDown();
-                                    num.Name = "num" + data.Name;
-                                    num.Minimum = 0;
-                                    num.Maximum = Int32.MaxValue;
-                                    num.Value = (int.TryParse(data.Value, out int value)) ? Convert.ToInt32(data.Value) : 0;
-                                    num.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                                    num.Location = new Point(x, y);
-                                    num.TextChanged += setting_ValueChanged;
-                                    pnlSettings.Controls.Add(num);
-                                    y += 22;
-                                    break;
-
-                                case "path":
-                                    TextBox pth = new TextBox();
-                                    pth.Name = "txt" + data.Name;
-                                    pth.Text = data.Value;
-                                    pth.Size = new Size(pnlSettings.Size.Width - (x + 58), 22);
-                                    pth.Location = new Point(x, y);
-                                    pth.TextChanged += setting_TextChanged;
-                                    pnlSettings.Controls.Add(pth);
-
-                                    Button pthbrowse = new Button();
-                                    pthbrowse.Name = "btn" + data.Name;
-                                    pthbrowse.Text = "...";
-                                    pthbrowse.Size = new Size(24, 22);
-                                    pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
-                                    pthbrowse.Click += path_Click;
-                                    pnlSettings.Controls.Add(pthbrowse);
-                                    y += 22;
-                                    break;
-
-                                case "boolean":
-                                    ComboBox cmb = new ComboBox();
-                                    cmb.Name = "cbx" + data.Name;
-                                    cmb.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
-                                    cmb.Location = new Point(x, y);
-                                    cmb.SelectedValueChanged += setting_SelectedValueChanged;
-                                    cmb.DropDownStyle = ComboBoxStyle.DropDownList;
-                                    cmb.Items.Add("True");
-                                    cmb.Items.Add("False");
-                                    cmb.SelectedItem = data.Value;
-                                    pnlSettings.Controls.Add(cmb);
-                                    y += 21;
-                                    break;
-
-                                default:
-                                    TextBox som = new TextBox();
-                                    som.Name = "txt" + data.Name;
-                                    som.Text = data.Value;
-                                    som.Size = new Size(pnlSettings.Size.Width - (x + 30), 22);
-                                    som.Location = new Point(x, y);
-                                    som.TextChanged += setting_TextChanged;
-                                    pnlSettings.Controls.Add(som);
-                                    y += 22;
-                                    break;
-                            }
-
-
-                            y += 10;
-                        }
-
-                        Button btn = new Button();
-                        btn.Name = "btnSave";
-                        btn.Text = "Save Changes";
-                        btn.Tag = ModuleTag;
-                        btn.Size = new Size(400, 23);
-                        btn.Location = new Point(12, 565);
-                        btn.Click += save_Click;
-                        this.Controls.Add(btn);
-
-                        ShowNoSettings(false);
-                    }
-                    catch (Exception)
-                    { ShowNoSettings(true); }
-                }
-
-                settingsChanged = false;
+                catch (Exception)
+                { ShowNoSettings(true); }
             }
+
+            settingsChanged = false;
         }
 
         private void FillInfoPanel(object ModuleTag)
@@ -331,40 +332,19 @@ namespace Jovo
             }
         }
 
-        private bool UserChangedSettings(object ModuleTag)
-        {
-            if (settingsChanged)
-            {
-                DialogResult dr = MessageBox.Show("Any unsaved changes will be lost!\n\nAre you sure you want to continue?", "Warning...", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (dr == DialogResult.No)
-                    return true;
-                else
-                    return false;
-            }
-            return false;
-        }
-
         private void ShowNoSettings(bool visible)
         {
             pnlNoSettings.Visible = visible;
         }
 
-        private void ShowSaveSuccess(object ModuleTag)
+        private void ShowMessage(string text, int r, int g, int b)
         {
             Timer timer = new Timer();
             timer.Interval = 3000;
             timer.Tick += save_Tick;
-            if (ModuleTag == null)
-            {
-                lblSaveSuccess.Text = "Settings for Jovo were saved successfully!";
-                utility.LogEvent("Jovo settings were changed");
-            }
-            else
-            {
-                ModuleData data = (ModuleData)ModuleTag;
-                lblSaveSuccess.Text = "Settings for " + data.Text + " were saved successfully!";
-                utility.LogEvent(data.Name + " settings were changed");
-            }
+
+            lblSaveSuccess.ForeColor = Color.FromArgb(r, g, b);
+            lblSaveSuccess.Text = text;
             pnlSaveSuccess.Visible = true;
 
             timer.Start();
@@ -373,21 +353,30 @@ namespace Jovo
         #region EventHandlers
         private void label_Click(object sender, EventArgs e)
         {
-            Label lbl = (Label)sender;
-            string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
-            foreach (Control cntrl in this.Controls)
+            if (settingsChanged && !warningPrompted)
             {
-                if (cntrl.Name.Contains("pnlHead"))
+                warningPrompted = true;
+                ShowMessage("You have unsaved changes, click Module again to discard changes.", 192, 57, 43);
+            }
+            else
+            {
+                warningPrompted = false;
+                Label lbl = (Label)sender;
+                string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
+                foreach (Control cntrl in this.Controls)
                 {
-                    Panel pnl = (Panel)cntrl;
-                    if (pnl.Name == pnlName)
+                    if (cntrl.Name.Contains("pnlHead"))
                     {
-                        pnl.Visible = true;
-                        FillInfoPanel(lbl.Tag);
-                        GenerateSettingPanel(lbl.Tag);
+                        Panel pnl = (Panel)cntrl;
+                        if (pnl.Name == pnlName)
+                        {
+                            pnl.Visible = true;
+                            FillInfoPanel(lbl.Tag);
+                            GenerateSettingPanel(lbl.Tag);
+                        }
+                        else
+                            pnl.Visible = false;
                     }
-                    else
-                        pnl.Visible = false;
                 }
             }
         }
@@ -406,7 +395,8 @@ namespace Jovo
 
         private void lblModuleChangelog_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Changelog form doesnt work yet.");
+            changelogOpen = true;
+            
         }
 
         private void btnFormClose_Click(object sender, EventArgs e)
@@ -416,7 +406,8 @@ namespace Jovo
 
         private void formSettings_Deactivate(object sender, EventArgs e)
         {
-            this.Hide();
+            if (!changelogOpen)
+                this.Hide();
         }
 
         private void setting_SelectedValueChanged(object sender, EventArgs e)
@@ -436,6 +427,8 @@ namespace Jovo
 
         private void save_Click(object sender, EventArgs e)
         {
+            warningPrompted = false;
+
             Button btn = (Button)sender;
             if (btn.Tag == null)
             {
@@ -461,7 +454,7 @@ namespace Jovo
                     }
                 }
                 Jovo.Default.Save();
-                ShowSaveSuccess(btn.Tag);
+                ShowMessage("Settings for Jovo were saved successfully!", 1, 152, 117);
                 settingsChanged = false;
             }
             else
@@ -527,7 +520,7 @@ namespace Jovo
 
                 if (module.SaveModuleSettings((ModuleData)btn.Tag, save))
                 {
-                    ShowSaveSuccess(btn.Tag);
+                    ShowMessage("Settings for " + ((ModuleData)btn.Tag).Name + " were saved successfully!", 1, 152, 117);
                     settingsChanged = false;
                 }
                 else

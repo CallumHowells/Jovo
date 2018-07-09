@@ -62,9 +62,9 @@
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(134)))), ((int)(((byte)(95)))), ((int)(((byte)(197)))));
             this.label1.Location = new System.Drawing.Point(47, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 46);
+            this.label1.Size = new System.Drawing.Size(182, 46);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Changelog.";
+            this.label1.Text = "Changelog";
             // 
             // pnlLine
             // 
@@ -94,7 +94,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(600, 333);
+            this.ClientSize = new System.Drawing.Size(600, 600);
             this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
