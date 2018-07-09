@@ -62,13 +62,61 @@ Text | Display Name of the setting shown to the user.
 Domain | Data type to be stored. `string, password, integer, path, boolean`
 Value | Value of the setting.
 
+The module's `changelog.json` file is read by Jovo to produce a readable changelog to display to the user. See the table below for info on changelog configuration.
+
+```json
+[
+   {
+      "Version":"1.0.0.0",
+      "Title":"Initial Release",
+      "Author":"Graham McNair",
+      "Tags":"initial release",
+      "Changes":[
+         {
+            "Title":"Initial Release",
+            "Description":"First non-dev release of CallModule, without 4Sight integration",
+            "Type":"misc"
+         }
+      ]
+   },
+   {
+      "Version":"1.0.1.0",
+      "Title":"4Sight Integration & More...",
+      "Author":"Graham McNair",
+      "Tags":"bug fix,initial,may contain bugs",
+      "Changes":[
+         {
+            "Title":"Added 4Sight Integration",
+            "Description":"",
+            "Type":"added"
+         },
+         {
+            "Title":"New SettingsHandler",
+            "Description":"Changed to new SettingsHandler for better configuration accross Jovo and Module.",
+            "Type":"changed"
+         }
+      ]
+   }
+]
+```
+JSON Item | Use
+------------- | -------------
+Version | Version code for the changelog.
+Title | Changelog title.
+Author | Who wrote the changelog and/or the update to the Module.
+Tags | Tags to highlight certain updates. `initial release, bug fix, stable, contains bugs`
+Changes > Title | Quick explanation of the change.
+Changes > Description | More details about the change and possible inpacts of it.
+Changes > Type | Type of change, split in user view to display better. `added, changed, deprecated, removed, fixed, security, misc`
+
 ## Built With
 
 * [Newtonsoft.Json](https://www.newtonsoft.com/json) - Popular high-performance JSON framework for .NET
 
-## Versioning
+## Versioning / Changelog
 
-We use [SemVer](http://semver.org/) for versioning.
+* We use [SemVer](http://semver.org/) for versioning.
+* Module Changelogs use a JSON variant of [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Authors
 
