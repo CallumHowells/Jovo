@@ -68,31 +68,32 @@ The module's `changelog.json` file is read by Jovo to produce a readable changel
 [
    {
       "Version":"1.0.0.0",
+      "VersionDate":"03/07/2018 15:12:00",
       "Title":"Initial Release",
-      "Author":"Graham McNair",
-      "Tags":"initial release",
+      "Description":"Initial Release",
+      "Author":"Callum Howells",
+      "Tags":"initial release,contains bugs",
       "Changes":[
          {
-            "Title":"Initial Release",
-            "Description":"First non-dev release of CallModule, without 4Sight integration",
+            "Title":"First non-dev release of CallModule, without 4Sight integration",
             "Type":"misc"
          }
       ]
    },
    {
       "Version":"1.0.1.0",
+      "VersionDate":"09/07/2018 11:32:00",
       "Title":"4Sight Integration & More...",
-      "Author":"Graham McNair",
-      "Tags":"bug fix,initial,may contain bugs",
+      "Description":"Some more info",
+      "Author":"Callum Howells",
+      "Tags":"bug fix,stable",
       "Changes":[
          {
             "Title":"Added 4Sight Integration",
-            "Description":"",
             "Type":"added"
          },
          {
-            "Title":"New SettingsHandler",
-            "Description":"Changed to new SettingsHandler for better configuration accross Jovo and Module.",
+            "Title":"Changed to new SettingsHandler for better configuration accross Jovo and Module.",
             "Type":"changed"
          }
       ]
@@ -102,11 +103,12 @@ The module's `changelog.json` file is read by Jovo to produce a readable changel
 JSON Item | Use
 ------------- | -------------
 Version | Version code for the changelog.
+VersionDate | Date of the version.
 Title | Changelog title.
+Description | Description of the bulk changes and general overview.
 Author | Who wrote the changelog and/or the update to the Module.
 Tags | Tags to highlight certain updates. `initial release, bug fix, stable, contains bugs`
-Changes > Title | Quick explanation of the change.
-Changes > Description | More details about the change and possible inpacts of it.
+Changes > Title | Explanation of the change and possible inpacts of it.
 Changes > Type | Type of change, split in user view to display better. `added, changed, deprecated, removed, fixed, security, misc`
 
 ## Built With
