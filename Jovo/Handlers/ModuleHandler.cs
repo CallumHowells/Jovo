@@ -190,6 +190,7 @@ namespace Jovo
                 }
                 else if (AvailableModule > InstalledModule)
                 {
+                    utility.LogEvent($"Updating {InstalledModule.Name} v{InstalledModule.Version} to {AvailableModule.Version}");
                     worker.ReportProgress(0, new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
