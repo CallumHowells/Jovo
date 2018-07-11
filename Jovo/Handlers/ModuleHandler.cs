@@ -174,6 +174,7 @@ namespace Jovo
             foreach (ModuleData AvailableModule in ServerModules)
             {
                 DirectoryInfo localDir = new DirectoryInfo(AppModulePath + "\\" + AvailableModule.Name);
+                ModuleData InstalledModule = InstalledModules.Find(m => m == AvailableModule);
 
                 if (!Directory.Exists(AppModulePath + "\\" + AvailableModule.Name))
                 {
@@ -187,11 +188,20 @@ namespace Jovo
 
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
-                else if (CompareModuleVersions(AvailableModule))
+                else if (AvailableModule > InstalledModule)
                 {
                     worker.ReportProgress(0, new NotificationData() { Title = "Updating Module...", Text = AvailableModule.Name, Timeout = 5000, Method = "Show" });
 
                     CopyAll(new DirectoryInfo(AvailableModule.Path), localDir, utility);
+
+                    ModuleData newModuleVersion = JsonConvert.DeserializeObject<ModuleData>(File.ReadAllText(AppModulePath + "\\" + InstalledModule.Name + "\\manifest.json"));
+                    if (newModuleVersion.IsActive != InstalledModule.IsActive)
+                    {
+                        newModuleVersion.IsActive = InstalledModule.IsActive;
+
+                        string json = JsonConvert.SerializeObject(newModuleVersion, Formatting.Indented);
+                        File.WriteAllText(AppModulePath + "\\" + InstalledModule.Name + "\\manifest.json", json);
+                    }
 
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
@@ -211,21 +221,6 @@ namespace Jovo
             }
 
             GetModules(OutputResult);
-        }
-
-        private bool CompareModuleVersions(ModuleData module)
-        {
-            ModuleData InstalledModule = InstalledModules.Find(m => m.Name == module.Name);
-
-            Version InstalledVersion = new Version(InstalledModule.Version);
-            Version ServerVersion = new Version(module.Version);
-            if (InstalledVersion < ServerVersion)
-            {
-                utility.LogEvent(String.Format("Updating {0} to version {1}", module.Name, module.Version));
-                return true;
-            }
-
-            return false;
         }
 
         private void CopyAll(DirectoryInfo source, DirectoryInfo target, UtilityHandler utility)
@@ -311,14 +306,17 @@ namespace Jovo
         public int Category { get; set; }
         public string Version { get; set; }
         public string PublishDate { get; set; }
-        public string Path { get; set; }
         public string Info { get; set; }
         public bool HasSettings { get; set; } = false;
         public bool CreateMenuItem { get; set; } = true;
         public bool IsActive { get; set; } = true;
         public string RequiresNetwork { get; set; } = "";
-        public bool IsConnected { get; set; } = true;
         public string KeyboardShortcut { get; set; } = "";
+
+        [JsonIgnore]
+        public bool IsConnected { get; set; } = true;
+        [JsonIgnore]
+        public string Path { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -368,6 +366,60 @@ namespace Jovo
         public static bool operator !=(ModuleData left, ModuleData right)
         {
             return !(left == right);
+        }
+
+        public static bool operator <(ModuleData left, ModuleData right)
+        {
+            if (ReferenceEquals(left, null))
+            {
+                if (ReferenceEquals(right, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (left != right)
+            {
+                return false;
+            }
+
+            if (new Version(left.Version) < new Version(right.Version))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public static bool operator >(ModuleData left, ModuleData right)
+        {
+            if (ReferenceEquals(left, null))
+            {
+                if (ReferenceEquals(right, null))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            if (left != right)
+            {
+                return false;
+            }
+
+            if (new Version(left.Version) > new Version(right.Version))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 
