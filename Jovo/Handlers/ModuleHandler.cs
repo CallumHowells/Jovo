@@ -206,9 +206,6 @@ namespace Jovo
 
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
-
-                //FileInfo manifest = new FileInfo(AvailableModule.Path + "\\manifest.json");
-                //manifest.CopyTo(AppModulePath + "\\" + AvailableModule.Name + "\\manifest.json", true);
             }
 
 
