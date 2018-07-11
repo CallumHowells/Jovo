@@ -203,51 +203,58 @@ namespace Jovo
 
         private void ConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList())
+            try
             {
-                ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
-
-                if (data.IsConnected)
+                foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.RequiresNetwork != "").OrderBy(m => m.Category).ToList())
                 {
-                    if (File.Exists(data.Path + "\\" + data.Icon))
-                    {
-                        var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
-                        var ms = new MemoryStream(bytes);
-                        _item.Image = Image.FromStream(ms);
-                    }
-                    else
-                        _item.Image = Properties.Resources.settings;
+                    if (menu.Items.Find(data.Name, false).Count() <= 0)
+                        break;
 
-                    _item.ToolTipText = "Connected to " + data.RequiresNetwork;
-                    _item.Enabled = true;
-                }
-                else
-                {
-                    if (File.Exists(data.Path + "\\" + data.Icon))
+                    ToolStripItem _item = menu.Items.Find(data.Name, false)[0];
+
+                    if (data.IsConnected)
                     {
-                        try
+                        if (File.Exists(data.Path + "\\" + data.Icon))
                         {
-                            Image imageBackground = Image.FromFile(data.Path + "\\" + data.Icon);
-                            Image imageOverlay = utility.ResizeImage(Properties.Resources.disconnected, new Size(imageBackground.Width / 2, imageBackground.Height / 2), true);
-
-                            Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
-                            using (Graphics gr = Graphics.FromImage(img))
-                            {
-                                gr.DrawImage(imageBackground, new Point(0, 0));
-                                gr.DrawImage(imageOverlay, imageBackground.Width / 2, imageBackground.Height / 2);
-                            }
-
-                            _item.Image = img;
+                            var bytes = File.ReadAllBytes(data.Path + "\\" + data.Icon);
+                            var ms = new MemoryStream(bytes);
+                            _item.Image = Image.FromStream(ms);
                         }
-                        catch (Exception) { }
+                        else
+                            _item.Image = Properties.Resources.settings;
+
+                        _item.ToolTipText = "Connected to " + data.RequiresNetwork;
+                        _item.Enabled = true;
                     }
                     else
-                        _item.Image = Properties.Resources.settings;
+                    {
+                        if (File.Exists(data.Path + "\\" + data.Icon))
+                        {
+                            try
+                            {
+                                Image imageBackground = Image.FromFile(data.Path + "\\" + data.Icon);
+                                Image imageOverlay = utility.ResizeImage(Properties.Resources.disconnected, new Size(imageBackground.Width / 2, imageBackground.Height / 2), true);
 
-                    _item.ToolTipText = "Unable to connect to " + data.RequiresNetwork;
-                    _item.Enabled = true;
+                                Image img = new Bitmap(imageBackground.Width, imageBackground.Height);
+                                using (Graphics gr = Graphics.FromImage(img))
+                                {
+                                    gr.DrawImage(imageBackground, new Point(0, 0));
+                                    gr.DrawImage(imageOverlay, imageBackground.Width / 2, imageBackground.Height / 2);
+                                }
+
+                                _item.Image = img;
+                            }
+                            catch (Exception) { }
+                        }
+                        else
+                            _item.Image = Properties.Resources.settings;
+
+                        _item.ToolTipText = "Unable to connect to " + data.RequiresNetwork;
+                        _item.Enabled = true;
+                    }
                 }
             }
+            catch (Exception) { }
 
             ConnectionWorker.RunWorkerAsync();
         }
