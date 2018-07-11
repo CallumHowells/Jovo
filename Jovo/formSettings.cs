@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -64,35 +65,32 @@ namespace Jovo
             GenerateSettingPanel(null);
 
             int x = 5 + lbl.Size.Width + 5;
-            foreach (ModuleData data in module.InstalledModules)
+            foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.HasSettings == true).OrderBy(m => m.Category).ToList())
             {
-                if (data.HasSettings)
-                {
-                    Label header = new Label();
-                    header.Name = "lbl" + data.Name;
-                    header.Text = data.Text;
-                    header.AutoSize = true;
-                    header.ForeColor = Color.FromArgb(30, 30, 30);
-                    header.BackColor = Color.Transparent;
-                    header.MouseEnter += label_MouseEnter;
-                    header.MouseLeave += label_MouseLeave;
-                    header.Click += label_Click;
-                    header.Tag = data;
-                    header.TextAlign = ContentAlignment.MiddleLeft;
-                    //header.Size = new Size(100, 25);
-                    header.Location = new Point(x, 70);
-                    header.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
-                    this.Controls.Add(header);
+                Label header = new Label();
+                header.Name = "lbl" + data.Name;
+                header.Text = data.Text;
+                header.AutoSize = true;
+                header.ForeColor = Color.FromArgb(30, 30, 30);
+                header.BackColor = Color.Transparent;
+                header.MouseEnter += label_MouseEnter;
+                header.MouseLeave += label_MouseLeave;
+                header.Click += label_Click;
+                header.Tag = data;
+                header.TextAlign = ContentAlignment.MiddleLeft;
+                //header.Size = new Size(100, 25);
+                header.Location = new Point(x, 70);
+                header.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+                this.Controls.Add(header);
 
-                    Panel under = new Panel();
-                    under.Name = "pnlHead" + data.Name;
-                    under.Size = new Size(header.Size.Width, 3);
-                    under.Location = new Point(x, 95);
-                    under.BackColor = Color.FromArgb(51, 153, 255);
-                    under.Visible = false;
-                    this.Controls.Add(under);
-                    x += header.Size.Width + 5;
-                }
+                Panel under = new Panel();
+                under.Name = "pnlHead" + data.Name;
+                under.Size = new Size(header.Size.Width, 3);
+                under.Location = new Point(x, 95);
+                under.BackColor = Color.FromArgb(51, 153, 255);
+                under.Visible = false;
+                this.Controls.Add(under);
+                x += header.Size.Width + 5;
             }
         }
 
@@ -398,7 +396,7 @@ namespace Jovo
 
         private void formSettings_Deactivate(object sender, EventArgs e)
         {
-                this.Hide();
+            this.Hide();
         }
 
         private void setting_SelectedValueChanged(object sender, EventArgs e)
