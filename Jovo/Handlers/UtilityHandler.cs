@@ -176,6 +176,17 @@ namespace Jovo
 
         public bool CheckKeyboardShortcut(ModuleData data, ModifierKeys modifier, Keys key)
         {
+            if (data.KeyboardShortcut == modifier.ToString().Replace(", ", "+") + "+" + key.ToString())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            // Possibly Deprecated
+            /*
             string pressed = modifier.ToString().Replace(", ", "+") + "+" + key.ToString();
             int keysPressed = pressed.Split('+').Length;
             int shortcutKeys = data.KeyboardShortcut.Split('+').Length;
@@ -183,15 +194,18 @@ namespace Jovo
 
             foreach (string k in data.KeyboardShortcut.Split('+'))
             {
-                if (!pressed.Contains(k))
-                    return false;
-                matchingKeys++;
+                foreach (string p in pressed.Split('+'))
+                {
+                    if (pressed.Contains(k) && p.Length == k.Length)
+                        matchingKeys++;
+                }
             }
 
             if ((matchingKeys == shortcutKeys) && (matchingKeys == keysPressed) && (keysPressed == shortcutKeys))
                 return true;
             else
                 return false;
+                */
         }
 
         public Image ResizeImage(Image image, Size size, bool preserveAspectRatio = true)
