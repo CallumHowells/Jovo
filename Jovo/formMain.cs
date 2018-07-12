@@ -279,13 +279,19 @@ namespace Jovo
         {
             if ((string)e.Result == "UPDATE")
             {
-                utility.LogEvent("Update Notification Shown");
-                formNotification = new formNotification("Jovo Update Available", "Click to Install", 0, true, utility);
-                DialogResult dr = formNotification.ShowDialog();
-                if (dr == DialogResult.OK)
+                if (!Convert.ToBoolean(Jovo.Default["Jovo_Automatic_Updates"]))
                 {
-                    utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
-                    icon.Visible = false;
+                    utility.LogEvent("Update Notification Shown");
+                    formNotification = new formNotification("Jovo Update Available", "Click to Install", 0, true, utility);
+                    DialogResult dr = formNotification.ShowDialog();
+                    if (dr == DialogResult.OK)
+                    {
+                        utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
+                        icon.Visible = false;
+                        module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
+                    }
+                } else
+                {
                     module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
                 }
             }
