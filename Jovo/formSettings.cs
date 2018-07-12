@@ -153,6 +153,20 @@ namespace Jovo
                         pnlSettings.Controls.Add(pthbrowse);
                         y += 22;
                     }
+                    else if (setting.Name.Contains("Updates"))
+                    {
+                        ComboBox cmb = new ComboBox();
+                        cmb.Name = "cbx" + setting.Name;
+                        cmb.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                        cmb.Location = new Point(x, y);
+                        cmb.SelectedValueChanged += setting_SelectedValueChanged;
+                        cmb.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmb.Items.Add("True");
+                        cmb.Items.Add("False");
+                        cmb.SelectedItem = Jovo.Default[setting.Name].ToString();
+                        pnlSettings.Controls.Add(cmb);
+                        y += 21;
+                    }
                     else
                     {
                         TextBox value = new TextBox();
@@ -438,6 +452,11 @@ namespace Jovo
                             {
                                 TextBox value = (TextBox)cntrl;
                                 Jovo.Default[setting.Name] = value.Text;
+                            }
+                            else if (cntrl.Name == "cbx" + setting.Name)
+                            {
+                                ComboBox value = (ComboBox)cntrl;
+                                Jovo.Default[setting.Name] = Convert.ToBoolean(value.SelectedItem);
                             }
                     }
                 }

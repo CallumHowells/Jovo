@@ -12,7 +12,7 @@ namespace Jovo {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class Jovo : global::System.Configuration.ApplicationSettingsBase {
         
         private static Jovo defaultInstance = ((Jovo)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Jovo())));
@@ -80,6 +80,18 @@ namespace Jovo {
             }
             set {
                 this["Jovo_Updater_Local_Path"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Jovo_Automatic_Updates {
+            get {
+                return ((bool)(this["Jovo_Automatic_Updates"]));
+            }
+            set {
+                this["Jovo_Automatic_Updates"] = value;
             }
         }
     }
