@@ -109,7 +109,7 @@ namespace Jovo
             {
                 int x = 10;
                 int y = 5;
-                foreach (SettingsProperty setting in Jovo.Default.Properties)
+                foreach (SettingsProperty setting in Jovo.Default.Properties.OfType<SettingsProperty>().OrderBy(s => s.Name))
                 {
                     Label name = new Label();
                     name.Name = "lbl" + setting.Name;

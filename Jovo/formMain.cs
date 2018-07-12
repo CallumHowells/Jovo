@@ -286,13 +286,13 @@ namespace Jovo
                     DialogResult dr = formNotification.ShowDialog();
                     if (dr == DialogResult.OK)
                     {
-                        utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
+                        utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path, true);
                         icon.Visible = false;
                         module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
                     }
                 } else
                 {
-                    utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path);
+                    utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path, true);
                     icon.Visible = false;
                     module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
                 }

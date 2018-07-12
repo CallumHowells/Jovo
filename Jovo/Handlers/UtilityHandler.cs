@@ -99,6 +99,9 @@ namespace Jovo
                             LogWriter.Write(Environment.NewLine + DateTime.Now.ToString() + " - " + message);
                         else
                             LogWriter.Write(message);
+
+                        if (blankLine)
+                            LogWriter.Write(Environment.NewLine);
                     }
                 }
             }
