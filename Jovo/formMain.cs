@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Diagnostics;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace Jovo
 {
@@ -46,6 +47,7 @@ namespace Jovo
 
             utility.IsDevUser = (Path.GetFileName(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location)) == "Debug") ? true : false;
 
+            SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
             AppDomain.CurrentDomain.FirstChanceException += new EventHandler<FirstChanceExceptionEventArgs>(FirstChance_Handler);
             hook.KeyPressed += new EventHandler<KeyPressedEventArgs>(hook_KeyPressed);
 
@@ -290,7 +292,8 @@ namespace Jovo
                         icon.Visible = false;
                         module.DoJovoUpdate(Jovo.Default.Jovo_Updater_Local_Path);
                     }
-                } else
+                }
+                else
                 {
                     utility.LogEvent("Processing Update - Killing Jovo and Starting Jovo_Updater @ " + Jovo.Default.Jovo_Updater_Local_Path, true);
                     icon.Visible = false;
@@ -413,6 +416,21 @@ namespace Jovo
                 }
             }
         }
+
+        private void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            if (e.Reason == SessionSwitchReason.SessionLock)
+            {
+                if (Jovo.Default.Module_Name_to_Run_When_PC_Locks.Length > 0)
+                    module.ExecuteModule(module.FindModule(Jovo.Default.Module_Name_to_Run_When_PC_Locks));
+            }
+            else if (e.Reason == SessionSwitchReason.SessionUnlock)
+            {
+                if (Jovo.Default.Module_Name_to_Run_When_PC_Unlocks.Length > 0)
+                    module.ExecuteModule(module.FindModule(Jovo.Default.Module_Name_to_Run_When_PC_Unlocks));
+            }
+        }
+
         #endregion
 
         protected override CreateParams CreateParams

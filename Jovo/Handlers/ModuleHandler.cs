@@ -207,8 +207,7 @@ namespace Jovo
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
             }
-
-
+            
             foreach (ModuleData data in InstalledModules)
             {
                 if (!ServerModules.Contains(data))

@@ -18,6 +18,7 @@ namespace Jovo
         UtilityHandler utility;
         bool settingsChanged;
         bool warningPrompted;
+        int maxRight;
 
         public formSettings(ModuleHandler _module, UtilityHandler _utility)
         {
@@ -48,22 +49,24 @@ namespace Jovo
             lbl.Click += label_Click;
             lbl.Tag = null;
             lbl.TextAlign = ContentAlignment.MiddleLeft;
-            lbl.Location = new Point(5, 70);
+            lbl.Location = new Point(5, (70 - 59));
             lbl.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
-            this.Controls.Add(lbl);
+            pnlModuleOptions.Controls.Add(lbl);
 
             Panel pnl = new Panel();
             pnl.Name = "pnlHeadJovo";
             pnl.Size = new Size(lbl.Size.Width, 3);
-            pnl.Location = new Point(5, 95);
+            pnl.Location = new Point(5, (95 - 59));
             pnl.BackColor = Color.FromArgb(51, 153, 255);
             pnl.Visible = true;
-            this.Controls.Add(pnl);
+            pnlModuleOptions.Controls.Add(pnl);
 
             FillInfoPanel(null);
             GenerateSettingPanel(null);
 
             int x = 5 + lbl.Size.Width + 5;
+            int count = 1;
+            int upto = module.InstalledModules.Where(m => m.IsActive == true && m.HasSettings == true).OrderBy(m => m.Category).ToList().Count();
             foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.HasSettings == true).OrderBy(m => m.Category).ToList())
             {
                 Label header = new Label();
@@ -78,18 +81,29 @@ namespace Jovo
                 header.Tag = data;
                 header.TextAlign = ContentAlignment.MiddleLeft;
                 //header.Size = new Size(100, 25);
-                header.Location = new Point(x, 70);
+                header.Location = new Point(x, (70 - 59));
                 header.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
-                this.Controls.Add(header);
+                pnlModuleOptions.Controls.Add(header);
 
                 Panel under = new Panel();
                 under.Name = "pnlHead" + data.Name;
                 under.Size = new Size(header.Size.Width, 3);
-                under.Location = new Point(x, 95);
+                under.Location = new Point(x, (95 - 59));
                 under.BackColor = Color.FromArgb(51, 153, 255);
                 under.Visible = false;
-                this.Controls.Add(under);
+                pnlModuleOptions.Controls.Add(under);
                 x += header.Size.Width + 5;
+
+                count++;
+                if (count == upto)
+                    maxRight = -(x - 50);
+            }
+
+            if (Math.Abs(maxRight) < 400)
+            {
+                pnlModuleOptions.Location = new Point(0, pnlModuleOptions.Location.Y);
+                btnLeft.Visible = false;
+                btnRight.Visible = false;
             }
         }
 
@@ -119,19 +133,28 @@ namespace Jovo
                     name.Location = new Point(x, y);
                     pnlSettings.Controls.Add(name);
                     y += 15;
-                    
+
                     if (setting.Name.Contains("Module_Name"))
                     {
                         ComboBox value = new ComboBox();
                         value.Name = "cbx" + setting.Name;
-                        value.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                        value.Size = new Size(pnlSettings.Size.Width - (x + 58), 21);
                         value.Location = new Point(x, y);
                         value.SelectedValueChanged += setting_SelectedValueChanged;
                         value.DropDownStyle = ComboBoxStyle.DropDownList;
-                        foreach (ModuleData data in module.InstalledModules)
+                        foreach (ModuleData data in module.InstalledModules.Where(m => m.IsActive == true && m.CreateMenuItem == true))
                             value.Items.Add(data.Name);
                         value.SelectedItem = Jovo.Default[setting.Name].ToString();
                         pnlSettings.Controls.Add(value);
+
+                        Button clearcombo = new Button();
+                        clearcombo.Name = "btn" + setting.Name;
+                        clearcombo.Text = "X";
+                        clearcombo.TextAlign = ContentAlignment.MiddleCenter;
+                        clearcombo.Size = new Size(24, 21);
+                        clearcombo.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
+                        clearcombo.Click += clear_Click;
+                        pnlSettings.Controls.Add(clearcombo);
                         y += 21;
                     }
                     else if (setting.Name.Contains("Path"))
@@ -147,6 +170,7 @@ namespace Jovo
                         Button pthbrowse = new Button();
                         pthbrowse.Name = "btn" + setting.Name;
                         pthbrowse.Text = "...";
+                        pthbrowse.TextAlign = ContentAlignment.MiddleCenter;
                         pthbrowse.Size = new Size(24, 22);
                         pthbrowse.Location = new Point(x + (pnlSettings.Size.Width - (x + 54)), y);
                         pthbrowse.Click += path_Click;
@@ -360,6 +384,43 @@ namespace Jovo
         }
 
         #region EventHandlers
+
+        private void nav_Click(object sender, EventArgs e)
+        {
+            if (((Label)sender).Tag.ToString() == "L")
+            {
+                if (pnlModuleOptions.Location.X < 33)
+                    pnlModuleOptions.Location = new Point(pnlModuleOptions.Location.X + 100, pnlModuleOptions.Location.Y);
+            }
+            else
+            {
+                if (pnlModuleOptions.Location.X >= maxRight)
+                    pnlModuleOptions.Location = new Point(pnlModuleOptions.Location.X - 100, pnlModuleOptions.Location.Y);
+            }
+
+            if (pnlModuleOptions.Location.X == 33)
+                btnLeft.Visible = false;
+            else
+                btnLeft.Visible = true;
+
+            if (pnlModuleOptions.Location.X <= maxRight)
+                btnRight.Visible = false;
+            else
+                btnRight.Visible = true;
+        }
+
+        private void nav_MouseEnter(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(51, 153, 255);
+        }
+
+        private void nav_MouseLeave(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.ForeColor = Color.FromArgb(30, 30, 30);
+        }
+
         private void label_Click(object sender, EventArgs e)
         {
             if (settingsChanged && !warningPrompted)
@@ -372,7 +433,7 @@ namespace Jovo
                 warningPrompted = false;
                 Label lbl = (Label)sender;
                 string pnlName = "pnlHead" + lbl.Name.Substring(3, lbl.Name.Length - 3);
-                foreach (Control cntrl in this.Controls)
+                foreach (Control cntrl in pnlModuleOptions.Controls)
                 {
                     if (cntrl.Name.Contains("pnlHead"))
                     {
@@ -559,6 +620,12 @@ namespace Jovo
                 ((TextBox)pnlSettings.Controls[btn.Name.Replace("btn", "txt")]).Text = fld.SelectedPath;
             }
             this.Deactivate += formSettings_Deactivate;
+        }
+
+        private void clear_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            ((ComboBox)pnlSettings.Controls[btn.Name.Replace("btn", "cbx")]).SelectedItem = null;
         }
 
         private void btnFormClose_MouseEnter(object sender, EventArgs e)

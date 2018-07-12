@@ -12,7 +12,7 @@ namespace Jovo {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.6.0.0")]
     internal sealed partial class Jovo : global::System.Configuration.ApplicationSettingsBase {
         
         private static Jovo defaultInstance = ((Jovo)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Jovo())));
@@ -92,6 +92,30 @@ namespace Jovo {
             }
             set {
                 this["Jovo_Automatic_Updates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Module_Name_to_Run_When_PC_Locks {
+            get {
+                return ((string)(this["Module_Name_to_Run_When_PC_Locks"]));
+            }
+            set {
+                this["Module_Name_to_Run_When_PC_Locks"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Module_Name_to_Run_When_PC_Unlocks {
+            get {
+                return ((string)(this["Module_Name_to_Run_When_PC_Unlocks"]));
+            }
+            set {
+                this["Module_Name_to_Run_When_PC_Unlocks"] = value;
             }
         }
     }

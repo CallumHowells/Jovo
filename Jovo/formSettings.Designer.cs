@@ -51,6 +51,9 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pnlSaveSuccess = new System.Windows.Forms.Panel();
             this.lblSaveSuccess = new System.Windows.Forms.Label();
+            this.pnlModuleOptions = new System.Windows.Forms.Panel();
+            this.btnLeft = new System.Windows.Forms.Label();
+            this.btnRight = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlInfo.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -286,12 +289,51 @@
             this.lblSaveSuccess.TabIndex = 0;
             this.lblSaveSuccess.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pnlModuleOptions
+            // 
+            this.pnlModuleOptions.Location = new System.Drawing.Point(33, 59);
+            this.pnlModuleOptions.Name = "pnlModuleOptions";
+            this.pnlModuleOptions.Size = new System.Drawing.Size(4000, 38);
+            this.pnlModuleOptions.TabIndex = 9;
+            // 
+            // btnLeft
+            // 
+            this.btnLeft.Font = new System.Drawing.Font("Segoe UI", 18F);
+            this.btnLeft.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnLeft.Location = new System.Drawing.Point(0, 59);
+            this.btnLeft.Name = "btnLeft";
+            this.btnLeft.Size = new System.Drawing.Size(29, 36);
+            this.btnLeft.TabIndex = 10;
+            this.btnLeft.Tag = "L";
+            this.btnLeft.Text = "<";
+            this.btnLeft.Visible = false;
+            this.btnLeft.Click += new System.EventHandler(this.nav_Click);
+            this.btnLeft.MouseEnter += new System.EventHandler(this.nav_MouseEnter);
+            this.btnLeft.MouseLeave += new System.EventHandler(this.nav_MouseLeave);
+            // 
+            // btnRight
+            // 
+            this.btnRight.Font = new System.Drawing.Font("Segoe UI", 18F);
+            this.btnRight.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.btnRight.Location = new System.Drawing.Point(571, 59);
+            this.btnRight.Name = "btnRight";
+            this.btnRight.Size = new System.Drawing.Size(29, 36);
+            this.btnRight.TabIndex = 11;
+            this.btnRight.Tag = "R";
+            this.btnRight.Text = ">";
+            this.btnRight.Click += new System.EventHandler(this.nav_Click);
+            this.btnRight.MouseEnter += new System.EventHandler(this.nav_MouseEnter);
+            this.btnRight.MouseLeave += new System.EventHandler(this.nav_MouseLeave);
+            // 
             // formSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 600);
+            this.Controls.Add(this.btnRight);
+            this.Controls.Add(this.btnLeft);
+            this.Controls.Add(this.pnlModuleOptions);
             this.Controls.Add(this.pnlSaveSuccess);
             this.Controls.Add(this.pnlNoSettings);
             this.Controls.Add(this.pnlSettings);
@@ -348,5 +390,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel pnlSaveSuccess;
         private System.Windows.Forms.Label lblSaveSuccess;
+        private System.Windows.Forms.Panel pnlModuleOptions;
+        private System.Windows.Forms.Label btnLeft;
+        private System.Windows.Forms.Label btnRight;
     }
 }

@@ -20,5 +20,11 @@
     <Setting Name="Jovo_Automatic_Updates" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="Module_Name_to_Run_When_PC_Locks" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Module_Name_to_Run_When_PC_Unlocks" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

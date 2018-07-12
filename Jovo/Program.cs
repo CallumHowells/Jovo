@@ -15,8 +15,6 @@ namespace Jovo
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Microsoft.Win32.SystemEvents.SessionSwitch += new Microsoft.Win32.SessionSwitchEventHandler(SystemEvents_SessionSwitch);
-
             ModuleHandler module = new ModuleHandler();
             UtilityHandler utility = new UtilityHandler();
             KeyboardHook hook = new KeyboardHook();
@@ -48,15 +46,6 @@ namespace Jovo
             }
 
             Application.Run(new formMain(module, utility, hook));
-        }
-
-
-
-        private static void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
-        {
-            UtilityHandler utility = new UtilityHandler();
-
-            utility.LogEvent("Session Event detected: " + e.Reason.ToString());
         }
     }
 }
