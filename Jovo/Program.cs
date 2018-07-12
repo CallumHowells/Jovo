@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace Jovo
 {
@@ -8,15 +9,18 @@ namespace Jovo
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        [STAThread]
+
         static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Microsoft.Win32.SystemEvents.SessionSwitch += new Microsoft.Win32.SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+
             ModuleHandler module = new ModuleHandler();
             UtilityHandler utility = new UtilityHandler();
             KeyboardHook hook = new KeyboardHook();
+
             utility.ArchiveLog();
 
             utility.LogEvent("############################ Program starting... ############################", true, true);
@@ -44,6 +48,15 @@ namespace Jovo
             }
 
             Application.Run(new formMain(module, utility, hook));
+        }
+
+
+
+        private static void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
+        {
+            UtilityHandler utility = new UtilityHandler();
+
+            utility.LogEvent("Session Event detected: " + e.Reason.ToString());
         }
     }
 }
