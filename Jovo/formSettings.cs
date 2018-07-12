@@ -109,7 +109,7 @@ namespace Jovo
             {
                 int x = 10;
                 int y = 5;
-                foreach (SettingsProperty setting in Jovo.Default.Properties)
+                foreach (SettingsProperty setting in Jovo.Default.Properties.OfType<SettingsProperty>().OrderBy(s => s.Name))
                 {
                     Label name = new Label();
                     name.Name = "lbl" + setting.Name;
@@ -152,6 +152,20 @@ namespace Jovo
                         pthbrowse.Click += path_Click;
                         pnlSettings.Controls.Add(pthbrowse);
                         y += 22;
+                    }
+                    else if (setting.Name.Contains("Updates"))
+                    {
+                        ComboBox cmb = new ComboBox();
+                        cmb.Name = "cbx" + setting.Name;
+                        cmb.Size = new Size(pnlSettings.Size.Width - (x + 30), 21);
+                        cmb.Location = new Point(x, y);
+                        cmb.SelectedValueChanged += setting_SelectedValueChanged;
+                        cmb.DropDownStyle = ComboBoxStyle.DropDownList;
+                        cmb.Items.Add("True");
+                        cmb.Items.Add("False");
+                        cmb.SelectedItem = Jovo.Default[setting.Name].ToString();
+                        pnlSettings.Controls.Add(cmb);
+                        y += 21;
                     }
                     else
                     {
@@ -438,6 +452,11 @@ namespace Jovo
                             {
                                 TextBox value = (TextBox)cntrl;
                                 Jovo.Default[setting.Name] = value.Text;
+                            }
+                            else if (cntrl.Name == "cbx" + setting.Name)
+                            {
+                                ComboBox value = (ComboBox)cntrl;
+                                Jovo.Default[setting.Name] = Convert.ToBoolean(value.SelectedItem);
                             }
                     }
                 }
