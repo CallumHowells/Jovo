@@ -119,7 +119,7 @@ namespace Jovo
                     name.Location = new Point(x, y);
                     pnlSettings.Controls.Add(name);
                     y += 15;
-
+                    
                     if (setting.Name.Contains("Module_Name"))
                     {
                         ComboBox value = new ComboBox();
