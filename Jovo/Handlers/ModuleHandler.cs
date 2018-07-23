@@ -207,13 +207,16 @@ namespace Jovo
                     worker.ReportProgress(0, new NotificationData() { Method = "Hide" });
                 }
             }
-            
-            foreach (ModuleData data in InstalledModules)
+
+            if (ServerModules.Count > 0)
             {
-                if (!ServerModules.Contains(data))
+                foreach (ModuleData data in InstalledModules)
                 {
-                    Directory.Delete(data.Path, true);
-                    utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
+                    if (!ServerModules.Contains(data))
+                    {
+                        Directory.Delete(data.Path, true);
+                        utility.LogEvent("Module not found on server (" + data.Name + "), Deleteing local module...");
+                    }
                 }
             }
 
@@ -322,12 +325,12 @@ namespace Jovo
 
         public bool Equals(ModuleData m)
         {
-            if (Object.ReferenceEquals(m, null))
+            if (ReferenceEquals(m, null))
             {
                 return false;
             }
 
-            if (Object.ReferenceEquals(this, m))
+            if (ReferenceEquals(this, m))
             {
                 return true;
             }
