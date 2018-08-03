@@ -230,7 +230,7 @@ namespace Jovo
                 fi.CopyTo(Path.Combine(target.FullName, fi.Name), true);
             }
 
-            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories().Where(x => x.Name != "Previous Versions").ToList())
+            foreach (DirectoryInfo diSourceSubDir in source.GetDirectories().Where(x => (x.Name != "Previous Versions") && x.Name != "Ready To Deploy").ToList())
             {
                 DirectoryInfo nextTargetSubDir = target.CreateSubdirectory(diSourceSubDir.Name);
                 CopyAll(diSourceSubDir, nextTargetSubDir, utility);
