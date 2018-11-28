@@ -315,13 +315,13 @@ namespace Jovo
                 else
                 {
                     e.Result = "NOUPDATE";
-                    Thread.Sleep(10000);
+                    Thread.Sleep(60000);
                 }
             }
             else
             {
                 e.Result = "NOUPDATE";
-                Thread.Sleep(10000);
+                Thread.Sleep(60000);
             }
         }
         #endregion
